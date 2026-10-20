@@ -112,6 +112,10 @@ $$
 $$ {#eq-rd-diffusive-tail}
 
 The integral follows by multiplying the one-dimensional Gaussian integrals.
+Its continuum interpretation assumes an intermediate window
+$a^2/D\ll t\ll L^2/D$, with microscopic spacing $a$ and system length $L$.
+The conserved zero mode must be removed by fixing the total charge or handled
+separately; a finite isolated system can retain its zero-mode contribution.
 It is a possible mechanism for an algebraic tail, not a derivation of the
 tail of any specific $\Delta_k$. To make it one, the coupling of the
 diagnostic to the slow field must be established and competing terms checked.

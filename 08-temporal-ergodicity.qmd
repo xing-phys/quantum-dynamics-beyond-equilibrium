@@ -106,11 +106,11 @@ for traceless $O$. The right side becomes small with $d$ for bounded observables
 Let a qubit precess under $H=\omega Z/2$ from $|+\rangle=(|0\rangle+|1\rangle)/\sqrt2$. Its Bloch vector is
 
 $$
-\boldsymbol r(t)=(\cos\omega t,\sin\omega t,0),
-\qquad P(t)=\frac12(I+\boldsymbol r(t)\cdot\boldsymbol\sigma).
+\vct r(t)=(\cos\omega t,\sin\omega t,0),
+\qquad P(t)=\frac12(I+\vct r(t)\cdot\vct\sigma).
 $$ {#eq-te-equator}
 
-Averaging over a period gives $\overline{\boldsymbol r}=0$, hence $M_\infty^{(1)}=I/2$. Yet the spin never leaves its equator. On that equator,
+Averaging over a period gives $\overline{\vct r}=0$, hence $M_\infty^{(1)}=I/2$. Yet the spin never leaves its equator. On that equator,
 
 $$
 \overline{r_x^2}=\overline{r_y^2}=\frac12,
@@ -197,7 +197,7 @@ For $H(t+\tau)=H(t)$, Floquet theory writes $U(t)=P(t)e^{-iQt}$ with periodic $P
 A subtler situation arises for $m$ rationally independent driving frequencies. Suppose a piecewise-smooth generalized Floquet decomposition exists,
 
 $$
-U(t)=P(\boldsymbol\omega t)e^{-iQt},
+U(t)=P(\vct\omega t)e^{-iQt},
 \qquad P:\mathbb T^m\longrightarrow U(d).
 $$ {#eq-te-generalized-floquet}
 

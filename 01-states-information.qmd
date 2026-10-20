@@ -55,19 +55,19 @@ They obey $\operatorname{Tr}(\sigma_i\sigma_j)=2\delta_{ij}$.
 Consequently any qubit state has the unique representation
 
 $$
-\rho=\frac12(I+\boldsymbol r\cdot\boldsymbol\sigma),
+\rho=\frac12(I+\vct r\cdot\vct\sigma),
 \qquad r_i=\operatorname{Tr}(\rho\sigma_i).
 $$ {#eq-si-bloch}
 
-Since $(\boldsymbol r\cdot\boldsymbol\sigma)^2=|\boldsymbol r|^2I$, its
-eigenvalues are $\pm|\boldsymbol r|$ and those of $\rho$ are
-$(1\pm|\boldsymbol r|)/2$. Positivity requires $|\boldsymbol r|\leq1$.
+Since $(\vct r\cdot\vct\sigma)^2=|\vct r|^2I$, its
+eigenvalues are $\pm|\vct r|$ and those of $\rho$ are
+$(1\pm|\vct r|)/2$. Positivity requires $|\vct r|\leq1$.
 Pure states lie on the surface; mixed states lie inside.
 
 The purity follows directly:
 
 $$
-\operatorname{Tr}\rho^2=\frac{1+|\boldsymbol r|^2}{2}.
+\operatorname{Tr}\rho^2=\frac{1+|\vct r|^2}{2}.
 $$
 
 A density matrix is pure exactly when $\rho^2=\rho$, equivalently
@@ -231,7 +231,7 @@ $$
 
 Trace distance is consequently a physical measure of distinguishability.
 For qubits, @eq-si-bloch gives
-$D(\rho,\sigma)=|\boldsymbol r-\boldsymbol s|/2$.
+$D(\rho,\sigma)=|\vct r-\vct s|/2$.
 For pure states it is
 $\sqrt{1-|\langle\psi|\phi\rangle|^2}$; one proves this by restricting the
 difference of projectors to their two-dimensional span.
@@ -268,7 +268,7 @@ while leaving a rich set of possibilities for the ensemble behind it.
    $\langle X_AX_B\rangle$ and $\langle Z_AZ_B\rangle$.
    Explain why no measurement on $A$ alone distinguishes them.
 4. **Trace distance.** Derive the qubit formula from the eigenvalues of
-   $(\boldsymbol r-\boldsymbol s)\cdot\boldsymbol\sigma$.
+   $(\vct r-\vct s)\cdot\vct\sigma$.
    Evaluate the distance between $|0\rangle$ and $|+\rangle$.
 5. **Purification freedom.** Show that applying a unitary only to the
    purifying system preserves $\rho_A$. Does a unitary on $A$ preserve it?

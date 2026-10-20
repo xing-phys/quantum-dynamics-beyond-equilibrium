@@ -56,7 +56,8 @@ Dephasing does not make each phase small. It makes their sum cancel for
 particular observables or under time averaging. Nor does dephasing alone
 make $\rho_{\mathrm{diag}}$ Gibbs: it retains all initial populations.
 
-Assume, more strongly, that nonzero energy gaps are nondegenerate.
+Assume both a nondegenerate energy spectrum and, more strongly, that
+nonzero energy gaps are nondegenerate.
 Subtracting the average in @eq-th-observable and squaring gives
 
 $$

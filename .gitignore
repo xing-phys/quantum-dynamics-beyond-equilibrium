@@ -2,3 +2,15 @@
 /_site/
 
 **/*.quarto_ipynb
+/node_modules/
+/_freeze/
+*.log
+__pycache__/
+/index.tex
+/index.aux
+/index.toc
+/index.out
+/index.bbl
+/index.bcf
+/index.blg
+/index.run.xml

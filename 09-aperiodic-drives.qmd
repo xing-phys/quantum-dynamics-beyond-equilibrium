@@ -210,7 +210,7 @@ $$
 \end{aligned}
 $$ {#eq-ad-xi-map}
 
-The reduction uses the special representation $U=u_0I-i\boldsymbol u\cdot\boldsymbol\sigma$ with real coefficients satisfying $u_0^2+|\boldsymbol u|^2=1$, and the multiplication identity $(\boldsymbol a\cdot\boldsymbol\sigma)(\boldsymbol b\cdot\boldsymbol\sigma)=(\boldsymbol a\cdot\boldsymbol b)I+i(\boldsymbol a\times\boldsymbol b)\cdot\boldsymbol\sigma$. Its rigorous derivation and invariant-measure analysis are specific to $SU(2)$; there is no assumption that the same two-variable map describes higher-dimensional gates. @ergPilatowsky2025
+The reduction uses the special representation $U=u_0I-i\vct u\cdot\vct\sigma$ with real coefficients satisfying $u_0^2+|\vct u|^2=1$, and the multiplication identity $(\vct a\cdot\vct\sigma)(\vct b\cdot\vct\sigma)=(\vct a\cdot\vct b)I+i(\vct a\times\vct b)\cdot\vct\sigma$. Its rigorous derivation and invariant-measure analysis are specific to $SU(2)$; there is no assumption that the same two-variable map describes higher-dimensional gates. @ergPilatowsky2025
 
 Far from the boundary, $e^{\xi_n}\ll1$, this becomes
 
@@ -256,7 +256,7 @@ because $dn/d\tau=(\tau\log2)^{-1}$. The associated mean time diverges. This sca
 
 ## A reproducible numerical laboratory
 
-For a qubit one can avoid replicated channels when studying only a fixed initial state. Evolve its Bloch vector with the $SO(3)$ rotations induced by $A$ and $B$, accumulate $\boldsymbol r$ and $\boldsymbol r\boldsymbol r^{\mathsf T}$, and compare with zero and $I_3/3$. This checks first- and second-order spherical moments. Full $M^{(k)}$ reconstruction is needed to certify a trace distance without restricting the family of witnesses.
+For a qubit one can avoid replicated channels when studying only a fixed initial state. Evolve its Bloch vector with the $SO(3)$ rotations induced by $A$ and $B$, accumulate $\vct r$ and $\vct r\vct r^{\mathsf T}$, and compare with zero and $I_3/3$. This checks first- and second-order spherical moments. Full $M^{(k)}$ reconstruction is needed to certify a trace distance without restricting the family of witnesses.
 
 An initial experiment should use a genuinely noncommuting pair, for example $A=e^{-i0.31\pi X}$ and $B=e^{-i0.23\pi Z}$. Compute the Floquet, Fibonacci, and Thue–Morse prefixes using the same pair, and plot distances against both gate count $T$ and recursion level. These numbers are an illustrative model, not a parameter set claimed to have a proved convergence exponent. Repeat for several pairs, several initial states, and a pair of nearly parallel rotation axes. A deterministic curve from one parameter choice is not an ensemble of independent runs.
 

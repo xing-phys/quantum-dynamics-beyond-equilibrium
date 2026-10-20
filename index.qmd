@@ -1,6 +1,4 @@
----
-title: "A guide to the book"
----
+# A guide to the book {.unnumbered}
 
 ::: {.hero}
 **QUANTUM MANY-BODY DYNAMICS**
@@ -15,7 +13,7 @@ resources. This book develops the tools needed to see that additional structure.
 
 ![One physical evolution can be examined through several different information
 structures. Each arrow specifies what is sampled or retained; none is an
-automatic implication between different notions of randomness. Original diagram.](figs/concept-map.svg){#fig-book-map}
+automatic implication between different notions of randomness. Original diagram.](figs/concept-map.svg)
 
 ## Purpose and prerequisites
 

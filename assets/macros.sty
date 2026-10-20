@@ -1,4 +1,4 @@
-% Extra physics macros for the OYA-OQS Quarto report.
+% Physics macros for Quantum Dynamics Beyond Thermal Equilibrium.
 % Keep this file in sync with assets/mathjax-config.html.
 
 % --- Brackets, expectation values, norms ---
@@ -15,6 +15,12 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\dd}{\mathrm{d}}
+\newcommand{\vct}[1]{\symbfit{#1}}
+
+% Keep three-digit page numbers inside the table-of-contents box.
+\makeatletter
+\renewcommand{\@pnumwidth}{2.5em}
+\makeatother
 
 % --- Calligraphic letters ---
 \newcommand{\cL}{\mathcal{L}}

@@ -193,7 +193,7 @@ I\otimes I+\sum_i\bar r_i(\sigma_i\otimes I+I\otimes\sigma_i)
 \right].
 $$
 
-The density matrix knows $\bar{\boldsymbol r}$; the second moment also knows
+The density matrix knows $\bar{\vct r}$; the second moment also knows
 the matrix $\overline{r_ir_j}$. For uniformly distributed directions on the
 sphere this matrix is $\delta_{ij}/3$; for the poles only its $zz$ entry is
 one.

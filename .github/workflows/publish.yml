@@ -1,0 +1,80 @@
+name: Build and publish textbook
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: textbook-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Install Quarto and TinyTeX
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+          tinytex: true
+
+      - name: Install fonts and SVG conversion
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes fonts-texgyre fonts-texgyre-math fonts-dejavu-core librsvg2-bin
+
+      - name: Check source references, mathematics, and figures
+        run: python3 scripts/check_sources.py
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.12.6'
+
+      - name: Reproduce numerical figures and verify laboratory examples
+        run: |
+          julia --project=. scripts/generate_figures.jl
+          julia --project=. scripts/check_laboratory.jl
+
+      - name: Compile every mathematical expression
+        run: |
+          npm ci --ignore-scripts
+          npm run check:math
+
+      - name: Render HTML and the combined PDF together
+        run: quarto render
+
+      - name: Check rendered navigation, assets, anchors, and PDF
+        run: python3 scripts/check_site.py
+
+      - name: Upload the complete book
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

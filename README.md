@@ -11,10 +11,13 @@ by concepts rather than by authors.
 
 Required: Quarto **1.10.18**. For PDF, install LuaLaTeX with TeX Gyre Pagella,
 Heros, and Pagella Math plus DejaVu Sans Mono (or run quarto install tinytex).
+SVG figures also require rsvg-convert. On Ubuntu the system packages are
+librsvg2-bin, fonts-texgyre, fonts-texgyre-math, and fonts-dejavu-core.
 For regenerating original numerical figures: Julia **1.10+**, standard
 libraries only. No Python notebook or external plotting package is required.
 
     julia --project=. scripts/generate_figures.jl
+    julia --project=. scripts/check_laboratory.jl
     python3 scripts/check_sources.py
     quarto render
     python3 scripts/check_site.py _site
@@ -22,7 +25,10 @@ libraries only. No Python notebook or external plotting package is required.
 
 HTML is written to _site/; the combined PDF is
 _site/quantum-dynamics-beyond-equilibrium.pdf. Build only the website with
-quarto render --to html. MathJax 3.2.2 and fonts are bundled locally.
+quarto render --to html. Use --no-clean when rendering a single format if
+you want to retain the other format's existing output. MathJax 3.2.2 and fonts
+are bundled locally. The vector macro vct uses matching bold italic symbols
+in HTML and PDF.
 
 ## Organization
 
@@ -38,6 +44,14 @@ Edit a chapter, commit, and push to main; GitHub Actions renders and deploys
 the site. The repository Pages source is GitHub Actions. Pull requests build
 without deploying. The workflow also builds the PDF with TinyTeX.
 Local generated output and caches are ignored by Git.
+
+Optional mathematical syntax validation uses the matching pinned MathJax parser:
+
+    npm ci
+    npm run check:math
+
+This compiles all formulas and checks custom macros. It does not prove
+scientific claims or replace visual layout inspection.
 
 ## Scientific and editorial policy
 

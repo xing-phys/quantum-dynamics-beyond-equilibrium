@@ -319,7 +319,7 @@ $$ {#eq-sc-relative-error}
 
 where $X\preceq Y$ means that $Y-X$ is positive semidefinite. The latter controls deviations even in directions where $T$ has tiny eigenvalues. An additive bound can hide a large relative error there. This explains why an additive temporal-design theorem cannot simply be inserted into a theorem requiring a relative global design; the difference is substantive.
 
-A useful elementary diagnostic for the temporal setting is the random-phase ensemble. With $\lvert\psi(\boldsymbol\theta)\rangle=\sum_j\sqrt{p_j}e^{i\theta_j}\lvert E_j\rangle$, its second moment is
+A useful elementary diagnostic for the temporal setting is the random-phase ensemble. With $\lvert\psi(\vct\theta)\rangle=\sum_j\sqrt{p_j}e^{i\theta_j}\lvert E_j\rangle$, its second moment is
 
 $$
 M_{\mathrm{phase}}^{(2)}

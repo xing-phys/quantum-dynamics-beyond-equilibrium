@@ -179,16 +179,16 @@ Periodic driving has one frequency lattice $m\omega$. For a smooth quasiperiodic
 
 $$
 H(t)=\sum_{\mathbf m\in\mathbb Z^p}H_{\mathbf m}
- e^{i\mathbf m\cdot\boldsymbol\omega t}.
+ e^{i\mathbf m\cdot\vct\omega t}.
 $$ {#eq-dp-quasiperiodic}
 
 To remove the oscillating part at leading order, a rotating-frame generator satisfies $\dot K(t)=H(t)-H_{\mathbf0}$. Its nonzero Fourier components are
 
 $$
-K_{\mathbf m}=\frac{H_{\mathbf m}}{i\mathbf m\cdot\boldsymbol\omega}.
+K_{\mathbf m}=\frac{H_{\mathbf m}}{i\mathbf m\cdot\vct\omega}.
 $$ {#eq-dp-denominator}
 
-Even when each basic frequency is large, an integer combination $\mathbf m\cdot\boldsymbol\omega$ can be small. These **small denominators** compete with the decay of Fourier amplitudes. Smoothness or analyticity controls large-$|\mathbf m|$ coefficients; arithmetic conditions on the frequency vector control how closely combinations approach zero. The periodic bound cannot simply be reused with the smallest basic frequency.
+Even when each basic frequency is large, an integer combination $\mathbf m\cdot\vct\omega$ can be small. These **small denominators** compete with the decay of Fourier amplitudes. Smoothness or analyticity controls large-$|\mathbf m|$ coefficients; arithmetic conditions on the frequency vector control how closely combinations approach zero. The periodic bound cannot simply be reused with the smallest basic frequency.
 
 Else, Ho, and Dumitrescu established long-lived interacting quasiperiodically driven phases under appropriate high-frequency, smoothness, and nonresonance conditions [@else2020quasiperiodic]. Their multiple time-translation structures are naturally formulated on the drive-phase torus, not as several independent shifts of the single physical time coordinate.
 

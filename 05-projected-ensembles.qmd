@@ -156,8 +156,8 @@ For traceless Hermitian $O$, its conditional expectation has variance $\operator
 A pure qubit projector is
 
 $$
-\rho_{\boldsymbol n}=\frac{I+\boldsymbol n\cdot\boldsymbol\sigma}{2},
-\qquad |\boldsymbol n|=1.
+\rho_{\vct n}=\frac{I+\vct n\cdot\vct\sigma}{2},
+\qquad |\vct n|=1.
 $$ {#eq-pe-bloch}
 
 Its first moment depends on $\mathbb E n_i$; its second also depends on $\mathbb E n_in_j$. Uniform spherical measure obeys $\mathbb E n_i=0$ and $\mathbb E n_in_j=\delta_{ij}/3$. These follow from rotational invariance and $\sum_i n_i^2=1$.
@@ -336,7 +336,7 @@ Postselection on rare outcomes can change the distribution substantially. Likewi
 
 2. **A design witness.** Compute $\mathbb E\langle X\rangle^2$, $\mathbb E\langle Y\rangle^2$, and $\mathbb E\langle Z\rangle^2$ for the uniform ensemble of the six Pauli eigenstates. Determine whether it is a $2$-design and test whether it is a $3$-design. *Hint:* inversion symmetry removes odd powers; a fourth-order test is needed to distinguish this ensemble from the sphere.
 
-3. **Frame-potential calculation.** Evaluate $\mathcal F_2$ for the tetrahedral states in @eq-pe-tetrahedron. *Hint:* for qubits $|\langle\psi_{\boldsymbol n}\vert\psi_{\boldsymbol m}\rangle|^2=(1+\boldsymbol n\cdot\boldsymbol m)/2$; distinct tetrahedral vectors have dot product $-1/3$.
+3. **Frame-potential calculation.** Evaluate $\mathcal F_2$ for the tetrahedral states in @eq-pe-tetrahedron. *Hint:* for qubits $|\langle\psi_{\vct n}\vert\psi_{\vct m}\rangle|^2=(1+\vct n\cdot\vct m)/2$; distinct tetrahedral vectors have dot product $-1/3$.
 
 4. **Finite-bath obstruction.** For a two-qubit retained subsystem and an environment of three qubits, determine which design orders are excluded by @eq-pe-rank-bound and give the resulting lower bound on $\Delta_3$. *Hint:* $d_A=4$, $d_B=8$, and $D_3=\binom63$.
 

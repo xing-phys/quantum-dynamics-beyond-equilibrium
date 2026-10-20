@@ -15,13 +15,14 @@ $U$. Dividing by $\|g\|$ preserves this invariance and fixes the length.
 Thus $|\psi\rangle=g/\|g\|$ is Haar.
 
 Using real Gaussian entries instead yields a distribution on the real sphere,
-invariant under orthogonal matrices. It is a different ensemble. Dynamics
-that is real in a specified basis can have an orthogonal rather than a
-complex-Haar benchmark.
+invariant under orthogonal matrices. It is a different ensemble. Real
+orthogonal propagators preserve real amplitudes and can have an orthogonal
+rather than a complex-Haar benchmark. A real Hamiltonian alone does not imply
+this restriction: its propagator $e^{-iHt}$ is generally complex.
 
 ## Amplitudes and the probability-of-probabilities
 
-Let $x_a=|\psi_a|^2$. For complex Gaussian entries,
+For dimension $d\geq2$, let $x_a=|\psi_a|^2$. For complex Gaussian entries,
 $y_a=|g_a|^2$ are independent exponential variables after choosing their
 mean to be one. Write $s=\sum_ay_a$, so $y_a=sx_a$.
 The Jacobian for this change of variables is $s^{d-1}$.

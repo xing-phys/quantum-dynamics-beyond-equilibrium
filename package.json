@@ -1,0 +1,12 @@
+{
+  "name": "quantum-dynamics-textbook-validation",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Optional validation with the same MathJax version bundled in the book",
+  "scripts": {
+    "check:math": "node scripts/check_math.cjs"
+  },
+  "devDependencies": {
+    "mathjax-full": "3.2.2"
+  }
+}

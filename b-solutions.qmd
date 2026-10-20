@@ -50,25 +50,25 @@ $\log2$: the pair is entangled, but its Schmidt weights are unequal.
 
 ### Exercise 4: Trace distance
 
-For Bloch vectors $\boldsymbol r,\boldsymbol s$, subtracting the two
+For Bloch vectors $\vct r,\vct s$, subtracting the two
 density operators gives
-$\rho-\sigma=(\boldsymbol r-\boldsymbol s)\cdot\boldsymbol\sigma/2$.
+$\rho-\sigma=(\vct r-\vct s)\cdot\vct\sigma/2$.
 The Pauli identity
-$(\boldsymbol v\cdot\boldsymbol\sigma)^2=|\boldsymbol v|^2I$ follows
+$(\vct v\cdot\vct\sigma)^2=|\vct v|^2I$ follows
 because the antisymmetric term
 $i\sum_{ijk}v_iv_j\epsilon_{ijk}\sigma_k$ vanishes. Hence the difference
-has eigenvalues $\pm|\boldsymbol r-\boldsymbol s|/2$. The trace norm adds
+has eigenvalues $\pm|\vct r-\vct s|/2$. The trace norm adds
 their absolute values, so
 
 $$
-D(\rho,\sigma)=\frac12|\boldsymbol r-\boldsymbol s|.
+D(\rho,\sigma)=\frac12|\vct r-\vct s|.
 $$ {#eq-sol-bloch-distance}
 
 The states $|0\rangle$ and $|+\rangle$ have Bloch vectors $(0,0,1)$ and
 $(1,0,0)$, whose separation is $\sqrt2$. Their trace distance is
 $1/\sqrt2$. For equally likely preparations, the optimal single-copy
 identification probability is $(1+1/\sqrt2)/2$. Measuring along the
-direction $(\boldsymbol e_z-\boldsymbol e_x)/\sqrt2$ attains this value:
+direction $(\vct e_z-\vct e_x)/\sqrt2$ attains this value:
 the optimal observable follows the difference of the two states, rather
 than either preparation axis alone.
 
@@ -191,8 +191,8 @@ two plus and two minus signs, so $\mathbb E r_i=0$. Each square is $1/3$,
 while opposite signs cancel in every off-diagonal product. Therefore
 $\mathbb E r_ir_j=\delta_{ij}/3$.
 
-Expanding $P_{\boldsymbol r}=(I+\boldsymbol r\cdot\boldsymbol\sigma)/2$
-shows that $\mathbb E P_{\boldsymbol r}^{\otimes2}$ depends only on these
+Expanding $P_{\vct r}=(I+\vct r\cdot\vct\sigma)/2$
+shows that $\mathbb E P_{\vct r}^{\otimes2}$ depends only on these
 first and second Bloch moments. They equal those of the sphere, proving
 the 2-design property without assuming that four points are continuously
 uniform. At third order, however, every listed vertex satisfies
