@@ -1,0 +1,279 @@
+# States, subsystems, and information {#sec-states}
+
+## Why a vector is not enough
+
+For an isolated system, quantum mechanics assigns a complex vector
+$|\psi\rangle$ in a Hilbert space $\mathcal H$. For a spin-$1/2$, choose the
+orthonormal basis $|0\rangle,|1\rangle$ and write
+
+$$
+|\psi\rangle=a|0\rangle+b|1\rangle,\qquad |a|^2+|b|^2=1.
+$$
+
+Multiplication by a common phase $e^{i\varphi}$ changes no probability.
+Therefore physical pure states are rays, rather than individual vectors.
+Relative phases do matter: $|+\rangle=(|0\rangle+|1\rangle)/\sqrt2$ and
+$|-\rangle=(|0\rangle-|1\rangle)/\sqrt2$ can be distinguished perfectly by a
+measurement in the $X$ basis.
+
+If a preparation device chooses $|\psi_j\rangle$ with probability $p_j$ and
+does not reveal $j$, the prediction for a Hermitian observable $O$ is
+
+$$
+\sum_jp_j\langle\psi_j|O|\psi_j\rangle
+=\operatorname{Tr}\!\left[\left(\sum_jp_j|\psi_j\rangle\langle\psi_j|\right)O\right].
+$$
+
+This motivates the density operator
+
+$$
+\rho=\sum_jp_j|\psi_j\rangle\langle\psi_j|,
+\qquad \rho\geq0,\qquad \operatorname{Tr}\rho=1.
+$$ {#eq-si-density}
+
+Positivity means $\langle v|\rho|v\rangle\geq0$ for every $v$. Conversely,
+diagonalizing any positive trace-one matrix gives a possible preparation
+ensemble: $\rho=\sum_\alpha\lambda_\alpha|\alpha\rangle\langle\alpha|$.
+The eigenvalues are nonnegative and sum to one.
+
+The density matrix describes all single-system measurements when the
+preparation label is unavailable. It does not uniquely specify the preparation
+procedure. We will make that distinction operational in
+@sec-measurement-ensembles.
+
+## The Bloch ball
+
+The identity and Pauli matrices form a basis for Hermitian $2\times2$ matrices:
+
+$$
+X=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+Y=\begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad
+Z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+$$
+
+They obey $\operatorname{Tr}(\sigma_i\sigma_j)=2\delta_{ij}$.
+Consequently any qubit state has the unique representation
+
+$$
+\rho=\frac12(I+\boldsymbol r\cdot\boldsymbol\sigma),
+\qquad r_i=\operatorname{Tr}(\rho\sigma_i).
+$$ {#eq-si-bloch}
+
+Since $(\boldsymbol r\cdot\boldsymbol\sigma)^2=|\boldsymbol r|^2I$, its
+eigenvalues are $\pm|\boldsymbol r|$ and those of $\rho$ are
+$(1\pm|\boldsymbol r|)/2$. Positivity requires $|\boldsymbol r|\leq1$.
+Pure states lie on the surface; mixed states lie inside.
+
+The purity follows directly:
+
+$$
+\operatorname{Tr}\rho^2=\frac{1+|\boldsymbol r|^2}{2}.
+$$
+
+A density matrix is pure exactly when $\rho^2=\rho$, equivalently
+$\operatorname{Tr}\rho^2=1$. Purity is a nonlinear function of $\rho$.
+Experimentally it can be measured with two independently prepared copies:
+if $F|u\rangle|v\rangle=|v\rangle|u\rangle$ is the swap operator, then
+$\operatorname{Tr}[F(\rho\otimes\rho)]=\operatorname{Tr}\rho^2$.
+
+## Composite systems and the partial trace
+
+Two systems have the tensor-product space
+$\mathcal H_A\otimes\mathcal H_B$. If their dimensions are $d_A,d_B$,
+the composite dimension is $d_Ad_B$. An orthonormal product basis is
+$|a\rangle_A|b\rangle_B$, and a general pure state is
+
+$$
+|\Psi\rangle_{AB}=\sum_{a,b}C_{ab}|a\rangle|b\rangle,
+\qquad \sum_{a,b}|C_{ab}|^2=1.
+$$
+
+Suppose an observer measures $O_A$ and has no access to $B$. Then
+
+$$
+\langle O_A\rangle
+=\sum_{a,a',b}C_{ab}C^*_{a'b}(O_A)_{a'a}.
+$$
+
+Thus the matrix sufficient for that observer is
+
+$$
+(\rho_A)_{aa'}=\sum_b C_{ab}C^*_{a'b},
+\qquad
+\rho_A=\operatorname{Tr}_B|\Psi\rangle\langle\Psi|=CC^\dagger.
+$$ {#eq-si-partial}
+
+This defines the partial trace. In a basis,
+$\operatorname{Tr}_B(|a,b\rangle\langle a',b'|)
+ =\delta_{bb'}|a\rangle\langle a'|$.
+The defining property is
+$\operatorname{Tr}[\rho_{AB}(O_A\otimes I_B)]
+=\operatorname{Tr}(\rho_AO_A)$.
+
+The loss of purity of $\rho_A$ need not reflect classical ignorance about the
+global state. The Bell pair
+
+$$
+|\Phi^+\rangle=\frac{|00\rangle+|11\rangle}{\sqrt2}
+$$
+
+is globally pure, while $\rho_A=\rho_B=I/2$. The subsystem is mixed because
+its observable statistics are entangled with another subsystem.
+
+### Worked example: a continuously tunable pair
+
+Consider
+$|\Psi_\theta\rangle=\cos\theta|00\rangle+\sin\theta|11\rangle$,
+with $0\leq\theta\leq\pi/4$. Explicit expansion gives
+
+$$
+\rho_{AB}=\cos^2\theta|00\rangle\langle00|
++\sin^2\theta|11\rangle\langle11|
++\sin\theta\cos\theta(|00\rangle\langle11|+|11\rangle\langle00|).
+$$
+
+The cross terms vanish under $\operatorname{Tr}_B$, since
+$\langle0|1\rangle=0$. Hence
+$\rho_A=\operatorname{diag}(\cos^2\theta,\sin^2\theta)$ and
+$\operatorname{Tr}\rho_A^2=1-\tfrac12\sin^2(2\theta)$.
+The subsystem becomes less pure as the global state becomes more entangled.
+
+## Schmidt decomposition and purification
+
+Apply singular-value decomposition to the coefficient matrix:
+$C=USV^\dagger$. Its nonzero singular values are $\sqrt{\lambda_\alpha}$.
+Absorbing the conjugation on the right into the definition of the $B$ basis
+gives
+
+$$
+|\Psi\rangle=\sum_{\alpha=1}^{r}\sqrt{\lambda_\alpha}
+|u_\alpha\rangle_A|v_\alpha\rangle_B.
+$$ {#eq-si-schmidt}
+
+The Schmidt rank obeys $r\leq\min(d_A,d_B)$.
+Both reduced states have the same nonzero eigenvalues $\lambda_\alpha$.
+The state is a product exactly when $r=1$.
+
+Conversely, any mixed state $\rho_A=\sum_\alpha\lambda_\alpha
+|u_\alpha\rangle\langle u_\alpha|$ can be obtained by tracing one half of
+the pure state in @eq-si-schmidt. This is a **purification**.
+The extra system need only have dimension at least the rank of $\rho_A$.
+Changing its basis changes the purification's representation without changing
+$\rho_A$. This freedom will become the freedom to generate different
+conditional ensembles by measuring the bath.
+
+## Entropy and mutual information
+
+The von Neumann entropy is
+
+$$
+S(\rho)=-\operatorname{Tr}(\rho\ln\rho)
+=-\sum_\alpha\lambda_\alpha\ln\lambda_\alpha,
+$$ {#eq-si-entropy}
+
+with $0\ln0=0$ by continuity. It vanishes for pure states and is at most
+$\ln d$, attained only by $I/d$. To see the latter, compare the eigenvalue
+distribution with the uniform distribution:
+$\sum_\alpha\lambda_\alpha\ln(d\lambda_\alpha)\geq0$.
+This is the nonnegativity of classical relative entropy.
+
+For a pure bipartite state,
+$S(\rho_A)=S(\rho_B)$ measures bipartite entanglement.
+For a general mixed bipartite state, $S(\rho_A)$ alone does not measure
+entanglement: the separable mixture
+$\tfrac12|00\rangle\langle00|+\tfrac12|11\rangle\langle11|$
+also has $\rho_A=I/2$.
+
+The mutual information is
+
+$$
+I(A:B)=S(\rho_A)+S(\rho_B)-S(\rho_{AB}).
+$$
+
+It measures total correlations, including classical correlations. For a
+pure Bell pair it equals $2\ln2$; for the separable mixture above it is
+$\ln2$. For a pure global state it is always $2S(\rho_A)$.
+
+The second Rényi entropy is $S_2(\rho)=-\ln\operatorname{Tr}\rho^2$.
+It is often easier to compute because it involves only two copies.
+It is not interchangeable with $S$: different eigenvalue distributions can
+have the same purity and different von Neumann entropies.
+
+## Distance and operational distinguishability
+
+For a matrix $A$, define
+$\|A\|_1=\operatorname{Tr}\sqrt{A^\dagger A}$ and
+$\|A\|_2=\sqrt{\operatorname{Tr}A^\dagger A}$.
+The latter is the Hilbert–Schmidt norm. For density matrices,
+
+$$
+D(\rho,\sigma)=\frac12\|\rho-\sigma\|_1.
+$$ {#eq-si-trace-distance}
+
+Why the factor $1/2$? Imagine the two states are equally likely, and a
+measurement effect $0\leq E\leq I$ triggers the guess “$\rho$.”
+The success probability is
+
+$$
+P_{\rm success}
+=\frac12\operatorname{Tr}(E\rho)
++\frac12\operatorname{Tr}[(I-E)\sigma]
+=\frac12+\frac12\operatorname{Tr}[E(\rho-\sigma)].
+$$
+
+Diagonalize the traceless Hermitian difference. The optimal $E$ projects
+onto its positive eigenspace. The sum of its positive eigenvalues is
+$\|\rho-\sigma\|_1/2$. Therefore
+
+$$
+P_{\rm success}^{\rm opt}=\frac12[1+D(\rho,\sigma)].
+$$
+
+Trace distance is consequently a physical measure of distinguishability.
+For qubits, @eq-si-bloch gives
+$D(\rho,\sigma)=|\boldsymbol r-\boldsymbol s|/2$.
+For pure states it is
+$\sqrt{1-|\langle\psi|\phi\rangle|^2}$; one proves this by restricting the
+difference of projectors to their two-dimensional span.
+
+If $O$ has operator norm at most one, then
+$|\operatorname{Tr}[O(\rho-\sigma)]|\leq2D(\rho,\sigma)$.
+A small trace distance therefore controls all bounded observable averages.
+The reverse inference from agreement of a few observables requires those
+observables to be informationally complete.
+
+## Information discarded and information retained
+
+There are three distinct objects already in view:
+the global state, the reduced state, and an ensemble realizing the reduced
+state. Knowing the first and a bath measurement specifies the third.
+Knowing the third specifies the second by averaging. Knowing the second
+does not specify either of the others.
+
+This hierarchy is the conceptual starting point for deep thermalization.
+Ordinary thermalization can be entirely successful at the level of $\rho_A$
+while leaving a rich set of possibilities for the ensemble behind it.
+
+## Exercises
+
+1. **Purity and spectrum.** Prove
+   $1/d\leq\operatorname{Tr}\rho^2\leq1$ and characterize both equality
+   cases. *Hint:* apply Cauchy–Schwarz to the eigenvalues for the lower bound.
+2. **Partial trace in components.** For
+   $|\Psi\rangle=(|00\rangle+|01\rangle+|10\rangle)/\sqrt3$,
+   compute both reduced states, their spectra, and $S_2$.
+   *Hint:* form the $2\times2$ coefficient matrix first.
+3. **Same marginal, different correlations.** Compare
+   $|\Phi^+\rangle\langle\Phi^+|$ with the separable mixture above using
+   $\langle X_AX_B\rangle$ and $\langle Z_AZ_B\rangle$.
+   Explain why no measurement on $A$ alone distinguishes them.
+4. **Trace distance.** Derive the qubit formula from the eigenvalues of
+   $(\boldsymbol r-\boldsymbol s)\cdot\boldsymbol\sigma$.
+   Evaluate the distance between $|0\rangle$ and $|+\rangle$.
+5. **Purification freedom.** Show that applying a unitary only to the
+   purifying system preserves $\rho_A$. Does a unitary on $A$ preserve it?
+   *Hint:* distinguish preservation of eigenvalues from preservation of a matrix.
+6. **Entropy versus entanglement.** Construct a separable two-qubit state
+   with $S(\rho_A)=\ln2$ and $I(A:B)=0$, and another with
+   $I(A:B)=\ln2$. What additional assumption makes $S(\rho_A)$ an
+   entanglement measure?

@@ -1,0 +1,247 @@
+# Random states, moments, and quantum designs {#sec-randomness-designs}
+
+## What “uniformly random” means
+
+There is no preferred direction in a Hilbert space unless extra structure
+is specified. The complex Haar state ensemble is the unique normalized
+distribution on pure-state rays invariant under every unitary basis change.
+One construction is to apply a Haar-distributed unitary to a fixed reference
+vector. Another is to normalize an isotropic complex Gaussian vector.
+
+Take $g_a=x_a+iy_a$, with independent equal-variance centered real Gaussian
+components. Its density depends only on
+$\sum_a|g_a|^2$, so $Ug$ has the same distribution as $g$ for every unitary
+$U$. Dividing by $\|g\|$ preserves this invariance and fixes the length.
+Thus $|\psi\rangle=g/\|g\|$ is Haar.
+
+Using real Gaussian entries instead yields a distribution on the real sphere,
+invariant under orthogonal matrices. It is a different ensemble. Dynamics
+that is real in a specified basis can have an orthogonal rather than a
+complex-Haar benchmark.
+
+## Amplitudes and the probability-of-probabilities
+
+Let $x_a=|\psi_a|^2$. For complex Gaussian entries,
+$y_a=|g_a|^2$ are independent exponential variables after choosing their
+mean to be one. Write $s=\sum_ay_a$, so $y_a=sx_a$.
+The Jacobian for this change of variables is $s^{d-1}$.
+The joint density is proportional to $e^{-s}s^{d-1}$ and has no dependence
+on the $x_a$ except the simplex constraints
+$x_a\geq0$, $\sum_ax_a=1$. Hence $x$ is uniform on that simplex.
+
+For a particular component $x=x_1$, the remaining simplex has volume
+proportional to $(1-x)^{d-2}$. Normalization gives
+
+$$
+P_d(x)=(d-1)(1-x)^{d-2},\qquad 0\leq x\leq1.
+$$ {#eq-rd-beta}
+
+Integrating with the beta integral yields
+
+$$
+\mathbb E x^k=\frac{k!(d-1)!}{(d+k-1)!}.
+$$ {#eq-rd-amplitude-moment}
+
+For $k=1$ this is $1/d$, and for $k=2$ it is $2/[d(d+1)]$.
+At large $d$, the rescaled probability $y=dx$ has density approaching
+$e^{-y}$. This exponential law is often called the complex
+Porter–Thomas law in quantum-information experiments.
+At finite $d$, @eq-rd-beta is the exact formula.
+
+Agreement with this distribution in one measurement basis does not prove a
+state design. An ensemble with uniformly random probabilities but fixed
+phases can reproduce probability statistics while missing phase-sensitive
+moments. Full moment operators test more information.
+
+## Deriving the Haar moment
+
+The $k$th moment is
+$M_k^{\rm H}=\int d\psi(|\psi\rangle\langle\psi|)^{\otimes k}$.
+Every vector $|\psi\rangle^{\otimes k}$ lies in the completely symmetric
+subspace of $\mathcal H^{\otimes k}$. Therefore the moment has support
+only there. It also commutes with $U^{\otimes k}$ for every $U$.
+The symmetric representation of the unitary group is irreducible, so an
+operator with this invariance is scalar on that subspace. Normalizing its
+trace gives
+
+$$
+M_k^{\rm H}=\frac{P_{\rm sym}^{(k)}}{D_k},
+\qquad
+D_k=\dim\operatorname{Sym}^k(\mathbb C^d)
+=\binom{d+k-1}{k}.
+$$ {#eq-rd-haar}
+
+The dimension counts occupations of $k$ identical bosons in $d$ modes:
+$n_1+\cdots+n_d=k$, $n_a\geq0$. The stars-and-bars count gives the binomial
+coefficient. The symmetric projector can be written
+
+$$
+P_{\rm sym}^{(k)}=\frac1{k!}\sum_{\pi\in S_k}U_\pi,
+$$
+
+where $U_\pi$ permutes the copies. At second order,
+
+$$
+M_2^{\rm H}=\frac{I+F}{d(d+1)}.
+$$ {#eq-rd-haar2}
+
+This also supplies a direct check of the amplitude moments: contract with
+$|a\rangle\langle a|^{\otimes2}$, and both terms contribute one.
+
+One can avoid representation theory at $k=2$. Unitary invariance restricts
+the answer to a linear combination of $I$ and $F$; permutation symmetry and
+absence of antisymmetric support set their coefficients equal; unit trace
+fixes the common coefficient. The general result applies the same logic on
+the symmetric subspace.
+
+## Designs as finite-copy indistinguishability
+
+A weighted pure-state ensemble is a state **$k$-design** if
+
+$$
+M_k(\mathcal E)=M_k^{\rm H}.
+$$ {#eq-rd-design}
+
+By tracing out copies, a $k$-design is also a $j$-design for every $j<k$.
+The converse is false. The operational interpretation is exact: no
+measurement receiving $k$ copies sharing one sampled label can distinguish
+this ensemble from Haar. This definition extends to continuous ensembles;
+finiteness is useful but not necessary @ambainis2007.
+
+An approximate design needs a specified metric. We use
+$\Delta_k=\tfrac12\|M_k-M_k^{\rm H}\|_1$.
+Some sources instead use multiplicative operator bounds or a rescaled
+Hilbert–Schmidt distance. These metrics have different dimension dependence.
+An unqualified “small design error” is therefore ambiguous.
+
+### Worked example: six qubit states
+
+Choose the six Pauli eigenstates, the Bloch vectors
+$\pm\hat x,\pm\hat y,\pm\hat z$, with weight $1/6$.
+Their mean is zero, so $M_1=I/2$. Their second-vector moment is
+$\overline{r_ir_j}=\delta_{ij}/3$, so their second state moment equals
+the uniform sphere's. They are a 2-design.
+
+They are also a 3-design: all odd vector moments through degree three
+vanish by inversion symmetry, and the remaining terms are fixed by the
+second moment. They are not a 4-design, since
+$\overline{r_z^4}=1/3$, while the sphere gives
+$\tfrac12\int_{-1}^1z^4\,dz=1/5$.
+
+Thus a finite, geometrically simple set can imitate Haar for a limited number
+of copies while remaining distinguishable at higher order. This is the
+precise sense in which a design is pseudorandom.
+
+## Frame potential and its lower bound
+
+The frame potential is the overlap statistic
+
+$$
+F_k(\mathcal E)=\sum_{z,w}p_zp_w|\langle\psi_z|\psi_w\rangle|^{2k}
+=\operatorname{Tr}M_k^2.
+$$ {#eq-rd-frame}
+
+It is computationally convenient because it avoids explicitly constructing
+an operator on dimension $d^k$ when the ensemble is not too large.
+Since $M_k$ is supported in a space of dimension $D_k$ and has unit trace,
+Cauchy–Schwarz gives $F_k\geq1/D_k$.
+Equality holds exactly for a $k$-design.
+
+More explicitly, $M_k^{\rm H}=P_{\rm sym}/D_k$ implies
+$\operatorname{Tr}(M_kM_k^{\rm H})=1/D_k$. Expanding the square,
+
+$$
+\|M_k-M_k^{\rm H}\|_2^2=F_k-\frac1{D_k}.
+$$ {#eq-rd-frame-gap}
+
+Since the difference is supported on the symmetric subspace,
+
+$$
+\frac12\sqrt{F_k-\frac1{D_k}}
+\leq\Delta_k
+\leq\frac12\sqrt{D_k\left(F_k-\frac1{D_k}\right)}.
+$$
+
+The lower bound uses $\|X\|_1\geq\|X\|_2$, and the upper bound uses
+$\|X\|_1\leq\sqrt{D_k}\|X\|_2$.
+An unscaled small frame-potential gap can give a weak trace-distance bound
+when $D_k$ is large.
+
+## Finite samples impose a floor
+
+Suppose $N$ independent Haar states are sampled with equal weights.
+The empirical frame potential includes $N$ self-overlaps of one:
+
+$$
+\mathbb EF_k^{\rm empirical}
+=\frac1N+\left(1-\frac1N\right)\frac1{D_k}.
+$$ {#eq-rd-sample-floor}
+
+Its excess above Haar is $(1-1/D_k)/N$. A finite sample of an exact Haar
+process therefore does not have zero empirical error.
+For correlated temporal samples, the independent-sample formula need not
+apply.
+
+A second obstruction comes from rank. An ensemble supported on $N$ pure
+states has $\operatorname{rank}M_k\leq N$, while Haar has rank $D_k$.
+An exact finite design therefore requires at least $N\geq D_k$.
+A useful distance bound is
+
+$$
+\Delta_k\geq \max\left(0,1-\frac{N}{D_k}\right).
+$$
+
+To derive it, project onto the support of $M_k$: the empirical moment assigns
+probability one there, whereas Haar assigns at most $N/D_k$.
+Trace distance bounds every such probability difference.
+The bound is necessary, not sufficient; satisfying it does not construct a
+design.
+
+## State randomness versus unitary randomness
+
+A unitary $k$-design reproduces Haar averages of polynomials with $k$ factors
+of $U$ and $k$ of $U^\dagger$. Its moment object can be represented by
+$\mathbb E[U^{\otimes k}\otimes U^{*\otimes k}]$.
+Applying such a distribution to a fixed vector gives a state $k$-design.
+The reverse inference from one initial state is invalid, because observing
+one column of a unitary does not determine all columns or their correlations.
+
+Similarly, a distribution over Kraus operators requires different normalization
+and weighting conventions from a distribution over normalized state vectors.
+These distinctions will matter when randomness is extended from states to
+processes.
+
+## Why designs belong in statistical mechanics
+
+The design hierarchy supplies a sequence of experimentally meaningful
+questions. Does the mean state look thermal? Do conditional observable
+fluctuations have their universal values? Do successively more detailed
+correlations agree with the proposed equilibrium distribution?
+
+One should choose the benchmark before applying the hierarchy. Haar is
+appropriate only if its first moment is compatible with the actual marginal
+and no further constraints forbid its higher moments. At finite temperature
+or with revealed charges, different target ensembles are needed.
+
+## Exercises
+
+1. **A qubit probability distribution.** Show that a Haar qubit has
+   $|\langle0|\psi\rangle|^2$ uniform on $[0,1]$, and that its Bloch
+   coordinate $r_z$ is uniform on $[-1,1]$.
+2. **Two moments, one mean.** Compute $F_1$ and $F_2$ for the pole ensemble.
+   Compare with Haar values $1/2$ and $1/3$.
+3. **Tetrahedron.** Four qubit states have Bloch vectors at the vertices of a
+   regular tetrahedron. Show they form a 2-design but fail at third order.
+   *Hint:* use vertices proportional to $(1,1,1)$, $(1,-1,-1)$,
+   $(-1,1,-1)$, and $(-1,-1,1)$.
+4. **Estimator bias.** Derive @eq-rd-sample-floor. Construct an estimator
+   excluding self-pairs that is unbiased for independent samples.
+5. **Rank bound.** For $d=4$ and $k=3$, compute $D_k$. How many distinct
+   outcomes are necessary for an exact design? What distance lower bound
+   follows for an ensemble of eight states?
+6. **Real versus complex.** For a uniformly random real unit vector, show
+   $\mathbb E x_1^4=3/[d(d+2)]$. *Hint:* use rotational symmetry and
+   $(\sum_ix_i^2)^2=1$, with a $45^\circ$ rotation to relate mixed moments.
+7. **Probability data are incomplete.** Construct a qubit ensemble with
+   the correct Haar distribution of computational-basis probabilities but
+   a nonzero average $X$ component. *Hint:* keep the relative phase zero.

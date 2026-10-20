@@ -1,0 +1,100 @@
+---
+title: "A guide to the book"
+---
+
+::: {.hero}
+**QUANTUM MANY-BODY DYNAMICS**
+
+## What does a quantum system forget—and what does it keep?
+
+A density matrix describes every measurement on a subsystem whose environment
+has been ignored. Yet the same density matrix can hide very different
+distributions of conditional wavefunctions, different histories, and different
+resources. This book develops the tools needed to see that additional structure.
+:::
+
+![One physical evolution can be examined through several different information
+structures. Each arrow specifies what is sampled or retained; none is an
+automatic implication between different notions of randomness. Original diagram.](figs/concept-map.svg){#fig-book-map}
+
+## Purpose and prerequisites
+
+This is a graduate introduction to nonequilibrium quantum dynamics through
+ensembles, information, and constraints. It starts with complex vectors and
+probabilities and proceeds to current questions about deep thermalization,
+Hilbert-space ergodicity, quantum resources, dynamical maps, and temporal
+memory. The intended reader has encountered elementary quantum mechanics and
+linear algebra. No previous course in quantum information or statistical
+mechanics is assumed. The mathematical appendix reviews the specific tools
+used in the derivations.
+
+The scientific backbone is recent work by Wen Wei Ho and collaborators,
+especially papers from 2024–2026, together with the foundational literature
+needed to understand it. The organizing principles are physical questions.
+This is an independent educational synthesis, not an authorized account of a
+research group. Exposition and figures are original and AI-assisted. Literature
+coverage is current through **20 October 2026**.
+
+## The main ideas
+
+Ordinary thermalization asks whether a small subsystem's density matrix becomes
+thermal. Deep thermalization asks a more detailed question: after measuring
+the surrounding bath, how are the subsystem's conditional states distributed?
+The first moment of this distribution is the density matrix. Its higher
+moments reveal information that averaging has removed.
+
+Hilbert-space ergodicity instead samples a trajectory at different times.
+Although its mathematics also uses moments of quantum states, its sampling
+protocol and obstructions differ. Static unitary dynamics preserves populations
+in its energy basis. An aperiodic drive may remove this obstruction, while
+taking extraordinarily long to become ergodic.
+
+Quantum resource theories ask which kinds of useful structure remain under a
+specified class of operations. Coherence, magic, and entanglement are different
+resources. Their fluctuations can distinguish phases whose mean density
+matrices agree. Quantum channels and multi-time processes then extend the
+discussion from distributions of states to distributions of transformations
+and patterns of memory.
+
+Finally, constrained dynamics shows why universal randomness is conditional.
+Scars, disconnected dynamical sectors, conservation laws, and high-frequency
+driving can all restrict the states that are explored. The right equilibrium
+benchmark must respect those restrictions.
+
+## How to read
+
+The full route is sequential. A first reading can follow one of these paths:
+
+| Interest | Suggested path |
+|---|---|
+| First encounter with the subject | Foundations → projected ensembles → temporal ergodicity |
+| Deep thermalization | Foundations → projected ensembles → Scrooge ensembles → resource transitions |
+| Driven dynamics | Thermalization → temporal ergodicity → aperiodic drives → driven phases |
+| Open systems and simulation | States and measurement → channels → temporal entanglement → laboratory |
+| Constraints and experiments | Thermalization → scars and fragmentation → driven phases → laboratory |
+
+Every chapter supplies worked examples and exercises. Hints help with the
+first step; selected complete solutions appear in the solutions appendix.
+Exercises labelled “research” are proposals for investigation and may have
+no established answer. The computational laboratory uses Julia and only its
+standard libraries, so every numerical illustration can be regenerated.
+
+## Conventions and claims
+
+We use $\hbar=1$. A state vector is normalized unless explicitly called
+unnormalized. Subsystems are $A,B,\ldots$, their Hilbert-space dimensions are
+$d_A,d_B,\ldots$, and $k$ is a moment order. The trace distance is
+$D(\rho,\sigma)=\tfrac12\|\rho-\sigma\|_1$. Entropies use natural logarithms,
+except when a result is explicitly expressed in bits. The Haar ensemble is
+complex unless a real ensemble is explicitly specified.
+
+An **identity** follows from the definitions. A **theorem** has stated
+hypotheses, which matter. A **model result** need not apply to all dynamics.
+**Numerical evidence** is limited by size and time. A **conjecture** or
+**open question** is not presented as established physics. In particular,
+agreement with a few moments is not a proof of all-order randomness, and a
+finite-time plateau is not a proof of an asymptotic phase.
+
+The research program's broad context is surveyed in @ergMark2026.
+The [annotated literature guide](c-literature-guide.qmd) provides a route from
+the derivations here to the primary sources.

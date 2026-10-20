@@ -1,0 +1,204 @@
+# Mathematical toolbox and notation {#sec-toolbox}
+
+## Vectors, operators, and traces
+
+A finite-dimensional Hilbert space is a complex vector space with inner
+product $\langle u|v\rangle$, conjugate-linear in $u$ and linear in $v$.
+An orthonormal basis obeys $\langle i|j\rangle=\delta_{ij}$ and
+$\sum_i|i\rangle\langle i|=I$. Components are
+$v_i=\langle i|v\rangle$, and the adjoint satisfies
+$\langle u|Av\rangle=\langle A^\dagger u|v\rangle$.
+
+A Hermitian matrix obeys $A^\dagger=A$ and has an orthonormal eigenbasis with
+real eigenvalues. A positive matrix has nonnegative eigenvalues.
+A unitary obeys $U^\dagger U=UU^\dagger=I$.
+The group $U(d)$ is the set of all $d$-dimensional unitaries; $SU(d)$ restricts
+their determinants to one. Global phases disappear from state projectors,
+but conventions about the group still matter for operator moments.
+
+The trace $\operatorname{Tr}A=\sum_i\langle i|A|i\rangle$ is independent of
+orthonormal basis. Cyclicity,
+$\operatorname{Tr}(AB)=\operatorname{Tr}(BA)$, follows by writing
+$\sum_{ij}A_{ij}B_{ji}$. Factors can be rotated cyclically, but cannot
+generally be reordered arbitrarily.
+The commutator is $[A,B]=AB-BA$ and anticommutator is $\{A,B\}=AB+BA$.
+
+For tensor products,
+$(A\otimes B)(C\otimes D)=AC\otimes BD$ and
+$\operatorname{Tr}(A\otimes B)=\operatorname{Tr}A\operatorname{Tr}B$.
+These identities explain why a product observable on $k$ copies measures
+a product of single-copy expectation values.
+
+## Singular values and best low-rank approximations
+
+Any rectangular complex matrix can be written $A=USV^\dagger$, with
+orthonormal columns in $U,V$ and nonnegative singular values $s_i$ in $S$.
+They are square roots of eigenvalues of $A^\dagger A$.
+This is singular-value decomposition, or SVD. Reshaping a bipartite state's
+coefficients into a matrix turns its SVD into the Schmidt decomposition.
+
+To approximate $A$ by a matrix of rank at most $\chi$ in Hilbert–Schmidt norm,
+keep its $\chi$ largest singular values. The squared error is
+$\sum_{i>\chi}s_i^2$. One way to see optimality is to project onto the
+candidate approximation's column space. The missed squared norm is minimized
+by the subspace carrying the largest eigenvalues of $AA^\dagger$.
+No rank-$\chi$ matrix can recover the component perpendicular to that space.
+
+Successive SVDs along a chain yield a matrix product representation.
+Truncating many bonds needs an accumulated error analysis; the error from
+one cut cannot simply be asserted to control the whole contracted process.
+
+## Norms, dimensions, and contraction
+
+The operator, Hilbert–Schmidt, and trace norms are
+$\|A\|_\infty=\max_i s_i$,
+$\|A\|_2=(\sum_is_i^2)^{1/2}$, and $\|A\|_1=\sum_is_i$.
+For rank at most $r$,
+
+$$
+\|A\|_2\leq\|A\|_1\leq\sqrt r\,\|A\|_2.
+$$ {#eq-tb-norms}
+
+The second inequality is Cauchy–Schwarz on the singular values.
+For Hermitian $X$ with zero trace, write its positive and negative spectral
+parts as $X=X_+-X_-$. They have equal trace, and
+
+$$
+\frac12\|X\|_1=\max_{0\leq E\leq I}\operatorname{Tr}(EX)
+=\max_{0\leq E\leq I}|\operatorname{Tr}(EX)|.
+$$ {#eq-tb-variation}
+
+The maximizing effect is the positive spectral projector, or the negative
+one for the opposite sign. This formula directly proves contraction under a
+CPTP map $\Phi$. Its adjoint is defined by
+$\operatorname{Tr}[E\Phi(X)]=\operatorname{Tr}[\Phi^\dagger(E)X]$.
+Positivity and trace preservation imply
+$0\leq\Phi^\dagger(E)\leq I$, since $\Phi^\dagger(I)=I$.
+Maximizing over this subset of effects cannot exceed the maximum over all
+effects. Therefore $D(\Phi(\rho),\Phi(\sigma))\leq D(\rho,\sigma)$.
+Partial trace is a special case.
+
+Trace distance is sensitive to all measurements. A norm on one selected
+family of observables can be weaker and more appropriate operationally,
+but must be specified explicitly.
+
+## Gaussian integrals, Wick contractions, and Haar moments
+
+For a standard complex Gaussian $g$ with density $e^{-|g|^2}/\pi$,
+
+$$
+\int_{\mathbb C}\frac{d^2g}{\pi}e^{-|g|^2+tg+sg^*}=e^{ts}.
+$$
+
+The identity follows by completing squares in the two real components,
+or expanding the angular and radial integrals. Differentiating at
+$t=s=0$ shows that
+$\mathbb E[g^m(g^*)^n]=\delta_{mn}m!$.
+For independent components the generating function is
+$\exp(\sum_at_as_a)$, so
+
+$$
+\mathbb E[g_{i_1}\cdots g_{i_k}g^*_{j_1}\cdots g^*_{j_k}]
+=\sum_{\pi\in S_k}\prod_{\ell=1}^k\delta_{i_\ell,j_{\pi(\ell)}}.
+$$ {#eq-tb-wick}
+
+Every pairing of an unstarred component with a starred one contributes.
+This is the complex Gaussian Wick identity.
+
+Write $g=r\psi$, with $\psi$ a unit vector. Isotropy makes the direction
+Haar-distributed and independent of $r$. Since $r^2$ is the sum of $d$
+independent exponential variables, its density is
+$s^{d-1}e^{-s}/\Gamma(d)$. The gamma integral gives
+$\mathbb E[r^{2k}]=\Gamma(d+k)/\Gamma(d)=d(d+1)\cdots(d+k-1)$.
+Dividing @eq-tb-wick by that radial moment gives
+
+$$
+\mathbb E[\psi_{i_1}\cdots\psi_{i_k}
+\psi^*_{j_1}\cdots\psi^*_{j_k}]
+=\frac{\sum_{\pi\in S_k}\prod_\ell\delta_{i_\ell,j_{\pi(\ell)}}}
+{d(d+1)\cdots(d+k-1)}.
+$$ {#eq-tb-haar-components}
+
+The numerator is the matrix element of $\sum_\pi U_\pi$.
+Using $P_{\rm sym}=\sum_\pi U_\pi/k!$ recovers the Haar moment formula
+without assuming prior knowledge of representation theory.
+
+The gamma function is
+$\Gamma(a)=\int_0^\infty s^{a-1}e^{-s}ds$ for $a>0$.
+Integration by parts gives $\Gamma(a+1)=a\Gamma(a)$, so
+$\Gamma(n+1)=n!$. The beta integral,
+$\int_0^1x^{a-1}(1-x)^{b-1}dx=\Gamma(a)\Gamma(b)/\Gamma(a+b)$,
+follows by setting $s=u+v$, $x=u/(u+v)$ in the product of two gamma integrals.
+
+## Why all moments identify a pure-state distribution
+
+Pure-state projectors form a compact subset of the finite-dimensional
+space of Hermitian matrices. The entries of $M_k$ are averages of
+degree-$k$ polynomials in projector entries. Knowing every $M_k$ therefore
+gives the average of every polynomial in those entries.
+Polynomials distinguish distinct projectors, include constants, and are
+closed under multiplication and conjugation. On this compact space they
+approximate continuous functions arbitrarily well (the polynomial
+approximation theorem in its Stone–Weierstrass form).
+Two probability measures with equal averages of every continuous function
+are the same measure.
+
+This explains why all-order moment agreement is such a strong claim.
+Agreement through one finite $k$ only determines a finite family of polynomial
+statistics. Finite experimental precision weakens the conclusion further.
+
+## Noncommuting limits
+
+A schematic diagnostic $\Delta_k(T,L)$ depends on moment order, observation
+time, and system size. None of the following is automatically equivalent:
+
+$$
+\lim_{T\to\infty}\Delta_k(T,L)=0
+\text{ for each fixed }k,L,\qquad
+\lim_{L\to\infty}\Delta_k(T,L)=0
+\text{ for each fixed }k,T.
+$$
+
+Nor does convergence for every fixed $k$ imply a rate uniform in $k$.
+If the required time grows rapidly with $k$ or $L$, exchanging limits can
+change the result. The finite-rank design obstruction supplies an immediate
+example: a fixed finite number of sampled states cannot reproduce arbitrary
+orders even when several low moments are accurate.
+
+Use the same caution with substitution depth $n$ and physical word length
+$T_n$. If $T_n=2^n$, a plateau lasting several units of $n$ corresponds to
+an exponentially increasing physical time. Uniform averaging over $n$ is
+not uniform averaging over the trajectory's microscopic steps.
+
+## A compact glossary
+
+| Term | Meaning in this book |
+|---|---|
+| Bath / environment | Degrees of freedom outside the retained subsystem |
+| Born weight | Probability of a specified measurement outcome |
+| Conditional state | State normalized after retaining an outcome |
+| Projected ensemble | Bath-outcome-weighted collection of conditional states |
+| Temporal ensemble | States sampled along one evolution with a stated clock |
+| Moment operator | Average of identical-copy projectors, one label shared across copies |
+| Haar ensemble | Unitary-invariant complex pure-state distribution |
+| State design | Ensemble matching Haar through a specified moment order |
+| Frame potential | Average powered overlap, equivalently purity of a moment |
+| Scrooge ensemble | Adjusted deformation of Haar minimizing accessible information at a fixed mean |
+| Generalized Scrooge ensemble | Mixture accounting for additional classical constraint information |
+| Accessible information | Maximum label information obtainable by measuring the output |
+| Coherence | Superposition resource relative to a specified basis |
+| Magic | Resource beyond stabilizer states and Clifford operations |
+| Fragmentation | Decomposition into dynamically disconnected subspaces |
+| Scar | Atypical nonthermal eigenstate or associated special dynamics in an otherwise thermal setting |
+| Kraus operator | One conditional operator in a dilation/instrument |
+| Channel | Linear completely positive trace-preserving map |
+| Instrument | Outcome-resolved completely positive maps summing to a channel |
+| Process tensor | Rule assigning outcomes to a sequence of interventions |
+| Causal break | Measurement and repreparation that removes system-carried history |
+| Temporal entanglement | Entanglement across a specified cut in a temporal tensor representation |
+| Prethermal regime | Long intermediate regime controlled by an approximate effective generator |
+| Floquet drive | Strictly periodic time dependence |
+| Morphic drive | Sequence generated by recursively substituting symbols |
+
+The glossary is a reminder, not a substitute for the definitions and
+assumptions in the chapters.

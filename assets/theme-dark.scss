@@ -1,5 +1,10 @@
+/*-- scss:defaults --*/
+$body-bg: #172229;
+$body-color: #e1e6e7;
+$link-color: #8ad0e3;
+$sidebar-bg: #111b21;
+$sidebar-fg: #d4dfe3;
+$font-size-base: 1.08rem;
+$headings-color: #f0f4f5;
 /*-- scss:rules --*/
-
-.navbar-title {
-  font-weight: 600;
-}
+.sidebar { border-right: 1px solid #34434b; }

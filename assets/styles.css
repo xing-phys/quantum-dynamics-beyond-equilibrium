@@ -1,28 +1,33 @@
-/* Shared styles for the OYA-OQS report site */
-
-/* Slightly larger, clearer display equations */
-.math.display {
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.25rem 0;
+:root { --book-accent: #255d76; --book-muted: #66717a; }
+body { font-family: Georgia, "Times New Roman", serif; line-height: 1.75; }
+main.content { max-width: 880px; }
+h1,h2,h3,h4,.sidebar,.navbar,.nav-footer,.quarto-page-breadcrumbs,.quarto-secondary-nav { font-family: "DejaVu Sans", Arial, sans-serif; }
+h1 { font-weight: 650; letter-spacing: -.035em; line-height: 1.15; }
+h2 { margin-top: 2.5rem; letter-spacing: -.025em; }
+h3 { margin-top: 1.8rem; }
+p { margin-bottom: 1.15rem; }
+.sidebar-title { font-size: 1.05rem; line-height: 1.45; font-weight: 650; }
+.sidebar-item-text { font-size: .88rem; line-height: 1.4; }
+.sidebar-item-section > .sidebar-item-container { margin-top: .75rem; }
+#TOC { font-family: "DejaVu Sans", Arial, sans-serif; font-size: .8rem; }
+.hero { border-left: 4px solid var(--book-accent); padding: .2rem 0 .4rem 1.5rem; margin: 1rem 0 2.5rem; }
+.hero > p:first-child { font-family: Arial,sans-serif; font-size: .72rem; letter-spacing: .16em; color: var(--book-muted); }
+.hero h2 { margin-top: .5rem; font-size: 2.4rem; line-height: 1.2; }
+.math.display { overflow-x: auto; overflow-y: hidden; padding: .65rem .2rem; }
+.math.inline { white-space: normal; }
+figure { margin: 2rem 0; }
+figure img { width: 100%; height: auto; border-radius: 5px; }
+figcaption { font-size: .88rem; line-height: 1.55; color: var(--book-muted); }
+div.callout { border-radius: 5px; font-size: .98rem; }
+pre { font-size: .8rem; line-height: 1.55; }
+table { font-size: .92rem; }
+.quarto-dark figure img { background: #fff; padding: .4rem; }
+.quarto-dark { --book-muted: #bac3cc; --book-accent: #84c4da; }
+a { text-underline-offset: .16em; }
+@media(max-width: 767px) {
+  body { font-size: 1rem; line-height: 1.65; }
+  .hero h2 { font-size: 1.8rem; }
+  main.content { padding-left: .4rem; padding-right: .4rem; }
+  h1 { font-size: 2rem; }
+  table { display:block; overflow-x:auto; }
 }
-
-/* Keep long inline formulas from breaking awkwardly */
-.math.inline {
-  white-space: nowrap;
-}
-
-/* Figure captions */
-figure.quarto-float.tbl figcaption,
-figure.quarto-float.fig figcaption {
-  font-size: 0.9em;
-  line-height: 1.4;
-}
-
-/* Theorem boxes */
-div.callout {
-  border-radius: 6px;
-}
-
-/* Dark mode: SVG figures with dark backgrounds can be dimmed if needed */
-/* .quarto-dark figure svg { filter: brightness(0.85); } */

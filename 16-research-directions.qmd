@@ -1,0 +1,272 @@
+# Connecting the frontiers and asking useful questions {#sec-research-directions}
+
+## A common language, several distinct physical questions
+
+The preceding chapters repeatedly used moments, randomness, and conditioning.
+Their common mathematical language should help us connect problems without
+erasing distinctions between them. This chapter assembles a map of those
+connections and develops concrete research questions. It supplies proposals,
+not new results.
+
+For a projected ensemble, one fixes a global state and samples a bath outcome
+with its Born probability. For a temporal ensemble, one fixes an evolution
+and samples a time according to a specified clock. For a projected Kraus
+ensemble, one retains both an input and an output and specifies a measure
+on bath records. For a multi-time process, one asks for responses to a family
+of interventions. These objects preserve different information.
+
+| Object | Sampled or retained label | What averaging removes | Natural comparison |
+|---|---|---|---|
+| Reduced state | No bath label | All outcome information | Gibbs state or constrained marginal |
+| Projected ensemble | Bath outcome | Conditional wavefunction fluctuations | Haar, Scrooge, sector-resolved ensemble |
+| Temporal ensemble | Physical time | Trajectory fluctuations | Allowed temporal equilibrium measure |
+| Recorded Kraus map | Bath input/output convention | Conditional transformation | Constrained random-matrix law |
+| Multi-time process | Intervention slots | History dependence if slots are contracted | Operationally Markov process |
+
+The statistical hierarchy is meaningful only after choosing the correct
+object and benchmark. The 2026 review @ergMark2026 provides an overview of
+the rapidly expanding landscape. We now use the derivations in this book
+to formulate sharper questions than “does this system thermalize?”
+
+## When does ordinary thermalization imply deep thermalization?
+
+We know an exact necessary condition: if projected moments approach a target
+ensemble at order $k\geq1$, their first moments must approach its mean state.
+Partial trace over $k-1$ copies maps one moment to the first, and trace
+distance cannot increase under that trace. Thus, writing $\mathcal E_*$ for
+the proposed target,
+
+$$
+D(\rho_A,\rho_{A,*})
+\leq \frac12\|M_k(\mathcal E)-M_k(\mathcal E_*)\|_1.
+$$ {#eq-rd-necessary}
+
+The reverse implication fails. The pole and sphere ensembles in
+@sec-measurement-ensembles already provide an exact counterexample.
+The resource-transition chapter gives dynamical settings where higher
+moments separate behaviors with the same thermal marginal.
+
+A useful question is therefore conditional: **which additional dynamical,
+eigenstate, and measurement assumptions promote a thermal marginal into a
+universal projected ensemble?** The answer may depend on locality,
+measurement basis, conservation laws, and the order $k$.
+
+An initial numerical project could fix a nonintegrable spin chain and a small
+$A$, compare several bath bases, and measure both $D(\rho_A,\rho_{\beta,A})$
+and $\Delta_2,\Delta_3$ from a target Scrooge ensemble. Then introduce a
+controlled integrable limit or a conserved charge. The comparison should
+hold the initial energy density and subsystem size fixed. A basis that
+reveals a conserved quantity needs its own constrained benchmark.
+
+What would this establish? Consistent finite-size behavior would reveal a
+candidate relation and timescale. It would not prove an implication for all
+initial states, all moment orders, or the thermodynamic limit. A proof would
+need explicit hypotheses controlling correlations between bath amplitudes,
+not simply an appeal to “quantum chaos.”
+
+## How does locality constrain design times?
+
+Locality limits the rate at which a subsystem interacts with new bath degrees
+of freedom. Moment matching also needs enough effectively distinct conditional
+states. If a finite projected ensemble has at most $N$ nonzero outcomes,
+the rank bound from @sec-randomness-designs gives
+
+$$
+\Delta_k\geq\max\left(0,1-\frac{N}{D_k}\right),
+\qquad D_k=\binom{d_A+k-1}{k}.
+$$
+
+This is an algebraic obstruction. To turn it into a time-dependent lower
+bound, one must relate $N$ or a more useful effective outcome number to a
+causal region. Simply replacing $N$ by $2^{vt}$ can be wrong: outcomes
+outside a naive subsystem light cone can still condition correlations that
+were established elsewhere, and very small probabilities may matter
+differently in different norms.
+
+A careful program would first establish an approximate locality statement
+for the particular conditional moment map, then combine it with a rank,
+entropy, or information bound. This separates the exact algebra from the
+model-dependent dynamical estimate.
+
+The nonlocality examples in @sec-gaussian-nonlocal also warn against inferring
+the rate of a conditional ensemble solely from local entanglement growth.
+Boundary conditions can affect how a global measurement record organizes
+information, even when short-time local observables look similar.
+
+## Conservation laws and hydrodynamic fluctuations
+
+In a charge-conserving chain, the subsystem charge is correlated with the
+bath record. A charge-revealing measurement leaves each conditional state
+inside a sector. A charge-erasing measurement can allow superpositions of
+sectors. Therefore the equilibrium target depends on what is observed,
+not only on the Hamiltonian.
+
+At finite times there is an additional issue: conserved densities relax
+slowly. Suppose a coarse charge field obeys diffusion. A spatial mode with
+wavevector $q$ decays as $e^{-Dq^2t}$. If a projected-moment diagnostic couples
+to a pair of such modes, a continuum estimate can involve
+
+$$
+\int\frac{d^dq}{(2\pi)^d}e^{-2Dq^2t}
+=(8\pi Dt)^{-d/2}.
+$$ {#eq-rd-diffusive-tail}
+
+The integral follows by multiplying the one-dimensional Gaussian integrals.
+It is a possible mechanism for an algebraic tail, not a derivation of the
+tail of any specific $\Delta_k$. To make it one, the coupling of the
+diagnostic to the slow field must be established and competing terms checked.
+
+This gives a useful bridge between hydrodynamics and quantum information:
+which replica or moment sectors carry conserved modes, and how do those
+modes affect approach to a constrained ensemble? A numerical test should
+compare system lengths and measurement bases and avoid fitting a power law
+through a crossover from short-time local relaxation to finite-size saturation.
+
+## Universality of maps versus universality of states
+
+The Kraus-map framework keeps information about all inputs. The Gaussian
+direction of a random matrix can make a fixed input's normalized output
+appear Haar distributed, while a fluctuating scalar changes outcome
+probabilities. Normalizing the output vector removes the scalar from the
+state but not from the experiment's sampling measure.
+
+This suggests separate tests of a proposed Kraus law:
+entry covariances, singular-value ratios, total operator norm fluctuations,
+and correlations between the norm and the normalized direction. Agreement
+of one marginal is insufficient. In particular, a histogram of
+$\|K_z\|_F$ alone cannot establish independent Ginibre angular statistics.
+
+The 2026 proposal in @huang2026kraus distinguishes exact solvable limits from
+generic-circuit evidence. Extending its statistical law to conserved systems,
+finite temperature, higher dimensions, or structured bath preparations is
+an open direction. New constraints may change the allowed matrix blocks and
+the dependence between their norms and directions.
+
+A mathematically clean starting project is a global Haar isometry with a
+fixed conserved charge. Its block structure is explicit. One can ask which
+rescaled entries approach Gaussian variables when the bath becomes large,
+which blocks remain correlated by exact completeness, and which input states
+sample which block mixture. This isolates conservation from spatial dynamics
+before both are combined.
+
+## Memory, coarse-graining, and useful simulation accuracy
+
+A complex bath need not require an exponentially difficult simulation for
+every observable. The temporal-entanglement chapter distinguished exact
+representation rank, approximation in vector norm, and operational error.
+They answer different questions.
+
+For a specified family of interventions $\mathfrak A$, one could define
+an operational discrepancy
+
+$$
+\epsilon_{\mathfrak A}
+=\sup_{\mathcal A_j\in\mathfrak A,\;0\leq E\leq I}
+\left|p_{\rm exact}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)
+-p_{\rm approx}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)\right|.
+$$ {#eq-rd-operational-error}
+
+The probabilities here are unconditional final probabilities for complete,
+trace-preserving interventions; postselected outcome probabilities require
+retaining their instrument branches and their normalization separately.
+An approximation may have small error for coarse, infrequent controls while
+failing for rapid interventions that retrieve stored bath information.
+
+A useful research question is whether restricted operational accuracy can be
+certified with a much smaller memory than is required to approximate the full
+history tensor. The restriction must be physically motivated and stated in
+advance. Choosing it after seeing a failed simulation can conceal the memory
+that the model actually misses.
+
+The double-SWAP example provides a basic benchmark. Any approximation that
+resets the bath predicts that the old input is lost; an intervention sequence
+that swaps it back disproves the approximation immediately. More complicated
+benchmarks can ask about entanglement recovery across a causal break.
+
+## What exactly is transitioning in a resource transition?
+
+There are at least three questions:
+
+1. Does the mean density matrix change?
+2. Does the distribution of conditional states change?
+3. Does an operational resource become localizable under the allowed controls?
+
+They need not have the same answer. A transition can be invisible to the
+mean state and visible in higher moments. Coherence depends on a reference
+basis, magic depends on stabilizer operations, and entanglement depends on
+a partition and allowed local operations. A quantity called “randomness”
+does not replace these definitions.
+
+A careful finite-size analysis specifies an order parameter, a subsystem
+scaling, a measurement protocol, and a limit. For example, holding $d_A$
+fixed as the bath grows is different from letting $A$ occupy a fixed fraction
+of the system. A proposed threshold based on a counting or entropy argument
+should be compared with data without silently upgrading an approximation to
+an exact boundary.
+
+An interesting extension is to combine a resource constraint with a dynamical
+sector. Does a fragmented sector support a useful ensemble of magic states,
+or does its restricted connectivity prevent resource localization? The
+correct baseline would be the constrained sector and the actual set of
+allowed operations, rather than full-Hilbert-space Haar by default.
+
+## Experiments: what can a finite measurement establish?
+
+Tomography of a small subsystem can estimate its conditional Bloch vectors
+or density matrices. It becomes expensive when bath strings are numerous
+and rare. Pooling different strings can improve counts while changing the
+ensemble; finite-shot noise can inflate moment errors. These effects need
+to enter the statistical model.
+
+A useful experiment reports the measured moment order, the retained bath
+record, the preparation and measurement bases, the estimator, and uncertainty
+under resampling or a justified noise model. It compares with a finite-sample
+benchmark, not merely an infinite-ensemble formula. A probability-of-
+probabilities test supplies valuable evidence but generally does not
+reconstruct all phase-sensitive correlations.
+
+For temporal ergodicity, physical observation times are another part of the
+protocol. Sampling at exponentially separated substitution-word endpoints
+does not reproduce uniform sampling over all intermediate times.
+Demonstrating a hierarchy of low-order moments is a strong finite experiment;
+it is not a measurement of infinitely many moments or an infinite-time limit.
+
+## A method for turning curiosity into a research project
+
+Start with one operational question and an exactly solvable reference case.
+Identify a counterexample to the broadest version of the desired claim.
+This prevents a project from spending months numerically verifying an
+assertion already ruled out by a conserved population or a real-state
+restriction.
+
+Next specify the limit and diagnostic. Derive its normalization, finite-rank
+bound, and sampling floor. Test a tiny system where every state and outcome
+can be enumerated. Only then scale up. If an asymptotic plateau is suspected,
+compare time and size trends independently and include a controlled limit
+with known behavior.
+
+Finally preserve the reasoning in a research note: assumptions, derivation,
+code version, benchmark, numerical observation, alternative explanations,
+and the precise statement that remains unproved. Such a note is reusable
+even if the original conjecture fails.
+
+## Exercises and project proposals
+
+1. Prove @eq-rd-necessary using the variational characterization of trace
+   distance in the mathematical appendix.
+2. Derive @eq-rd-diffusive-tail and explain why it does not by itself determine
+   the relaxation exponent of a nonlinear moment distance.
+3. Design two ensembles with identical outcome-norm statistics but different
+   conditional state directions. Which Kraus-law diagnostic distinguishes them?
+4. Formulate a resource-localization question inside a fixed charge sector.
+   State the free operations and explain whether sector Haar is a plausible
+   benchmark.
+5. **Project:** compare uniform-time and substitution-endpoint sampling of
+   one qubit morphic drive. Which conclusions change when the clock changes?
+6. **Project:** construct an approximation to a small reused-bath process
+   that fits unperturbed relaxation. Find a causal-break intervention that
+   detects its error.
+7. **Research:** determine conditions under which a conditional ensemble's
+   higher moments inherit a hydrodynamic long-time tail. A convincing result
+   should identify the relevant conserved mode and its coupling to the
+   diagnostic, or provide a controlled counterexample.

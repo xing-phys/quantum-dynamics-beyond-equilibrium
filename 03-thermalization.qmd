@@ -1,0 +1,281 @@
+# From unitary dynamics to thermal behavior {#sec-thermalization}
+
+## The apparent paradox
+
+An isolated quantum system obeys
+$i\partial_t|\Psi(t)\rangle=H|\Psi(t)\rangle$.
+For time-independent $H$,
+$|\Psi(t)\rangle=e^{-iHt}|\Psi(0)\rangle$.
+Its evolution is reversible and preserves inner products, the global purity,
+and all energy-basis populations. How can equilibrium emerge?
+
+The answer begins by specifying what is observed. A small subsystem loses
+access to correlations with its complement. A laboratory measurement also
+usually samples finite times and a limited set of observables. Equilibration
+means that those observations remain close to some stationary values for
+most late times. Thermalization additionally identifies those values with a
+thermal ensemble fixed by conserved macroscopic quantities. These are
+different statements.
+
+No finite closed system with discrete spectrum converges monotonically to
+one pure state under unitary dynamics. Recurrences remain possible.
+Equilibration is therefore generally a statement about most times or a
+thermodynamic limit, not the disappearance of reversible microscopic evolution.
+
+## Dephasing and the diagonal ensemble
+
+Let $H|n\rangle=E_n|n\rangle$ and
+$|\Psi(0)\rangle=\sum_nc_n|n\rangle$. Then
+
+$$
+\langle O(t)\rangle=\sum_{m,n}c_m^*c_n
+e^{i(E_m-E_n)t}O_{mn}.
+$$ {#eq-th-observable}
+
+For a nondegenerate spectrum the infinite-time average of an off-diagonal
+phase vanishes:
+
+$$
+\lim_{T\to\infty}\frac1T\int_0^T e^{i\omega t}\,dt
+=0\quad(\omega\neq0),
+$$
+
+because the numerator $e^{i\omega T}-1$ stays bounded while the denominator
+$i\omega T$ grows. Hence
+
+$$
+\overline{\rho(t)}=\rho_{\rm diag}
+=\sum_n|c_n|^2|n\rangle\langle n|.
+$$ {#eq-th-diagonal}
+
+For degeneracies, replace the individual eigenstate projectors by energy
+eigenspace projectors: $\overline\rho=\sum_EP_E\rho(0)P_E$.
+Coherences inside a degenerate eigenspace survive.
+
+Dephasing does not make each phase small. It makes their sum cancel for
+particular observables or under time averaging. Nor does dephasing alone
+make $\rho_{\rm diag}$ Gibbs: it retains all initial populations.
+
+Assume, more strongly, that nonzero energy gaps are nondegenerate.
+Subtracting the average in @eq-th-observable and squaring gives
+
+$$
+\overline{|\langle O(t)\rangle-\overline{\langle O\rangle}|^2}
+=\sum_{m\ne n}|c_m|^2|c_n|^2|O_{mn}|^2.
+$$ {#eq-th-fluctuation}
+
+The assumption eliminates terms with distinct but equal gaps.
+Writing $p_n=|c_n|^2$ and using
+$p_mp_n\leq(p_m^2+p_n^2)/2$, Hermiticity and
+$\sum_m|O_{mn}|^2=\langle n|O^2|n\rangle\leq\|O\|_\infty^2$
+bound the right side by
+
+$$
+\|O\|_\infty^2\sum_np_n^2
+=\frac{\|O\|_\infty^2}{d_{\rm eff}},
+\qquad d_{\rm eff}=\frac1{\sum_np_n^2}.
+$$
+
+A large effective number of occupied levels suppresses temporal fluctuations.
+This statement supplies no universal relaxation timescale and no Gibbs
+identification. Gap degeneracies or a small effective dimension can invalidate
+the conclusion.
+
+## Why the Gibbs state appears
+
+First consider maximum entropy. Among density matrices with fixed
+$\operatorname{Tr}\rho=1$ and $\operatorname{Tr}(\rho H)=E$, maximize
+$-\operatorname{Tr}\rho\ln\rho$. A variation with Lagrange multipliers gives
+
+$$
+\delta\!\left[-\operatorname{Tr}\rho\ln\rho
+-\alpha(\operatorname{Tr}\rho-1)-\beta(\operatorname{Tr}\rho H-E)\right]=0.
+$$
+
+Since $\delta\operatorname{Tr}(\rho\ln\rho)
+=\operatorname{Tr}[\delta\rho(\ln\rho+I)]$, stationarity implies
+$\ln\rho+I+\alpha I+\beta H=0$. Thus
+
+$$
+\rho_\beta=\frac{e^{-\beta H}}{Z(\beta)},\qquad
+Z(\beta)=\operatorname{Tr}e^{-\beta H}.
+$$ {#eq-th-gibbs}
+
+The energy condition fixes $\beta$. The multiplier is inverse temperature
+when Boltzmann's constant is one.
+For a conserved charge $Q$ with specified expectation, an additional
+multiplier gives $\rho\propto e^{-\beta(H-\mu Q)}$ when this is the appropriate
+equilibrium description.
+
+The variational argument selects a state given constraints. It does not
+prove that a Hamiltonian produces it. That dynamical question is addressed
+by typicality and eigenstate thermalization.
+
+The same Gibbs weights follow from a large bath. In a weakly coupled
+composite at fixed total energy $E$, a subsystem eigenstate of energy
+$\epsilon_a$ has weight proportional to the number of bath states at
+$E-\epsilon_a$. Writing this number as $e^{S_B(E-\epsilon_a)}$ and expanding,
+
+$$
+S_B(E-\epsilon_a)
+=S_B(E)-\beta\epsilon_a
+-\frac{\epsilon_a^2}{2C_BT^2}+\cdots.
+$$
+
+Here $\beta=\partial_ES_B$, and
+$\partial_E^2S_B=-1/(C_BT^2)$. If the bath heat capacity is large and the
+subsystem's energy range is small on that scale, the quadratic correction
+is negligible, giving the Gibbs state. Strong coupling, a small bath, or
+additional constraints can change the answer.
+
+### Worked example: a thermal qubit
+
+For $H_A=\omega Z/2$,
+
+$$
+Z_A=2\cosh(\beta\omega/2),\qquad
+\rho_{\beta,A}=\frac12[I-\tanh(\beta\omega/2)Z].
+$$
+
+At $\beta=0$ the state is $I/2$. At large positive $\beta$ it approaches
+the lower-energy $Z=-1$ eigenstate. Negative temperature is meaningful only
+for systems with an upper energy bound and a suitable equilibrium regime.
+The sign convention depends on the chosen Hamiltonian, not on whether a
+basis vector is called $|0\rangle$.
+
+## Typicality is a kinematic statement
+
+Draw a pure state uniformly from a large energy shell $\mathcal H_R$.
+Its mean global density matrix is $P_R/d_R$, and its mean local state is
+$\Omega_A=\operatorname{Tr}_B(P_R/d_R)$.
+Canonical typicality says that most such pure states have reduced states
+close to $\Omega_A$ when the effective bath is sufficiently large
+@popescu2006. This establishes that local mixedness is compatible with global
+purity without an ensemble of unknown global preparations.
+
+A particularly transparent exact calculation uses the full tensor-product
+space. For a uniformly random state on dimension $D=d_Ad_B$, the second
+state moment is $(I+F_{AB})/[D(D+1)]$, derived in
+@sec-randomness-designs. Since
+$\operatorname{Tr}\rho_A^2=\operatorname{Tr}[
+(|\Psi\rangle\langle\Psi|)^{\otimes2}(F_A\otimes I_{BB'})]$,
+the identity term has trace $d_Ad_B^2$, while the total-swap term has trace
+$d_A^2d_B$. Therefore
+
+$$
+\mathbb E\operatorname{Tr}\rho_A^2
+=\frac{d_A+d_B}{d_Ad_B+1}.
+$$ {#eq-th-page-purity}
+
+Subtracting $1/d_A$ gives
+$\mathbb E\|\rho_A-I/d_A\|_2^2
+=(d_A^2-1)/[d_A(d_Ad_B+1)]$.
+Using $\|X\|_1\leq\sqrt{d_A}\|X\|_2$ and Jensen's inequality,
+
+$$
+\mathbb E D(\rho_A,I/d_A)
+\leq\frac12\sqrt{\frac{d_A^2-1}{d_Ad_B+1}}.
+$$
+
+For $d_B\gg d_A$, the right side scales as $\sqrt{d_A/d_B}/2$.
+Typical states are locally almost maximally mixed.
+Markov's inequality turns a small average distance into a bound on the
+fraction of states with a large distance.
+
+Nothing in this calculation proves that a particular trajectory visits
+typical states quickly—or at all. Typicality is about volume in state space;
+dynamics is about the path generated by a specified Hamiltonian.
+
+## Eigenstate thermalization
+
+The eigenstate thermalization hypothesis, or **ETH**, supplies a dynamical
+bridge for generic nonintegrable many-body systems @deutsch1991;
+@srednicki1994. A commonly used schematic ansatz for a simple observable is
+
+$$
+O_{mn}=\mathcal O(\bar E)\delta_{mn}
++e^{-S(\bar E)/2}f_O(\bar E,\omega)R_{mn},
+\quad \bar E=\frac{E_m+E_n}{2},\quad \omega=E_m-E_n.
+$$ {#eq-th-eth}
+
+The diagonal term varies smoothly with energy. The entropy $S$ counts the
+number of states in the relevant energy window. The off-diagonal matrix
+elements are small on that scale; $R_{mn}$ represents fluctuations with
+order-one magnitude, with correlations constrained by Hermiticity and
+operator identities. This is a hypothesis about classes of observables and
+Hamiltonians, not an exact independent-random-matrix formula.
+
+If the initial energy distribution is narrow around $E_0$, then
+
+$$
+\overline{\langle O\rangle}
+=\sum_np_nO_{nn}\simeq\sum_np_n\mathcal O(E_n)
+\simeq\mathcal O(E_0).
+$$
+
+The first approximation uses diagonal ETH; the second uses smoothness and
+a narrow energy distribution. If microcanonical and canonical ensembles
+agree for that observable, this becomes the Gibbs expectation.
+Off-diagonal ETH helps suppress late-time fluctuations and constrains
+spectral response.
+
+There are two important limitations. First, the hypothesis may fail in
+integrable, localized, fragmented, or scarred systems. Second, ETH for a
+restricted family of local operators constrains reduced density matrices
+but does not by itself specify an entire distribution of conditional
+wavefunctions. Deep thermalization asks for additional information.
+
+## Locality and competing timescales
+
+A local Hamiltonian is a sum of finite-range or sufficiently rapidly decaying
+terms. Such structure limits how fast initially distant degrees of freedom
+influence one another. Entanglement may spread approximately ballistically,
+while a conserved density can relax diffusively. For a diffusion equation
+$\partial_tq=D_q\nabla^2q$, a wavelength-$L$ perturbation relaxes on
+$t\sim L^2/D_q$.
+
+This estimate is obtained by substituting
+$q(x,t)\propto e^{ikx-\Gamma t}$, which gives $\Gamma=D_qk^2$.
+It differs from a ballistic transit time $L/v$.
+One cannot infer a universal thermalization rate merely from the absence
+of visible conservation laws.
+
+There may also be separate times for entanglement saturation, local density
+matrix equilibration, and agreement of increasingly high ensemble moments.
+The chapter on projected ensembles will show why the last need not coincide
+with the first two.
+
+## A careful vocabulary
+
+**Equilibration** concerns closeness to stationary values for most times.
+**Thermalization** identifies those values with a thermodynamic ensemble.
+**Scrambling** concerns the spread and encoding of information into many-body
+correlations. **Chaos** has several quantum diagnostics, whose equivalence
+requires care. **Ergodicity** must specify a measure and sampling procedure.
+These notions are related but no pair should be silently equated.
+
+The central lesson is that there are two separate questions: which states
+look typical under a chosen measure, and which measure a physical evolution
+actually generates.
+
+## Exercises
+
+1. **Degenerate spectrum.** For $H=\operatorname{diag}(0,0,1)$,
+   compute the time-averaged density matrix of
+   $(|0\rangle+|1\rangle+|2\rangle)/\sqrt3$. Which coherence survives?
+2. **Dephasing without thermalization.** Evolve a qubit with
+   $H=\omega Z/2$ from $|+\rangle$. Compute $\langle X(t)\rangle$,
+   its time average, and its variance. Explain why small subsystems matter.
+3. **Finite-bath correction.** Derive the quadratic term in the bath entropy
+   expansion using $C_B=dE/dT$. Under what condition is it negligible?
+4. **Typical purity.** Reproduce @eq-th-page-purity by tracing the two swap
+   terms. Evaluate it for $d_A=2$ and $d_B=2,16,256$.
+5. **ETH energy width.** Expand $\mathcal O(E_n)$ to second order about
+   $E_0=\sum_np_nE_n$. Show the leading correction involves the energy
+   variance. *Hint:* the linear term cancels.
+6. **Integrable counterexample.** Consider noninteracting spins with
+   $H=\sum_i h_iZ_i$. Identify all conserved $Z_i$ and explain why total
+   energy alone cannot determine late-time local states.
+7. **Timescales.** Compare $L/v$ and $L^2/D_q$ as $L$ grows. Design a
+   finite-size numerical check that can distinguish the two without fitting
+   a single system size.

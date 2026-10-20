@@ -1,0 +1,269 @@
+# Measurement, conditioning, and quantum ensembles {#sec-measurement-ensembles}
+
+## A density matrix has many stories
+
+Two devices can prepare exactly the same density matrix:
+one chooses $|0\rangle$ or $|1\rangle$ with equal probabilities; another
+chooses $|+\rangle$ or $|-\rangle$. Both average to $I/2$.
+Nevertheless the devices implement different ensembles. A third could choose
+a uniformly random direction on the Bloch sphere.
+
+No measurement on a single unlabeled output distinguishes the devices.
+Suppose, however, that each device first chooses one label and then produces
+two copies of the corresponding pure state. The first device produces
+
+$$
+M_2^{(Z)}=\frac12|00\rangle\langle00|+\frac12|11\rangle\langle11|,
+$$
+
+whereas the second produces
+$M_2^{(X)}=\tfrac12(|++\rangle\langle++|+|--\rangle\langle--|)$.
+The two-copy observable $Z\otimes Z$ has expectation one for the first
+and zero for the second.
+
+There is no cloning assumption: the device knows which state it prepares.
+The experiment needs repeated preparation with the same classical label.
+Two independent unlabeled draws instead yield $(I/2)^{\otimes2}$ in both
+cases, erasing the distinction.
+
+![Three qubit ensembles have the same zero mean Bloch vector but different
+second moments: poles, equator, and the full sphere. The plotted points are
+illustrative samples; the table gives exact ensemble values. Original figure.](figs/ensemble-geometry.svg){#fig-me-geometry}
+
+## Generalized measurements from probability conservation
+
+A projective measurement consists of mutually orthogonal projectors $P_z$
+with $\sum_zP_z=I$. On input $\rho$, outcome $z$ has probability
+$p_z=\operatorname{Tr}(P_z\rho)$ and, when retained, leaves
+$P_z\rho P_z/p_z$.
+
+The more general measurement is described by operators $K_z$ obeying
+$\sum_zK_z^\dagger K_z=I$. The unnormalized output for outcome $z$ is
+$K_z\rho K_z^\dagger$, so
+
+$$
+p_z=\operatorname{Tr}(K_z^\dagger K_z\rho),\qquad
+\rho_z=\frac{K_z\rho K_z^\dagger}{p_z}.
+$$ {#eq-me-instrument}
+
+The positive operators $E_z=K_z^\dagger K_z$ form a positive
+operator-valued measure, or **POVM**. They specify probabilities but not the
+entire state disturbance. Replacing $K_z$ by $V_zK_z$ for a unitary $V_z$
+preserves $E_z$ and changes the conditional state. A set of outcome-resolved
+maps, rather than just the effects, is called an **instrument**.
+
+Outcomes with $p_z=0$ are omitted from a conditional ensemble.
+Their normalized states are undefined but contribute zero to every average.
+This convention avoids divisions by zero in analytical and numerical formulas.
+
+## Measuring a purification
+
+Expand a pure bipartite state in a bath measurement basis:
+
+$$
+|\Psi\rangle_{AB}=\sum_z|\widetilde\psi_z\rangle_A|z\rangle_B,
+\qquad |\widetilde\psi_z\rangle=(I_A\otimes\langle z|)|\Psi\rangle.
+$$ {#eq-me-slices}
+
+The Born probability is
+$p_z=\langle\widetilde\psi_z|\widetilde\psi_z\rangle$, and the normalized
+conditional state is $|\psi_z\rangle=|\widetilde\psi_z\rangle/\sqrt{p_z}$.
+Completeness gives the identity
+
+$$
+\sum_zp_z|\psi_z\rangle\langle\psi_z|
+=\sum_z|\widetilde\psi_z\rangle\langle\widetilde\psi_z|
+=\rho_A.
+$$ {#eq-me-mean}
+
+This **projected ensemble** retains the bath outcome as a label.
+Changing the bath basis changes the vectors
+$|\widetilde\psi_z\rangle$ while keeping the sum in @eq-me-mean fixed.
+The measurement never changes the unconditioned local state at $A$.
+Access to the label is essential; otherwise this procedure cannot signal
+from $B$ to $A$.
+
+### Worked example: steering the same mixed qubit
+
+For $|\Phi^+\rangle$, a $Z$ measurement on $B$ generates
+$\{\tfrac12,|0\rangle;\tfrac12,|1\rangle\}$ on $A$.
+An $X$ measurement generates $|+\rangle,|-\rangle$.
+A measurement in basis $|b_z\rangle$ generates the conjugate vectors
+$|b_z^*\rangle$ in the computational basis:
+$(I\otimes\langle b_z|)|\Phi^+\rangle=|b_z^*\rangle/\sqrt2$.
+Complex conjugation matters for a $Y$ measurement.
+
+For the partially entangled state
+$\sqrt\lambda|00\rangle+\sqrt{1-\lambda}|11\rangle$,
+a $Z$ measurement gives states $|0\rangle,|1\rangle$ with probabilities
+$\lambda,1-\lambda$. An $X$ measurement gives the equally likely states
+
+$$
+|\psi_\pm\rangle=\sqrt\lambda|0\rangle
+\pm\sqrt{1-\lambda}|1\rangle.
+$$
+
+Their Bloch vectors are
+$(\pm2\sqrt{\lambda(1-\lambda)},0,2\lambda-1)$.
+The two vectors share a latitude. Averaging cancels the transverse component,
+returning $\rho_A=\operatorname{diag}(\lambda,1-\lambda)$.
+
+## Why arbitrary ensemble decompositions can be measured remotely
+
+Here is a constructive version of purification freedom. Let
+$\rho=\sum_{\alpha=1}^{r}\lambda_\alpha|\alpha\rangle\langle\alpha|$
+with $\lambda_\alpha>0$, and suppose
+$\rho=\sum_jp_j|\psi_j\rangle\langle\psi_j|$ is another decomposition.
+Define
+
+$$
+u_{j\alpha}=\frac{\sqrt{p_j}\langle\alpha|\psi_j\rangle}
+{\sqrt{\lambda_\alpha}}.
+$$
+
+The decomposition identity implies
+
+$$
+\sum_j u_{j\alpha}u_{j\beta}^*
+=\frac{\langle\alpha|\rho|\beta\rangle}
+{\sqrt{\lambda_\alpha\lambda_\beta}}
+=\delta_{\alpha\beta}.
+$$
+
+Thus the columns of $u$ are orthonormal. On the purifying system define
+$|m_j\rangle=\sum_\alpha u_{j\alpha}^*|\alpha\rangle$.
+Then $\sum_j|m_j\rangle\langle m_j|=I$ on its support, so these rank-one
+effects constitute a POVM. Contracting the canonical purification yields
+
+$$
+(I\otimes\langle m_j|)\sum_\alpha\sqrt{\lambda_\alpha}
+|\alpha\rangle|\alpha\rangle
+=\sqrt{p_j}|\psi_j\rangle.
+$$
+
+Every finite pure-state ensemble decomposition can therefore be obtained by
+a suitable measurement of a purification. This is the content of the
+Hughston–Jozsa–Wootters construction @hjw1993. If the number of outcomes
+exceeds the purifier's dimension, a POVM or enlarged bath is required.
+This mathematical freedom does not mean that a fixed local measurement basis
+in a physical spin chain can realize every ensemble.
+
+## Moments: an organized description of fluctuations
+
+For an ensemble $\mathcal E=\{p_z,|\psi_z\rangle\}$, define
+
+$$
+M_k(\mathcal E)=\sum_zp_z
+\bigl(|\psi_z\rangle\langle\psi_z|\bigr)^{\otimes k}.
+$$ {#eq-me-moments}
+
+For a continuous distribution replace the sum by an integral.
+$M_k$ is a positive, trace-one operator on $k$ copies.
+The same probability $p_z$ appears once, because one label is sampled and
+then used for all $k$ copies. Using $p_z^k$ describes a different experiment.
+
+For observables $O_1,\ldots,O_k$,
+
+$$
+\mathbb E_{\mathcal E}\prod_{\ell=1}^k
+\langle\psi|O_\ell|\psi\rangle
+=\operatorname{Tr}\!\left[M_k(O_1\otimes\cdots\otimes O_k)\right].
+$$
+
+In particular the ensemble variance of the conditional mean of $O$ is
+
+$$
+\operatorname{Var}_{\mathcal E}(\langle O\rangle)
+=\operatorname{Tr}[M_2(O\otimes O)]
+-[\operatorname{Tr}(M_1O)]^2.
+$$ {#eq-me-variance}
+
+This is not the quantum variance
+$\langle O^2\rangle-\langle O\rangle^2$ in one state.
+For $O=Z$, the pole ensemble has conditional-mean variance one and each
+state has quantum variance zero. The equatorial ensemble reverses these
+values. The total measurement statistics after forgetting the label agree.
+
+For a Bloch-vector ensemble,
+
+$$
+M_2=\frac14\left[
+I\otimes I+\sum_i\bar r_i(\sigma_i\otimes I+I\otimes\sigma_i)
++\sum_{ij}\overline{r_ir_j}\,\sigma_i\otimes\sigma_j
+\right].
+$$
+
+The density matrix knows $\bar{\boldsymbol r}$; the second moment also knows
+the matrix $\overline{r_ir_j}$. For uniformly distributed directions on the
+sphere this matrix is $\delta_{ij}/3$; for the poles only its $zz$ entry is
+one.
+
+## Classical–quantum records
+
+Retaining the outcome explicitly gives the classical–quantum state
+
+$$
+\omega_{ZA}=\sum_zp_z|z\rangle\langle z|_Z\otimes\rho_z.
+$$
+
+The block diagonal structure yields
+$S(\omega_{ZA})=H(p)+\sum_zp_zS(\rho_z)$, where
+$H(p)=-\sum_zp_z\ln p_z$ is Shannon entropy.
+Since $\omega_A=\sum_zp_z\rho_z$ and $\omega_Z$ has entropy $H(p)$,
+
+$$
+I(Z:A)=S(\rho_A)-\sum_zp_zS(\rho_z).
+$$ {#eq-me-holevo}
+
+This is the Holevo information of the ensemble. For pure conditional states
+it equals $S(\rho_A)$ for every decomposition of that same marginal.
+It therefore does not distinguish the pole ensemble from the uniform sphere.
+The **accessible information**, the maximum classical information extracted
+by a measurement on one output, can distinguish them. A Holevo bound is an
+upper bound on accessible information, not a claim that it is attained.
+This distinction motivates Scrooge ensembles later.
+
+## Incomplete records and mixed conditional states
+
+Suppose $B=B_1B_2$ but only $B_1$ is measured. The conditional operator is
+
+$$
+\widetilde\rho_A(z)=\operatorname{Tr}_{B_2}
+\bigl[\langle z|_{B_1}\rho_{AB_1B_2}|z\rangle_{B_1}\bigr].
+$$
+
+Normalize by $p_z=\operatorname{Tr}\widetilde\rho_A(z)$.
+Even a globally pure input usually yields a mixed $\rho_A(z)$, because the
+unobserved system remains entangled with $A$. Likewise, if a detector
+coarse-grains outcomes $z$ into bins $y$, then
+
+$$
+\rho_A(y)=\frac{\sum_{z\in y}p_z\rho_A(z)}
+{\sum_{z\in y}p_z}.
+$$
+
+The mean remains $\rho_A$, but moments formed after this mixing generally
+differ. Thus detector loss and record processing are part of the definition
+of a physical ensemble, rather than innocuous changes of notation.
+
+## Exercises
+
+1. **Two copies.** Calculate
+   $D(M_2^{(Z)},M_2^{(X)})$. *Hint:* write both in the symmetric basis
+   $|00\rangle,(|01\rangle+|10\rangle)/\sqrt2,|11\rangle$.
+2. **POVM versus instrument.** Give two instruments with identical effects
+   $E_0=|0\rangle\langle0|$, $E_1=|1\rangle\langle1|$ but different
+   output states. Verify that the outcome probabilities agree.
+3. **Three ensemble geometries.** Compute
+   $\overline{r_ir_j}$ for uniform sampling of the equatorial circle.
+   Compare with the sphere and poles using @eq-me-variance.
+4. **Conjugation.** Measure $B$ of a Bell pair in the $Y$ basis.
+   Which $Y$ eigenstate appears on $A$ for each outcome?
+5. **Discarding a bit.** For
+   $(|000\rangle+|111\rangle)/\sqrt2$, measure the second qubit in the
+   $X$ basis and trace out the third. Show that both conditional states of
+   the first qubit are $I/2$. Compare with measuring both in the $X$ basis.
+6. **Independent versus shared labels.** Explain the difference between
+   $M_2(\mathcal E)$ and $M_1(\mathcal E)\otimes M_1(\mathcal E)$.
+   Find an ensemble for which they agree. *Hint:* what does vanishing
+   variance of every observable imply?
