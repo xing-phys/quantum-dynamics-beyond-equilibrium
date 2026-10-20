@@ -28,7 +28,7 @@ cases, erasing the distinction.
 
 ![Three qubit ensembles have the same zero mean Bloch vector but different
 second moments: poles, equator, and the full sphere. The plotted points are
-illustrative samples; the table gives exact ensemble values. Original figure.](figs/ensemble-geometry.svg){#fig-me-geometry}
+illustrative samples; the labels give exact ensemble values. Original figure.](figs/ensemble-geometry.svg){#fig-me-geometry}
 
 ## Generalized measurements from probability conservation
 

@@ -1,0 +1,735 @@
+# Selected worked solutions {#sec-solutions}
+
+These solutions develop a selection of the numbered exercises in Chapters
+1–14. Each heading gives the original exercise number and title so that a
+reader can return to the question without guessing which calculation is
+being discussed. They are best read after attempting the exercise. Open
+research questions remain open: the calculations here establish the finite
+models and bounds stated in their questions, rather than a general
+universality principle.
+
+Throughout this appendix, logarithms are natural except for the explicitly
+bit-valued resource measures in Chapter 10. We use
+$D(\rho,\sigma)=\frac12\|\rho-\sigma\|_1$ and
+$S_2(\rho)=-\log\operatorname{Tr}\rho^2$.
+
+## Chapter 1: states and information
+
+Return to @sec-states for the definitions of reduced states and distinguishability.
+
+### Exercise 2: Partial trace in components
+
+Write the coefficients as a matrix whose row is the $A$ index and whose
+column is the $B$ index:
+
+$$
+C=\frac1{\sqrt3}\begin{pmatrix}1&1\\1&0\end{pmatrix}.
+$$
+
+The partial trace is not an elementwise sum of amplitudes. Its components
+are $(\rho_A)_{aa'}=\sum_b C_{ab}C_{a'b}^*$, because tracing identifies the
+two bath indices. Thus $\rho_A=CC^\dagger$, while
+$\rho_B=C^TC^*$ in this coefficient convention. Here the matrix is real
+and symmetric, so both reductions happen to be
+
+$$
+\rho_A=\rho_B=\frac13\begin{pmatrix}2&1\\1&1\end{pmatrix}.
+$$ {#eq-sol-reduced-example}
+
+Its trace is one and its determinant is $1/9$. The characteristic
+polynomial is therefore $x^2-x+1/9$, giving
+$\lambda_\pm=(3\pm\sqrt5)/6$. Both are positive and sum to one, as a
+density matrix requires. The two reductions have the same nonzero
+spectrum because they come from a global pure state; their equality as
+matrices in this example is an additional symmetry, not a general rule.
+
+Instead of squaring the eigenvalues separately, use
+$\lambda_+^2+\lambda_-^2=(\lambda_++\lambda_-)^2-2\lambda_+\lambda_-=7/9$.
+Consequently $S_2(\rho_A)=S_2(\rho_B)=\log(9/7)$. The result is below
+$\log2$: the pair is entangled, but its Schmidt weights are unequal.
+
+### Exercise 4: Trace distance
+
+For Bloch vectors $\boldsymbol r,\boldsymbol s$, subtracting the two
+density operators gives
+$\rho-\sigma=(\boldsymbol r-\boldsymbol s)\cdot\boldsymbol\sigma/2$.
+The Pauli identity
+$(\boldsymbol v\cdot\boldsymbol\sigma)^2=|\boldsymbol v|^2I$ follows
+because the antisymmetric term
+$i\sum_{ijk}v_iv_j\epsilon_{ijk}\sigma_k$ vanishes. Hence the difference
+has eigenvalues $\pm|\boldsymbol r-\boldsymbol s|/2$. The trace norm adds
+their absolute values, so
+
+$$
+D(\rho,\sigma)=\frac12|\boldsymbol r-\boldsymbol s|.
+$$ {#eq-sol-bloch-distance}
+
+The states $|0\rangle$ and $|+\rangle$ have Bloch vectors $(0,0,1)$ and
+$(1,0,0)$, whose separation is $\sqrt2$. Their trace distance is
+$1/\sqrt2$. For equally likely preparations, the optimal single-copy
+identification probability is $(1+1/\sqrt2)/2$. Measuring along the
+direction $(\boldsymbol e_z-\boldsymbol e_x)/\sqrt2$ attains this value:
+the optimal observable follows the difference of the two states, rather
+than either preparation axis alone.
+
+## Chapter 2: measurement and ensembles
+
+The ensemble moments used below are defined in @sec-measurement-ensembles.
+
+### Exercise 1: Two copies
+
+In the symmetric basis
+$\{|00\rangle,|s\rangle=(|01\rangle+|10\rangle)/\sqrt2,|11\rangle\}$,
+the pole ensemble gives
+$M_2^{(Z)}=\operatorname{diag}(1/2,0,1/2)$. Meanwhile
+$|++\rangle$ and $|--\rangle$ have coordinate vectors
+$(1/2,\pm1/\sqrt2,1/2)$. Form their projectors before averaging; the terms
+linear in the middle coordinate cancel. The result is
+
+$$
+M_2^{(X)}=
+\begin{pmatrix}1/4&0&1/4\\0&1/2&0\\1/4&0&1/4\end{pmatrix},\qquad
+M_2^{(Z)}-M_2^{(X)}=
+\begin{pmatrix}1/4&0&-1/4\\0&-1/2&0\\-1/4&0&1/4\end{pmatrix}.
+$$ {#eq-sol-two-copy-matrices}
+
+The outer $2\times2$ block has eigenvalues $0,1/2$; the middle vector has
+eigenvalue $-1/2$. Both moments vanish on the antisymmetric subspace, so
+there is no missing fourth eigenvalue contribution. The trace norm of the
+difference is one and its trace distance is $1/2$. Receiving two copies
+with a shared preparation label therefore allows success probability
+$3/4$, even though one copy is exactly $I/2$ under either source. The
+shared label is essential: two independently resampled states would both
+give $(I/2)^{\otimes2}$.
+
+### Exercise 2: POVM versus instrument
+
+An effect fixes a probability, while an instrument also fixes the
+post-measurement state. A first instrument uses
+$K_0=|0\rangle\langle0|$ and $K_1=|1\rangle\langle1|$. Its effects are
+$K_j^\dagger K_j=|j\rangle\langle j|$ and its nonzero conditional outputs
+are $|j\rangle\langle j|$.
+
+A second instrument uses $L_0=|+\rangle\langle0|$ and
+$L_1=|+\rangle\langle1|$. Again
+$L_j^\dagger L_j=|j\rangle\langle j|$, so both instruments return outcome
+$j$ with probability $\rho_{jj}$. But now
+$L_j\rho L_j^\dagger=\rho_{jj}|+\rangle\langle+|$; every allowed outcome
+prepares $|+\rangle$. Each set obeys completeness because its effects sum
+to $I$. The unconditional first instrument dephases, whereas the second
+replaces every unit-trace input by $|+\rangle\langle+|$. An outcome of
+zero probability has no normalized conditional state and requires no
+separate prescription.
+
+## Chapter 3: thermalization
+
+The relevant distinction between dephasing and equilibrium is developed in
+@sec-thermalization.
+
+### Exercise 1: Degenerate spectrum
+
+For $H=\operatorname{diag}(0,0,1)$ and $\hbar=1$,
+$|\psi(t)\rangle=(|0\rangle+|1\rangle+e^{-it}|2\rangle)/\sqrt3$.
+Every density-matrix entry evolves as
+$\rho_{ab}(t)=e^{-it(E_a-E_b)}/3$. The infinite-time average of a
+nonzero-frequency exponential is zero, while a zero-frequency entry
+remains unchanged. Thus
+
+$$
+\overline\rho=\frac13
+\begin{pmatrix}1&1&0\\1&1&0\\0&0&1\end{pmatrix}
+=\frac23|+_{01}\rangle\langle+_{01}|+\frac13|2\rangle\langle2|,
+\quad |+_{01}\rangle=\frac{|0\rangle+|1\rangle}{\sqrt2}.
+$$ {#eq-sol-degenerate-average}
+
+The coherence between $|0\rangle$ and $|1\rangle$ survives because their
+energies coincide. The basis-independent statement is
+$\overline\rho=\sum_E P_E\rho(0)P_E$, with $P_E$ the full projector onto an
+energy eigenspace. Deleting all off-diagonal entries in an arbitrarily
+chosen degenerate eigenbasis would incorrectly delete a stationary
+coherence. The surviving weights $2/3,1/3,0$ also show why the time average
+need not be a Gibbs state.
+
+### Exercise 3: Finite-bath correction
+
+The probability for a system level of energy $E_a$ is proportional to the
+bath density of states at $E_{\mathrm{tot}}-E_a$. Expand its entropy around
+$E_{\mathrm{tot}}$:
+
+$$
+S_B(E_{\mathrm{tot}}-E_a)=S_B(E_{\mathrm{tot}})-\beta E_a
++\frac12 S_B''(E_{\mathrm{tot}})E_a^2+\cdots.
+$$
+
+With $k_B=1$, $\beta=1/T$ and $C_B=dE_B/dT$, the chain rule gives
+$S_B''=d\beta/dE_B=-1/(T^2C_B)$. For a stable bath of positive heat
+capacity,
+
+$$
+p_a\ \propto\ \exp\!\left[-\beta E_a-
+\frac{E_a^2}{2T^2C_B}+\cdots\right].
+$$ {#eq-sol-finite-bath}
+
+The quadratic term suppresses large exchanges more strongly than an
+infinite bath does. The local approximation should be centered on the
+relevant exchange range: a shift of energy origin changes the expansion
+point and the corresponding $\beta$ together. A sufficient condition is
+$|\Delta E_a|^2/(T^2C_B)\ll1$ throughout the appreciably populated system
+levels, together with small higher derivatives over that range. Merely
+saying that the bath has many sites is insufficient near a singular
+thermodynamic regime or when the system exchanges an extensive energy.
+
+## Chapter 4: quantum designs
+
+Use the Haar moment and frame-potential definitions in @sec-randomness-designs.
+
+### Exercise 3: Tetrahedron
+
+Choose the four unit vectors listed in the exercise, each divided by
+$\sqrt3$ and sampled with probability $1/4$. Each Cartesian component has
+two plus and two minus signs, so $\mathbb E r_i=0$. Each square is $1/3$,
+while opposite signs cancel in every off-diagonal product. Therefore
+$\mathbb E r_ir_j=\delta_{ij}/3$.
+
+Expanding $P_{\boldsymbol r}=(I+\boldsymbol r\cdot\boldsymbol\sigma)/2$
+shows that $\mathbb E P_{\boldsymbol r}^{\otimes2}$ depends only on these
+first and second Bloch moments. They equal those of the sphere, proving
+the 2-design property without assuming that four points are continuously
+uniform. At third order, however, every listed vertex satisfies
+$r_xr_yr_z=1/(3\sqrt3)$. The spherical average of this odd monomial is
+zero, since inversion changes its sign and preserves the measure. Hence
+
+$$
+\operatorname{Tr}[(X\otimes Y\otimes Z)M^{(3)}_{\mathrm{tet}}]
+=\frac1{3\sqrt3}\neq0
+=\operatorname{Tr}[(X\otimes Y\otimes Z)M^{(3)}_{\mathrm H}].
+$$ {#eq-sol-tetrahedron-witness}
+
+This explicit three-copy witness proves failure at order three. Agreement
+of the polarization covariance is a complete order-two test for qubits,
+but says nothing about the cubic correlation just exposed.
+
+### Exercise 4: Estimator bias
+
+For $N$ independent samples from an ensemble $\mathcal E$, let
+$\widehat F_k=N^{-2}\sum_{i,j}|\langle\psi_i|\psi_j\rangle|^{2k}$.
+There are $N$ diagonal terms, each exactly one, and $N(N-1)$ off-diagonal
+terms, each with expectation $F_k(\mathcal E)$. Therefore
+
+$$
+\mathbb E\widehat F_k=\frac1N+\left(1-\frac1N\right)F_k(\mathcal E),
+\qquad
+\widetilde F_k=\frac1{N(N-1)}\sum_{i\ne j}
+|\langle\psi_i|\psi_j\rangle|^{2k}.
+$$ {#eq-sol-unbiased-frame-estimator}
+
+The second expression is unbiased for $N\geq2$. Excluding diagonal pairs
+does not make the remaining terms independent: pairs sharing one sample
+are correlated, so error bars must account for that dependence. Moreover,
+the proof uses independently drawn labels. Sampling consecutive states
+of a slowly mixing temporal trajectory can bias the off-diagonal average
+as an estimator for an intended stationary ensemble. Removing self-pairs
+corrects the algebraic sampling floor, rather than all finite-time or
+correlation effects.
+
+## Chapter 5: projected ensembles
+
+The Born probabilities in @sec-projected-ensembles must be retained in
+every average.
+
+### Exercise 1: Unequal Schmidt weights
+
+Let $0\leq\lambda\leq1$. Measuring $B$ in $Z$ gives $|0\rangle$ with
+probability $\lambda$ and $|1\rangle$ with probability $1-\lambda$.
+Measuring in $X$ instead gives the unnormalized vectors
+$(\sqrt\lambda|0\rangle\pm\sqrt{1-\lambda}|1\rangle)/\sqrt2$.
+Their squared norms are $1/2$, so the normalized states are
+$|\phi_\pm\rangle=\sqrt\lambda|0\rangle\pm\sqrt{1-\lambda}|1\rangle$,
+with equal probabilities. Both ensembles average to
+$\rho_A=\operatorname{diag}(\lambda,1-\lambda)$.
+
+For the $Z$ ensemble, the random conditional expectation
+$z_\psi=\langle Z\rangle_\psi$ takes values $\pm1$. Thus
+$\mathbb E z_\psi=2\lambda-1$ and
+$\operatorname{Var}_{\mathcal E_Z}(z_\psi)=1-(2\lambda-1)^2=4\lambda(1-\lambda)$.
+For the $X$ ensemble both states have $z_\psi=2\lambda-1$, so the ensemble
+variance is zero. Their second raw moments are respectively $1$ and
+$(2\lambda-1)^2$.
+
+There is also a different variance: measuring $Z$ *within* an individual
+conditional state. This quantum measurement variance is zero for each
+$Z$-prepared state and $4\lambda(1-\lambda)$ for each $X$-prepared state.
+Their roles exchange so that the total unconditioned measurement variance
+is unchanged. Finally,
+$\langle\phi_+|\phi_-\rangle=2\lambda-1$, which vanishes only for equal
+Schmidt weights. Orthogonal bath outcomes do not require orthogonal
+conditional states on the retained subsystem.
+
+### Exercise 4: Finite-bath obstruction
+
+Here $d_A=4$ and at most $d_B=8$ pure conditional states have nonzero
+weight. A sum of eight rank-one replicated projectors has rank at most
+eight. But the Haar $k$th moment is maximally mixed on a symmetric
+subspace of dimension $D_k=\binom{k+3}{k}$. The first values are
+$D_1=4$, $D_2=10$, and $D_3=20$. Consequently all exact design orders
+$k\geq2$ are excluded; order one is allowed by rank, without being
+guaranteed dynamically.
+
+Let $P$ project onto the support of the actual third moment and let its
+rank be $r\leq8$. A two-outcome measurement with effect $I-P$ returns zero
+for that moment and $1-r/20$ for Haar. Since trace distance bounds every
+effect's probability difference,
+
+$$
+\Delta_3\geq1-\frac r{20}\geq\frac35.
+$$ {#eq-sol-small-bath-bound}
+
+This bound is independent of scrambling quality. More evolution can
+change the eight states, but cannot increase the number of possible
+outcomes in this fixed rank-one measurement protocol.
+
+## Chapter 6: constraints and symmetry
+
+The thermodynamic assumptions behind constrained targets are discussed in
+@sec-scrooge-symmetry.
+
+### Exercise 5: Macroscopic input fluctuations
+
+In a uniformly mixed fixed-charge sector with $Q=nN$, one site is occupied
+with probability $n$. For two distinct sites,
+$\langle n_1n_2\rangle=Q(Q-1)/[N(N-1)]\to n^2$. Thus any fixed pair tends
+to the product Bernoulli state with probabilities
+$((1-n)^2,n(1-n),n(1-n),n^2)$ in the basis $00,01,10,11$. The finite-size
+negative covariance vanishes as $1/N$ when the filling is fixed.
+
+At $n=1/2$, the one-site state is $I/2$ and the pair is $I/4$ in the
+thermodynamic limit. For an equal incoherent average of sectors near
+$n=1/4$ and $n=3/4$, the one-site state is again $I/2$. The pair instead is
+
+$$
+\rho_{12}\longrightarrow
+\operatorname{diag}\left(\frac5{16},\frac3{16},\frac3{16},\frac5{16}\right),
+\qquad
+\langle n_1n_2\rangle-\langle n_1\rangle\langle n_2\rangle=\frac1{16}.
+$$ {#eq-sol-macroscopic-charge-mixture}
+
+The surviving covariance is the classical variance of the random filling,
+$\mathbb E n^2-(\mathbb E n)^2$, rather than a failure to scramble inside
+either sector. Replacing a broad charge distribution by its mean therefore
+loses local two-site information even at infinite system size. An
+assumption that charge fluctuations are subextensive rules out this
+particular counterexample and must be stated before using one effective
+filling for every finite subsystem.
+
+### Exercise 6: Failure of a naive theorem composition
+
+Choose $0<\epsilon<1/2$ and
+$T=\operatorname{diag}(1-\epsilon^2,\epsilon^2)$,
+$M=\operatorname{diag}(1-\epsilon^2-\epsilon,\epsilon^2+\epsilon)$.
+Both are density matrices. Their difference is
+$\operatorname{diag}(-\epsilon,\epsilon)$, so $D(M,T)=\epsilon\to0$.
+Nevertheless the second basis vector sees relative error
+$|M_{22}-T_{22}|/T_{22}=1/\epsilon$, which diverges.
+
+Equivalently, the second eigenvalue of
+$T^{-1/2}MT^{-1/2}-I$ is $1/\epsilon$. The first is
+$-\epsilon/(1-\epsilon^2)$, so the operator norm of this relative error is
+$1/\epsilon$. An additive trace-distance guarantee therefore cannot be
+inserted without modification into a theorem requiring a small relative
+operator error. A lower bound on $\lambda_{\min}(T)$, or a restriction to
+its well-populated support, is additional information. The example is
+especially relevant to low-temperature targets, where small eigenvalues
+are physically natural.
+
+## Chapter 7: Gaussian conditioning
+
+Here vacuum quadrature covariance is $I/2$, as in @sec-gaussian-nonlocal.
+
+### Exercise 2: Schur complement and purity
+
+For the two-mode squeezed state, set $c=\cosh2r$, $s=\sinh2r$ and
+$C=sZ/2$. A diagonal pure measurement seed has
+$V_M=\operatorname{diag}(t,t^{-1})/2$ with $t=e^{2u}>0$.
+The Schur complement gives diagonal conditional variances
+
+$$
+v_q=\frac12\left(c-\frac{s^2}{c+t}\right)
+=\frac{1+ct}{2(c+t)},\qquad
+v_p=\frac{1+c/t}{2(c+1/t)}.
+$$ {#eq-sol-gaussian-seed-variances}
+
+The simplification uses $s^2=c^2-1$. Multiplying the two expressions,
+the numerator is
+$(1+ct)(1+c/t)=1+c(t+t^{-1})+c^2$, which equals
+$(c+t)(c+t^{-1})$. Therefore $v_qv_p=1/4$, the one-mode pure-state
+condition in this convention. The outcome changes the conditional mean,
+not these variances.
+
+At $u=0$, $t=1$ and $v_q=v_p=1/2$, so the state is coherent and
+$d_{A|y}=sZy/(c+1)$. At large $|u|$ the state can be squeezed while
+remaining pure. The check separates purity from coherent-state form:
+rank-one Gaussian measurements preserve conditional purity of a globally
+pure pair, but do not all prepare the same covariance.
+
+### Exercise 3: Homodyne information
+
+In the coherent cloud the unknown displacement $d_q$ is a centered
+Gaussian of variance $\overline n$. A homodyne reading is
+$Q=d_q+\xi$ with independent vacuum noise
+$\operatorname{Var}\xi=1/2$. A real Gaussian of variance $v$ has
+differential entropy $h=\frac12\log(2\pi ev)$, so
+
+$$
+I(d_q;Q)=h(Q)-h(Q|d_q)=\frac12\log(1+2\overline n).
+$$ {#eq-sol-homodyne-information}
+
+The unobserved $d_p$ is independent and supplies no additional information
+to this reading. Heterodyne measures both quadratures with noise variance
+one in each and obtains $I_{\mathrm{het}}=\log(1+\overline n)$. At small
+$\overline n$, the homodyne and heterodyne values are respectively
+$\overline n-\overline n^2+\cdots$ and
+$\overline n-\overline n^2/2+\cdots$. At large occupation they grow as
+$\frac12\log(2\overline n)$ and $\log\overline n$. Heterodyne wins here
+because the encoded signal occupies both independent quadratures;
+homodyne's lower noise in one quadrature does not compensate for missing
+the other. Indeed $(1+\overline n)^2\geq1+2\overline n$ establishes this
+ordering for every $\overline n\geq0$.
+
+## Chapter 8: Hilbert-space ergodicity
+
+The temporal ensemble and its clock are specified in @sec-temporal-ergodicity.
+
+### Exercise 2: Cross-observable covariances
+
+Write $o=\langle\psi|O|\psi\rangle$ and
+$q=\langle\psi|Q|\psi\rangle$. Their product is
+$\operatorname{Tr}[(O\otimes Q)P_\psi^{\otimes2}]$. Inserting
+$M_{\mathrm H}^{(2)}=(I+S)/[d(d+1)]$ gives
+$\mathbb E_{\mathrm H}(oq)=[\operatorname{Tr}O\operatorname{Tr}Q+
+\operatorname{Tr}(OQ)]/[d(d+1)]$. Since the first means are
+$\operatorname{Tr}O/d$ and $\operatorname{Tr}Q/d$,
+
+$$
+\operatorname{Cov}_{\mathrm H}(o,q)=
+\frac{\operatorname{Tr}(OQ)-\operatorname{Tr}O\operatorname{Tr}Q/d}
+{d(d+1)}.
+$$ {#eq-sol-haar-observable-covariance}
+
+Subtracting the trace parts makes the numerator simply the
+Hilbert–Schmidt inner product of the centered observables. For $Q=O$ it
+is nonnegative, as a variance requires. For traceless orthogonal Paulis
+the covariance vanishes; for a qubit Pauli with itself it equals $1/3$.
+This concerns fluctuations of conditional *expectations* over pure
+states, rather than the operator covariance of two potentially
+noncommuting measurements on one state.
+
+### Exercise 4: Rank and sample complexity
+
+An empirical moment is
+$M_T^{(k)}=T^{-1}\sum_{t=1}^T|\psi_t\rangle^{\otimes k}
+\langle\psi_t|^{\otimes k}$. Its image lies in the span of $T$ vectors,
+so its rank $r$ cannot exceed $T$. All those vectors also lie in the
+symmetric subspace. Let $P$ be the support projector. Then
+$\operatorname{Tr}(PM_T^{(k)})=1$ and
+$\operatorname{Tr}(PM_{\mathrm H}^{(k)})=r/D_k$.
+
+The operational characterization
+$D(\rho,\sigma)=\max_{0\leq E\leq I}|\operatorname{Tr}E(\rho-\sigma)|$
+applied to $E=P$ yields
+$\Delta_T^{(k)}\geq1-r/D_k\geq1-T/D_k$ when $T<D_k$.
+Independence of the sampled states is unnecessary for this deterministic
+rank bound. Random sampling cannot evade it, and strong temporal
+correlations can only lower the actual rank. Since $D_k$ grows as
+$d^k/k!$ for fixed $k$ and large $d$, a small scalar diagnostic obtained
+from very few times cannot by itself certify small full moment distance.
+
+## Chapter 9: aperiodic drives
+
+Operator ordering follows the word convention of @sec-aperiodic-drives.
+
+### Exercise 2: Derive the channel recursion
+
+Let $X,Y$ have lengths $L_X,L_Y$ and let $R$ be an arbitrary replicated
+input operator. The first $L_X$ sampled prefixes of $XY$ are exactly the
+prefixes of $X$. A prefix at offset $r$ into $Y$ has total gate
+$V_Y(r)V_X$, with the later operation on the left. Its action on $R$ is
+$\mathcal V_Y(r)\circ\mathcal V_X(R)$. Splitting the sum and dividing by
+$L_X+L_Y$ gives the concatenation formula in the chapter.
+
+For three blocks, put $L=L_X+L_Y+L_Z$. Repeating the same argument gives
+
+$$
+\mathcal N_{XYZ}^{(k)}=
+\frac{L_X}{L}\mathcal N_X^{(k)}+
+\frac{L_Y}{L}\mathcal N_Y^{(k)}\circ\mathcal V_X^{(k)}+
+\frac{L_Z}{L}\mathcal N_Z^{(k)}\circ\mathcal V_Y^{(k)}
+\circ\mathcal V_X^{(k)}.
+$$ {#eq-sol-three-block-channel}
+
+The last term includes both complete earlier blocks, in their actual
+time order. Including a block's endpoint as well as the next block's
+initial point would count their boundary twice; the convention
+$0\leq t<L_W$ prevents this. The weights sum to one, so the recurrence
+preserves a normalized average. Nothing in this derivation assumes
+random gates, ergodicity, or existence of an infinite-time limit.
+
+### Exercise 6: A heavy-tailed clock
+
+Treat the large recursion level $n$ as continuous for its tail and write
+$p_n(n)\sim Cn^{-3/2}$. With $\tau=2^n$,
+$n=\log\tau/\log2$ and $dn/d\tau=1/(\tau\log2)$. Probability transforms
+with the Jacobian, giving
+
+$$
+p_\tau(\tau)\sim
+\frac{C\sqrt{\log2}}{\tau(\log\tau)^{3/2}},\qquad
+\Pr(\tau>t)\sim\frac{2C\sqrt{\log2}}{\sqrt{\log t}}.
+$$ {#eq-sol-heavy-clock}
+
+The survival function follows by substituting $x=\log\tau$ into its
+tail integral. A nonnegative random variable has mean
+$\int_0^\infty\Pr(\tau>t)\,dt$, which diverges for this survival law.
+Equivalently, the discrete sum $\sum_n2^np_n(n)$ diverges. Thus a tail
+that looks like an ordinary power law in recursion depth becomes
+exceptionally broad in gate count. The calculation derives a consequence
+of the assumed level distribution; it does not establish that every
+aperiodic drive has this distribution or that different plateaus are
+independent renewal events.
+
+## Chapter 10: coherence and magic
+
+All resource entropies in this section are in bits, following
+@sec-resource-transitions.
+
+### Exercise 2: Two-copy discrimination
+
+The symmetric space splits into $d$ diagonal vectors $|aa\rangle$ and
+$d(d-1)/2$ off-diagonal symmetric vectors
+$(|ab\rangle+|ba\rangle)/\sqrt2$, $a<b$. On the first subspace,
+$M_{\mathrm{bit}}^{(2)}-M_{\mathrm H}^{(2)}$ has eigenvalue
+$(d-1)/[d(d+1)]$; on the second it has eigenvalue
+$-2/[d(d+1)]$. The antisymmetric space contributes zero. Adding the
+positive eigenvalues, or half the sum of all absolute eigenvalues,
+gives $\Delta_2=(d-1)/(d+1)$.
+
+For one, two, and three retained qubits, $d=2,4,8$, so the distances are
+$1/3,3/5,7/9$. The effect projecting onto
+$\operatorname{span}\{|aa\rangle\}$ achieves the optimal probability
+difference: the classical ensemble always lands there, whereas Haar does
+so with probability $2/(d+1)$. On a single copy both hypotheses are
+$I/d$, so every effect has identical expectation. Increasing experimental
+precision cannot extract a distinction that the first moment erases;
+the experiment must access shared-label multi-copy information.
+
+### Exercise 5: Coherence without magic
+
+For a pure qubit, computational coherence is the binary entropy of its
+$Z$ probabilities. Thus $C_r(|0\rangle)=0$, while $|+\rangle$,
+$|Y_+\rangle$, and $|T\rangle$ each have $C_r=1$. To compute the second
+stabilizer Rényi entropy, include the identity Pauli explicitly:
+
+$$
+M_2=-\log_2\!\left[\frac{1+r_x^4+r_y^4+r_z^4}{2}\right].
+$$ {#eq-sol-qubit-magic}
+
+The respective Bloch vectors are $(0,0,1)$, $(1,0,0)$, $(0,1,0)$ and
+$(1/\sqrt2,1/\sqrt2,0)$. The first three give bracket one and $M_2=0$.
+The last gives bracket $3/4$ and
+$M_2=\log_2(4/3)$. The complex amplitude in $|Y_+\rangle$ therefore
+does not imply magic: it is a Pauli eigenstate and hence stabilizer.
+Coherence detects superposition relative to a chosen basis, whereas
+magic detects departure from the entire stabilizer set. The two
+diagnostics answer different operational questions even on one qubit.
+
+## Chapter 11: channels and bath records
+
+The dilation and Kraus conventions are those of @sec-channels-memory.
+
+### Exercise 1: Dephasing from a controlled bath rotation
+
+Since $e^{-i\theta X}|0\rangle=\cos\theta|0\rangle-i\sin\theta|1\rangle$,
+projection onto bath outputs gives
+$K_0=|0\rangle\langle0|+\cos\theta|1\rangle\langle1|$ and
+$K_1=-i\sin\theta|1\rangle\langle1|$. The effects sum to $I$. Direct
+multiplication shows that populations are unchanged, while
+$\rho_{01}\mapsto\cos\theta\,\rho_{01}$. This is exactly the overlap of
+the two possible bath states, so lost coherence records the bath's
+ability to distinguish the system basis states.
+
+The channel is unitary precisely when $|\cos\theta|=1$, namely
+$\theta\in\pi\mathbb Z$. For even multiples it is the identity; for odd
+multiples it is conjugation by $Z$. If $|\cos\theta|<1$, an input
+$|+\rangle$ has output Bloch length $|\cos\theta|<1$ and becomes mixed,
+which rules out a unitary channel. At $\cos\theta=0$ the two bath states
+are orthogonal and the channel completely dephases.
+
+### Exercise 6: Radial diagnostics
+
+Set $d=d_S$, $R=\|G\|_F^2$, and
+$W=\|K\|_F^2=Y^2R/(dd_B)$. Each of the $d^2$ squared complex-Gaussian
+entries has mean and variance one, so
+$\mathbb ER=d^2$ and $\mathbb ER^2=d^2(d^2+1)$. Independence and
+$\mathbb EY^2=1$, $\mathbb EY^4=e^{4\sigma^2}$ imply
+
+$$
+\mathbb EW=\frac d{d_B},\qquad
+\frac{\operatorname{Var}W}{(\mathbb EW)^2}
+=e^{4\sigma^2}\left(1+\frac1{d^2}\right)-1.
+$$ {#eq-sol-kraus-radial-variation}
+
+The coefficient of variation is the square root of the last expression.
+It approaches $\sqrt{e^{4\sigma^2}-1}$ at fixed nonzero $\sigma$ as
+$d\to\infty$. At $\sigma=0$ it is $1/d$, the ordinary Gaussian norm
+concentration. Thus a fluctuating scalar can retain broad outcome norms
+even when the many entries make the Gaussian radial factor sharply
+concentrated. These are ensemble moments of the stated scaling model;
+they do not assert that independent finite draws of $K$ satisfy exact
+Kraus completeness for one physical instrument.
+
+## Chapter 12: temporal memory
+
+See @sec-temporal-entanglement for the difference between a normalized
+history vector and a process Choi operator.
+
+### Exercise 2: A memory bit
+
+Prepare $|+\rangle$, let the bath apply $Z^b$, and measure $X$. The
+recorded sign is deterministically $x_1=(-1)^b$. Now prepare a fresh
+$|+\rangle$ regardless of that sign, repeat the interaction, and record
+$x_2$. With a reused bath bit,
+$p(x_1,x_2)=\frac12\delta_{x_1,x_2}$, so
+$\mathbb E(x_1x_2)=1$. With independent unbiased bits at the two steps,
+all four sign pairs have probability $1/4$ and
+$\mathbb E(x_1x_2)=0$.
+
+Each individual step has the same averaged complete-dephasing channel.
+The difference appears only in a multi-time experiment that retains the
+record and makes a causal break. After repreparation the system input is
+identical in every run, yet the future is correlated with the earlier
+record through the bath. This disproves memorylessness on the accessible
+probe. It witnesses classical memory; no entanglement or quantum storage
+is required for this particular violation.
+
+### Exercise 4: MPS rank and approximation
+
+The normalized Schmidt probabilities are $p_0=1/2$ and
+$p_1=\cdots=p_D=1/(2D)$. For rank $r\geq1$, the optimal approximation
+keeps the largest weight and $r-1$ of the equal smaller weights. Its
+discarded weight is
+$w_{\mathrm{disc}}=(D-r+1)/(2D)$. Requiring this to be at most $0.01$ gives
+
+$$
+r_{\min}=1+\lceil0.98D\rceil.
+$$ {#eq-sol-schmidt-rank-required}
+
+The formula includes the rounding needed when $D$ is small. Although
+$S_2=-\log[(1+1/D)/4]\to\log4$, almost all of the $D$ small Schmidt
+weights must be retained at this accuracy. If $D=e^{cT}$, the required
+bond rank grows exponentially in time. “Discarded weight” here means the
+squared norm lost by the unnormalized Schmidt truncation. Renormalizing
+the truncated vector gives fidelity $1-w_{\mathrm{disc}}$ with the original
+and pure-state trace distance $\sqrt{w_{\mathrm{disc}}}$; these different
+error conventions should not be conflated. A bounded second Rényi
+entropy alone does not control a prescribed approximation error.
+
+## Chapter 13: constraints, scars, and fragments
+
+The graph components and infinite-temperature inner product are defined
+in @sec-scars-fragmentation.
+
+### Exercise 1: Counting allowed states
+
+Let $G(x)=\sum_{L\geq0}D_Lx^L$. Summing
+$D_L=D_{L-1}+D_{L-2}$ for $L\geq2$ yields
+$G-1-2x=x(G-1)+x^2G$. Keeping the initial conditions separately is what
+fixes the numerator. Solving gives
+
+$$
+G(x)=\frac{1+x}{1-x-x^2}.
+$$ {#eq-sol-blockade-generating-function}
+
+The denominator roots are $x_+=(\sqrt5-1)/2=1/\varphi$ and
+$x_-=-(1+\sqrt5)/2=-\varphi$. The positive root is closer to the origin,
+and the numerator does not cancel it, so it determines the radius of
+convergence and exponential growth $D_L\propto\varphi^L$. More precisely,
+$D_L=F_{L+2}=[\varphi^{L+2}-(-1/\varphi)^{L+2}]/\sqrt5$. The constraint
+reduces the entropy density from $\log2$ to $\log\varphi$ but still leaves
+an exponentially large space. This counting fact does not decide whether
+the Hamiltonian thermalizes inside that space.
+
+### Exercise 5: A local memory bound
+
+The $Q=2,P=7$ sector has three equally weighted basis states. Only the
+frozen state $100001$ has $n_1=1$, hence
+$\langle n_1\rangle=1/3$ and
+$O=n_1-1/3=\operatorname{diag}(2/3,-1/3,-1/3)$. Its fragment averages are
+$O_f=2/3$ and $O_a=-1/3$, with weights $w_f=1/3$, $w_a=2/3$. The bound is
+
+$$
+\overline C\geq\frac13\left(\frac23\right)^2+
+\frac23\left(-\frac13\right)^2=\frac29.
+$$ {#eq-sol-fragment-memory}
+
+In fact $O$ is constant on each entire connected block, so it commutes
+with the Hamiltonian restricted to this sector. Therefore
+$C(t)=\operatorname{Tr}(O^2)/3=2/9$ for every time: the bound is
+saturated. No dephasing calculation is needed. A generic local observable
+need not be block-constant, and its conserved projection could be much
+smaller. The example demonstrates explicitly how a local operator can
+retain memory of an additional fragment label even after the two
+specified global charges have been fixed.
+
+## Chapter 14: driven phases
+
+The small expansion parameter is local frequency times period, as
+explained in @sec-driven-phases.
+
+### Exercise 1: Sign of the engineered term
+
+Put $U=e^{-iTH_B/2}e^{-iTH_A/2}$, with $A$ applied first. Direct
+multiplication gives
+$U=I-iT(H_A+H_B)/2-T^2(H_A^2+H_B^2)/8-T^2H_BH_A/4+O(T^3)$.
+Now write $H_F=H_0+TH_1+O(T^2)$, where $H_0=(H_A+H_B)/2$. Expanding
+$e^{-iTH_F}$ produces the quadratic term
+$-iT^2H_1-T^2(H_A^2+H_AH_B+H_BH_A+H_B^2)/8$.
+Matching coefficients cancels the two square terms and leaves
+$-iH_1=-[H_B,H_A]/8$. Therefore
+
+$$
+H_F=\frac{H_A+H_B}{2}-\frac{iT}{8}[H_B,H_A]+O(T^2).
+$$ {#eq-sol-drive-commutator}
+
+Reversing the segments interchanges $A,B$ and flips the commutator sign.
+Because $[H_B,H_A]^\dagger=-[H_B,H_A]$, multiplication by $-i$ makes the
+correction Hermitian. This is a useful check on both its sign and its
+physical admissibility. The omitted terms in $H_F$ are of order $T^2$,
+although the gate comparison was made through order $T^2$ with a
+remainder of order $T^3$.
+
+### Exercise 6: Domain walls in one dimension
+
+For $D=-J\sum_iZ_iZ_{i+1}$, a satisfied bond has energy $-J$ and a domain
+wall has energy $+J$. In an open chain at zero field, the bond variables
+are independent after choosing one boundary spin. A wall therefore has
+probability
+$p_{\mathrm{dw}}=e^{-\beta J}/(e^{\beta J}+e^{-\beta J})
+=1/(1+e^{2\beta J})\sim e^{-2\beta J}$.
+
+Across $r$ bonds, each wall reverses the spin sign. Independence gives
+$\langle Z_iZ_{i+r}\rangle=(1-2p_{\mathrm{dw}})^r=(\tanh\beta J)^r$, so
+
+$$
+\xi^{-1}=-\log\tanh(\beta J),\qquad
+\xi\sim\frac12e^{2\beta J}\quad(\beta J\gg1).
+$$ {#eq-sol-ising-correlation-length}
+
+A finite chain with $Lp_{\mathrm{dw}}\ll1$ is usually almost uniformly
+magnetized in a snapshot and can display a convincing finite-size ordered
+regime. Yet $\xi$ is finite for every nonzero temperature, so there is no
+thermodynamic long-range Ising order in this nearest-neighbor model.
+Periodic boundaries require an even total number of walls; that changes
+finite-size statistics but not the infinite-chain correlation length.
+For prethermal time-crystal claims, a long lifetime of an effective
+Hamiltonian and the existence of its ordered phase are separate
+requirements. A low wall density establishes a useful finite-size scale,
+not an infinite-volume ordered phase by itself.

@@ -1,0 +1,564 @@
+# Computational laboratory: testing distributions and dynamics {#sec-computational-laboratory}
+
+A simulation becomes a scientific test only after we specify the distribution being sampled, the observable being estimated, and the limit in which the claim is supposed to hold. A cloud of states can look uniform while having the wrong second moment. A smooth decay can be a sampling artifact. A striking revival can arise in a small system without establishing a many-body phase. This chapter develops numerical experiments that make these distinctions explicit.
+
+The projects connect the projected-ensemble framework of @sec-projected-ensembles, constrained ensembles in @sec-scrooge-symmetry, temporal ergodicity in @sec-temporal-ergodicity, aperiodic drives in @sec-aperiodic-drives, and constrained dynamics in @sec-scars-fragmentation. They implement basic objects rather than reproduce the full numerical studies of the cited papers. Their purpose is to teach how to test a proposed physical mechanism and how to recognize an incorrect test.
+
+All code uses Julia standard libraries. Code blocks can be copied, in order, into a single file and run with `julia --project=. laboratory.jl`. The book does not execute them during rendering. The separate script `scripts/generate_figures.jl` generates the original figures and CSV data used below. Its seed is fixed, and its computations include explicit finite-size and sampling choices. The source code is part of the scientific argument: changing the weights, time convention, or Hamiltonian normalization changes the experiment.
+
+## Establish conventions before computing
+
+We set $\hbar=1$. State vectors are complex column vectors, and a prime in Julia denotes the conjugate transpose. The inner product `dot(v,w)` conjugates its first argument. Our trace distance is $\tfrac12\|X-Y\|_1$, including the factor $1/2$. For a Hermitian difference, its trace norm is the sum of absolute eigenvalues; the sum of absolute matrix entries is a different quantity.
+
+We use a dedicated random-number generator instead of relying on hidden global random state:
+
+```julia
+using Random, LinearAlgebra, Statistics
+rng = MersenneTwister(20261020)
+
+function haar_state(rng, d)
+    @assert d >= 1
+    g = randn(rng, d) + im * randn(rng, d)
+    return g / norm(g)
+end
+
+function tensorpower(x, k)
+    @assert k >= 1
+    out = copy(x)
+    for j in 2:k
+        out = kron(out, x)
+    end
+    return out
+end
+
+function trace_distance(A, B)
+    X = A - B
+    @assert isapprox(X, X'; atol=1e-11)
+    return sum(abs, eigvals(Hermitian((X + X') / 2))) / 2
+end
+```
+
+Why does `haar_state` work? The joint density of the real and imaginary Gaussian components depends only on the vector norm. Every unitary preserves that norm, so the direction has a unitary-invariant distribution. Normalization removes the irrelevant radius. The variance chosen for the Gaussian components does not affect the direction, provided all components have the same isotropic distribution.
+
+Two numerical errors require different responses. **Floating-point error** comes from approximate arithmetic and should decrease when precision increases or a better algorithm is used. **Statistical error** comes from finite sampling and generally decreases as the inverse square root of the number of independent samples. More decimal digits do not remove statistical error. Conversely, repeating a biased estimator more often does not correct its systematic bias.
+
+## Laboratory 1: a Born-weighted projected ensemble
+
+### From a coefficient array to the measured distribution
+
+Store a normalized bipartite state as a matrix $C$ of size $d_A\times d_B$, with the convention
+
+$$
+|\Psi\rangle=\sum_{a,z}C_{az}|a\rangle_A|z\rangle_B,
+\qquad \sum_{a,z}|C_{az}|^2=1.
+$$ {#eq-lab-coefficients}
+
+Its $z$th column is the unnormalized conditional state $v_z$. Measuring the bath in the indicated basis gives $p_z=v_z^\dagger v_z$ and $|\psi_z\rangle=v_z/\sqrt{p_z}$. Therefore
+
+$$
+M^{(k)}=\sum_{z:p_z>0}p_z
+\left(\frac{v_zv_z^\dagger}{p_z}\right)^{\otimes k}.
+$$ {#eq-lab-projected-moment}
+
+The denominator contains $p_z^k$ inside the tensor product, while the outcome contributes only one factor of $p_z$ outside it. Omitting this distinction is a common source of incorrect higher moments. At $k=1$ the factors cancel, giving the essential identity $M^{(1)}=CC^\dagger$.
+
+```julia
+function projected_moment(C, k)
+    @assert k >= 1
+    @assert isapprox(sum(abs2, C), 1; atol=1e-12)
+    dA, dB = size(C)
+    M = zeros(ComplexF64, dA^k, dA^k)
+    for z in 1:dB
+        v = C[:, z]             # A copy: do not normalize C in place.
+        p = real(dot(v, v))
+        if p > 0
+            w = tensorpower(v / sqrt(p), k)
+            M .+= p .* (w * w')
+        end
+    end
+    return M
+end
+
+function basic_moment_checks(C, k)
+    M = projected_moment(C, k)
+    @assert isapprox(tr(M), 1; atol=1e-11)
+    @assert isapprox(M, M'; atol=1e-11)
+    @assert minimum(eigvals(Hermitian(M))) >= -1e-11
+    @assert isapprox(projected_moment(C, 1), C * C'; atol=1e-11)
+    return M
+end
+```
+
+Zero-probability columns contribute nothing and require no conditional state. A threshold that discards small but nonzero probabilities changes the ensemble. Such a threshold may be useful for performance, but then its discarded probability mass must be reported and included in the error budget. Enumerating every column, as above, avoids that extra approximation for small baths.
+
+The array convention matters when comparing with another program. Julia stores arrays by columns, so `C = reshape(haar_state(rng,dA*dB),dA,dB)` makes index $a$ vary fastest. This is consistent with @eq-lab-coefficients by definition. A package using a different tensor-index ordering may require a permutation before a partial trace. Checking $CC^\dagger$ against the independently implemented reduced state is more reliable than guessing the ordering.
+
+### Construct the correct Haar target
+
+The Haar moment is a maximally mixed state on the symmetric subspace:
+
+$$
+M_{\mathrm H}^{(k)}=\frac{P_{\mathrm{sym}}^{(k)}}{D_k},
+\qquad D_k=\binom{d_A+k-1}{k}.
+$$ {#eq-lab-haar-target}
+
+The denominator is $D_k$, not $d_A^k$. For example, two copies of the same pure qubit occupy the three-dimensional symmetric subspace of a four-dimensional tensor-product space. The antisymmetric singlet has exactly zero weight. Comparing with $I/d_A^k$ would therefore diagnose a discrepancy even for a perfect Haar ensemble.
+
+For a qubit, a particularly simple exact construction avoids summing $k!$ permutation matrices. Let $|D_r^{(k)}\rangle$ be the normalized equal superposition of bitstrings with $r$ ones. There are $\binom kr$ such strings. The Dicke states, with $r=0,\ldots,k$, form an orthonormal basis of the symmetric subspace. Thus a computational-basis matrix element is
+
+$$
+\langle i|M_{\mathrm H}^{(k)}|j\rangle
+=\begin{cases}
+[(k+1)\binom kr]^{-1},& |i|=|j|=r,\\
+0,& |i|\ne |j|,
+\end{cases}
+$$ {#eq-lab-qubit-haar}
+
+where $|i|$ is the number of ones in the length-$k$ bitstring representing $i$.
+
+```julia
+function haar_qubit_moment(k)
+    @assert k >= 1
+    D = 2^k
+    M = zeros(ComplexF64, D, D)
+    for i in 0:D-1, j in 0:D-1
+        r = count_ones(i)
+        if r == count_ones(j)
+            M[i+1, j+1] = 1 / ((k+1) * binomial(k, r))
+        end
+    end
+    return M
+end
+
+function exact_projected_checks()
+    Cbell = Matrix{ComplexF64}(I, 2, 2) / sqrt(2)
+    M2 = basic_moment_checks(Cbell, 2)
+    @assert isapprox(M2, Diagonal([0.5, 0, 0, 0.5]); atol=1e-12)
+    @assert isapprox(trace_distance(M2, haar_qubit_moment(2)),
+                     1/3; atol=1e-12)
+    H3 = haar_qubit_moment(3)
+    @assert isapprox(tr(H3), 1; atol=1e-12)
+    @assert isapprox(tr(H3 * H3), 1/4; atol=1e-12)
+    @assert count(x -> x > 1e-10, eigvals(Hermitian(H3))) == 4
+    return nothing
+end
+exact_projected_checks()
+
+C = reshape(haar_state(rng, 2*32), 2, 32)
+M3 = basic_moment_checks(C, 3)
+finite_bath_distance = trace_distance(M3, haar_qubit_moment(3))
+```
+
+These checks have exact expected answers. The Bell-state first moment is $I/2$, but the second moment assigns probability $1/2$ to each of $|00\rangle$ and $|11\rangle$. Its distance from the Haar second moment is $1/3$. This small example detects an omitted Born weight, an incorrect target, or a missing factor in the distance without relying on a noisy random calculation.
+
+### What the finite-bath benchmark establishes
+
+Generate a global Haar state, reshape it into $C$, and evaluate @eq-lab-projected-moment for $k=1,2,3$. Repeat for independent preparations and increasing $d_B$, with $d_A=2$ fixed. This is the experiment in @fig-lab-projected. The script computes each projected ensemble by exact enumeration of its bath outcomes; the error bars arise from the finite number of independent global preparations, not from sampling measurement shots.
+
+![Projected moments of independent global Haar states approach their qubit Haar targets as bath dimension grows. Points average 48 preparations per size; bars show the standard error across preparations. This is an original finite-bath random-state benchmark, generated by the accompanying Julia script.](figs/projected-convergence.svg){#fig-lab-projected}
+
+There is a useful analytic check beyond the first moment. Write the unnormalized Gaussian columns as $r_z\phi_z$. Their independent directions $\phi_z$ are Haar distributed. Their squared radii are independent gamma variables of shape $d_A$. After normalization, their weights obey a Dirichlet distribution with all parameters equal to $d_A$. Consequently
+
+$$
+\mathbb E\sum_zp_z^2=\frac{d_A+1}{d_A d_B+1}.
+$$ {#eq-lab-dirichlet-weights}
+
+To obtain this result directly, the Dirichlet second moment is
+$\mathbb E p_z^2=d_A(d_A+1)/[(d_Ad_B)(d_Ad_B+1)]$; summing $d_B$ identical terms gives @eq-lab-dirichlet-weights. Directions and weights are independent. Distinct Haar directions satisfy $\mathbb E|\langle\phi_z|\phi_{z'}\rangle|^{2k}=1/D_k$. Splitting the frame potential into equal and unequal labels then gives
+
+$$
+\mathbb E\,\operatorname{Tr}[(M^{(k)})^2]
+=\frac1{D_k}+\left(1-\frac1{D_k}\right)
+\frac{d_A+1}{d_A d_B+1}.
+$$ {#eq-lab-global-haar-frame}
+
+This is an exact ensemble-average identity for the stated random-state model. It predicts the mean squared Hilbert–Schmidt error after subtracting $1/D_k$. It does not give the mean trace distance by taking a square root: the norms differ, and the expectation of a square root is not the square root of the expectation.
+
+The figure contains no Hamiltonian, spatial locality, conserved energy, or time axis. It therefore provides **no proof of physical deep thermalization**. It establishes a benchmark that dynamics might approach. Establishing dynamical behavior requires evolving a specified initial state, retaining the physical measurement basis, examining times and sizes, and comparing with the correct constrained target. Special solvable dynamics and their assumptions are discussed in @HoChoi2022, while distinct moment-relaxation times are analyzed in @IppolitiHo2022. Neither conclusion follows from drawing global Haar states.
+
+## Laboratory 2: quantify finite-sampling bias
+
+Suppose $N$ independent pure states are drawn from an ensemble with moment $M^{(k)}$. Define $Q_i=(|\psi_i\rangle\langle\psi_i|)^{\otimes k}$ and $\widehat M=N^{-1}\sum_iQ_i$. Its mean is $M^{(k)}$, but its purity is biased:
+
+$$
+\begin{aligned}
+\mathbb E\operatorname{Tr}\widehat M^2
+&=\frac1{N^2}\left[N+N(N-1)\operatorname{Tr}[(M^{(k)})^2]\right]\\
+&=\frac1N+\frac{N-1}{N}\mathcal F_k.
+\end{aligned}
+$$ {#eq-lab-frame-bias}
+
+Here $\mathcal F_k=\operatorname{Tr}[(M^{(k)})^2]$. The first term comes from the $N$ diagonal pairs, since $\operatorname{Tr}Q_i^2=1$. For distinct indices, independence makes the expectation $\operatorname{Tr}[(M^{(k)})^2]$. For true Haar samples, the expected apparent excess above $1/D_k$ is $(1-1/D_k)/N$. A nonzero excess of this size is a predictable sampling floor.
+
+Removing only identical sample indices gives the unbiased estimator
+
+$$
+\widehat{\mathcal F}_{k,U}
+=\frac1{N(N-1)}\sum_{i\ne j}
+|\langle\psi_i|\psi_j\rangle|^{2k}.
+$$ {#eq-lab-unbiased-frame}
+
+```julia
+function sampled_frame_potentials(states, k)
+    N = size(states, 2)
+    @assert N >= 2 && k >= 1
+    @assert all(isapprox(norm(states[:, j]), 1; atol=1e-11)
+                for j in 1:N)
+    cross = 0.0
+    for i in 1:N, j in 1:N
+        if i != j
+            cross += abs2(dot(states[:, i], states[:, j]))^k
+        end
+    end
+    return (plug_in=(N + cross)/N^2,
+            unbiased=cross/(N*(N-1)))
+end
+
+states = hcat([haar_state(rng, 2) for j in 1:200]...)
+frame_estimates = sampled_frame_potentials(states, 2)
+```
+
+The unbiased estimator can fluctuate below the Haar lower bound. This is not a physical ensemble with an impossible frame potential; it is a noisy estimator of a number. The plug-in estimator, being the purity of an actual empirical moment, obeys the physical bound but has the upward bias in @eq-lab-frame-bias. Reporting which estimator was used resolves the apparent contradiction.
+
+For an arbitrary target moment $M$, the same calculation gives
+
+$$
+\mathbb E\|\widehat M-M\|_2^2
+=\frac{1-\operatorname{Tr}M^2}{N}.
+$$ {#eq-lab-moment-sampling-error}
+
+This provides a scale for error, not an error bar for every nonlinear statistic. Confidence intervals for a frame estimator must respect its pair dependence: the $N(N-1)$ overlaps are not independent because many share the same state. Resampling complete independent states or independent experimental runs preserves this structure; treating every pair as an independent sample underestimates uncertainty.
+
+Three sampling protocols must be kept separate. Enumerating a fixed projected ensemble uses its exact Born probabilities. Drawing a finite number of bath records samples those probabilities and estimates that fixed ensemble. Drawing new global states changes the preparation and introduces a further ensemble average. Subtracting diagonal pairs from the *exact* Born-weighted frame potential changes a physical observable; the correction in @eq-lab-unbiased-frame applies to an empirical sample estimator. Distinct shots with the same bath outcome remain legitimate distinct sample indices and must not be discarded merely because their labels coincide.
+
+There is also an experimental access issue. A single outcome-conditioned copy does not reveal its wavefunction. Computing overlaps from reconstructed conditional states requires enough repetitions for tomography or an alternative measurement protocol with the appropriate copies and conditioning. Simulations that know every amplitude bypass that cost. An experimental proposal must include it, especially when the number of bath outcomes grows exponentially.
+
+## Laboratory 3: sample a Scrooge ensemble correctly
+
+Let $\rho$ be a positive density operator on dimension $d$, with eigenvalues $\lambda_i$. The Scrooge construction transforms a Haar direction $\phi$ into
+
+$$
+\psi(\phi)=\frac{\sqrt\rho\,\phi}{\sqrt{q(\phi)}},
+\qquad q(\phi)=\phi^\dagger\rho\phi,
+$$ {#eq-lab-scrooge-map}
+
+and samples the input direction with adjusted weight $d\,q(\phi)$. The transformation alone is insufficient. Because $q\leq\lambda_{\max}$, rejection sampling supplies a simple exact distributional prescription: propose Haar $\phi$, accept it with probability $q/\lambda_{\max}$, and return the normalized transformed state. The density of accepted directions is
+
+$$
+\frac{q(\phi)/\lambda_{\max}}
+{\int q(\phi)\,\mathrm d\mu_{\mathrm H}/\lambda_{\max}}
+\,\mathrm d\mu_{\mathrm H}
+=d\,q(\phi)\,\mathrm d\mu_{\mathrm H},
+$$ {#eq-lab-rejection-proof}
+
+since $\int q\,\mathrm d\mu_{\mathrm H}=\operatorname{Tr}\rho/d=1/d$. The average acceptance probability is $1/(d\lambda_{\max})$. For $\rho=I/d$ every proposal is accepted; a nearly pure state has lower acceptance in this full-space implementation. Restricting proposals to the support is a possible optimization for rank-deficient $\rho$.
+
+```julia
+function scrooge_samples(rng, rho, N)
+    @assert N >= 1
+    @assert isapprox(rho, rho'; atol=1e-12)
+    @assert isapprox(real(tr(rho)), 1; atol=1e-12)
+    E = eigen(Hermitian(rho))
+    @assert minimum(E.values) >= -1e-12
+    vals = max.(E.values, 0.0)  # Remove roundoff-sized negative values.
+    vals ./= sum(vals)
+    sqrt_rho = E.vectors * Diagonal(sqrt.(vals)) * E.vectors'
+    lambda_max = maximum(vals)
+    d = size(rho, 1)
+    states = zeros(ComplexF64, d, N)
+    accepted = 0
+    attempts = 0
+    while accepted < N
+        phi = haar_state(rng, d)
+        v = sqrt_rho * phi
+        q = real(dot(v, v))
+        attempts += 1
+        if q > 0 && rand(rng) < min(q / lambda_max, 1.0)
+            accepted += 1
+            states[:, accepted] = v / sqrt(q)
+        end
+    end
+    return (states=states, attempts=attempts)
+end
+
+rho = ComplexF64[0.8 0; 0 0.2]
+sc = scrooge_samples(rng, rho, 4000)
+rho_estimate = sc.states * sc.states' / size(sc.states, 2)
+@assert isapprox(tr(rho_estimate), 1; atol=1e-11)
+```
+
+The final assertion checks normalization only; it deliberately does not claim that one finite sample equals $\rho$. For independent accepted states the expected first-moment squared error is $(1-\operatorname{Tr}\rho^2)/N$, by @eq-lab-moment-sampling-error. More samples reduce this statistical error. Checking the mean is necessary but cannot establish the full Scrooge distribution: many ensembles share the same mean.
+
+For a stronger qubit check, write $\rho=\operatorname{diag}(a,b)$, $a+b=1$. A Haar input has $x=|\phi_0|^2$ uniform on $[0,1]$, and the transformed population is $y=ax/[ax+b(1-x)]$. Inverting gives $x=by/[a+(b-a)y]$ and a Jacobian $ab/[a+(b-a)y]^2$. Multiplying by the adjustment $2q=2ab/[a+(b-a)y]$ yields
+
+$$
+f_{\mathrm{Sc}}(y)=\frac{2a^2b^2}{[a+(b-a)y]^3},
+\qquad 0\leq y\leq1.
+$$ {#eq-lab-scrooge-density}
+
+The phase remains uniform. This density integrates to one and has mean $a$. The population histogram in @fig-lab-scrooge tests a distributional prediction that a mean-density-matrix check misses.
+
+![A Scrooge-qubit population histogram for eigenvalues 0.8 and 0.2, compared with the exact adjusted density. The dashed constant density is the Haar-qubit population law. Original Monte Carlo illustration; 40,000 accepted samples in the figure-generation script.](figs/scrooge-qubit.svg){#fig-lab-scrooge}
+
+For a diagnostic with an exact wrong answer, omit the acceptance step and average the transformed population. At $a=3/4$, the mean becomes $3/2-(3/4)\log3$, rather than $3/4$. This finite discrepancy persists at infinite sample size. It is a bias in the distribution, not Monte Carlo noise.
+
+An alternative is importance sampling: draw Haar directions and average $d q\,P_\psi^{\otimes k}$. This estimator is unbiased but has a fluctuating trace at finite $N$. Dividing by the sampled total weight makes the trace exactly one but introduces the usual finite-sample bias of a ratio estimator. Rejection sampling gives equally weighted independent accepted states and avoids that particular ratio. The Scrooge and Gaussian-adjusted-projected constructions are developed in @Jozsa1994 and @GoldsteinGAP2006; their role in recent many-body work is discussed in @Mok2026. The sampler tests these ensemble definitions and does not establish their dynamical universality.
+
+## Laboratory 4: average every temporal prefix
+
+### Why exponentially spaced checkpoints change the question
+
+For a discrete trajectory $|\psi_t\rangle=U(t)|\psi_0\rangle$, the uniform-time moment through $T$ steps is
+
+$$
+M_T^{(k)}=\frac1T\sum_{t=0}^{T-1}
+(|\psi_t\rangle\langle\psi_t|)^{\otimes k}.
+$$ {#eq-lab-temporal-average}
+
+Fibonacci block gates can be computed at exponentially growing lengths $L_n$. It is tempting to average only the states at those endpoints. That gives $N^{-1}\sum_{n=1}^N P_{\psi_{L_n}}^{\otimes k}$, a different measure. Since $L_n\sim\varphi^n$, uniform sampling in $n$ resembles logarithmic sampling in physical time. Each early checkpoint receives as much weight as a late one despite representing very different numbers of intervening steps. Weighting an endpoint by its interval length also does not reconstruct the interval average unless the state is known to remain representative throughout that interval.
+
+This distinction matters for slow exploration: checkpoints may repeatedly hit special parts of a trajectory. A statement about uniform-time ergodicity cannot be tested by silently replacing its measure. Generalized Fibonacci and critically slow morphic dynamics make this issue especially acute [@ergPilatowsky2023; @ergPilatowsky2025].
+
+### An exact recursion for the required measure
+
+There is an efficient remedy at fixed small $d$ and $k$. A chronological word $W$ of length $L$ has a final gate $V_W$ and a prefix-averaging channel
+
+$$
+\mathcal S_W(X)=\frac1L\sum_{t=0}^{L-1}
+V_W(t)^{\otimes k}X V_W(t)^{\dagger\otimes k}.
+$$ {#eq-lab-prefix-channel}
+
+The convention includes the initial state of a block and excludes its final endpoint. For concatenation $XY$, the final gate is $V_YV_X$. Prefixes within $Y$ act on the state after $X$, so
+
+$$
+\mathcal S_{XY}=\frac{L_X\mathcal S_X+
+L_Y\mathcal S_Y\circ\operatorname{Ad}_{V_X^{\otimes k}}}
+{L_X+L_Y}.
+$$ {#eq-lab-prefix-concatenation}
+
+Every physical time is counted exactly once. To implement the channel as a matrix, Julia's column-vectorization identity is
+$\operatorname{vec}(UXU^\dagger)=(\overline U\otimes U)\operatorname{vec}X$. The conjugation and tensor order are essential.
+
+```julia
+function conjugation_matrix(U, k)
+    Uk = tensorpower(U, k)
+    return kron(conj(Uk), Uk)
+end
+
+function single_gate_block(U, k)
+    D = size(U, 1)^k
+    # One pre-gate prefix, at time zero: its averaging channel is identity.
+    return (L=1, V=ComplexF64.(U),
+            S=Matrix{ComplexF64}(I, D^2, D^2))
+end
+
+function concatenate_blocks(X, Y, k)
+    L = Base.Checked.checked_add(X.L, Y.L)
+    S = (X.L/L) * X.S +
+        (Y.L/L) * Y.S * conjugation_matrix(X.V, k)
+    return (L=L, V=Y.V * X.V, S=S)
+end
+
+function fibonacci_block(A, B, k, n)
+    @assert n >= 0
+    old = single_gate_block(B, k) # W0 = 1
+    cur = single_gate_block(A, k) # W1 = 0
+    n == 0 && return old
+    for j in 2:n
+        nxt = concatenate_blocks(cur, old, k) # Wj = Wj-1 Wj-2
+        old, cur = cur, nxt
+    end
+    return cur
+end
+
+function fibonacci_word(n)
+    @assert n >= 0
+    old, cur = [1], [0]
+    n == 0 && return old
+    for j in 2:n
+        old, cur = cur, vcat(cur, old)
+    end
+    return cur
+end
+
+function direct_prefix_moment(word, gates, psi0, k)
+    D = length(psi0)^k
+    M = zeros(ComplexF64, D, D)
+    psi = copy(psi0)
+    for symbol in word
+        v = tensorpower(psi, k)
+        M .+= v * v'
+        psi = gates[symbol+1] * psi
+    end
+    return (M=M/length(word), final=psi)
+end
+
+function verify_fibonacci_prefixes()
+    X = ComplexF64[0 1; 1 0]
+    Z = ComplexF64[1 0; 0 -1]
+    A = exp(-im * (0.37*pi) * X)
+    B = exp(-im * (0.23*pi) * Z)
+    psi0 = ComplexF64[1, 0]
+    k, n = 2, 8
+    block = fibonacci_block(A, B, k, n)
+    direct = direct_prefix_moment(fibonacci_word(n), (A, B), psi0, k)
+    v0 = tensorpower(psi0, k)
+    D = length(v0)
+    Mrecursive = reshape(block.S * vec(v0 * v0'), D, D)
+    @assert block.L == length(fibonacci_word(n)) == 34
+    @assert isapprox(Mrecursive, direct.M; atol=1e-11)
+    @assert isapprox(block.V * psi0, direct.final; atol=1e-11)
+    return trace_distance(Mrecursive, haar_qubit_moment(k))
+end
+fibonacci_distance = verify_fibonacci_prefixes()
+```
+
+The exact checks compare independent constructions of the same finite word. They test chronology, tensor ordering, inclusion of time zero, and the length weights. The gate angles are illustrative choices; this code makes no theorem-level claim of ergodicity for them. The Fibonacci existence and genericity qualifications remain those stated in @sec-aperiodic-drives.
+
+Recursing to large $n$ avoids storing exponentially many states, but the channel matrix has dimension $d^{2k}\times d^{2k}$ and hence $d^{4k}$ entries. This method is useful for small replicated systems, not a solution to arbitrary many-body dynamics. Integer overflow is explicitly checked. At very long recursion depths, floating-point unitary and channel errors must also be monitored against higher precision and small-word benchmarks. Artificially projecting every intermediate result back to a physical channel can hide an error and change the recursion.
+
+For a credible convergence study, plot several moment orders against physical length $L_n$, compare several gate pairs including commuting controls, and vary the fitting window. A long plateau may be a transient. A finite interval consistent with a power law does not exclude logarithmic decay. Numerical observations should be reported as such, separately from exact recursion identities and source-specific asymptotic theorems.
+
+## Laboratory 5: exact diagonalization of the PXP chain
+
+### Construct the allowed space and the Hamiltonian
+
+An open-chain blockade configuration has no adjacent excited sites. Encode the occupation at site $j$ as bit $j-1$ of an integer $s$. Then the condition is `s & (s >> 1) == 0`. The number of allowed configurations is $D_L=F_{L+2}$, with $F_0=0,F_1=1$. For example, $D_2=3$ and $D_{10}=144$; these are exact counting checks.
+
+Use
+
+$$
+H=g\sum_{j=1}^L P_{j-1}X_jP_{j+1},\qquad g=\Omega/2,
+$$ {#eq-lab-pxp-hamiltonian}
+
+with missing boundary projectors set to identity. Flipping one bit gives a nonzero matrix element $g$ precisely when the destination is still allowed. This implements the projectors without allocating the full $2^L$ space.
+
+```julia
+function pxp_hamiltonian(L; g=1.0)
+    @assert 1 <= L <= 16  # Dense diagonalization is intended for small chains.
+    allowed = [s for s in 0:(1 << L)-1 if (s & (s >> 1)) == 0]
+    index = Dict(s => j for (j, s) in enumerate(allowed))
+    H = zeros(Float64, length(allowed), length(allowed))
+    for (col, s) in enumerate(allowed), j in 0:L-1
+        t = xor(s, 1 << j)
+        if haskey(index, t)
+            H[index[t], col] = g
+        end
+    end
+    @assert H == H'
+    return (H=H, allowed=allowed, index=index)
+end
+
+function return_probability(spectrum, psi0, t)
+    weights = abs2.(spectrum.vectors' * psi0)
+    return abs2(sum(weights .* exp.(-im .* spectrum.values .* t)))
+end
+
+function evolved_state(spectrum, psi0, t)
+    c = spectrum.vectors' * psi0
+    return spectrum.vectors * (exp.(-im .* spectrum.values .* t) .* c)
+end
+```
+
+Every edge is visited in both directions, filling two symmetric matrix entries. The assignment is `= g`, not `+= 2g`; the convention already counts each physical matrix element once. Time in the generated revival figure is measured in $1/g$. Setting $g=1$ corresponds to $\Omega=2$, which matters when comparing an experimental Rabi frequency with a plotted revival time.
+
+### Analytic checks before a longer chain
+
+On two sites, the basis is $|00\rangle,|10\rangle,|01\rangle$. The state $(|10\rangle-|01\rangle)/\sqrt2$ is dark, while the symmetric bright state couples to $|00\rangle$ with matrix element $\sqrt2g$. From $|10\rangle$, the return probability is
+
+$$
+R_2(t)=\left[\frac{1+\cos(\sqrt2gt)}2\right]^2.
+$$ {#eq-lab-two-site-return}
+
+```julia
+function verify_two_site_pxp()
+    g = 0.7
+    model = pxp_hamiltonian(2; g=g)
+    @assert length(model.allowed) == 3
+    psi0 = zeros(ComplexF64, 3)
+    psi0[model.index[1]] = 1 # Site 1 excited.
+    spectrum = eigen(Symmetric(model.H))
+    for t in (0.0, 0.2, 1.0, pi/(sqrt(2)*g), 2*pi/(sqrt(2)*g))
+        expected = ((1 + cos(sqrt(2)*g*t))/2)^2
+        @assert isapprox(return_probability(spectrum, psi0, t),
+                         expected; atol=1e-12)
+        @assert isapprox(norm(evolved_state(spectrum, psi0, t)),
+                         1; atol=1e-12)
+    end
+    return nothing
+end
+verify_two_site_pxp()
+```
+
+For an even longer chain, let $|\mathbb Z_2\rangle=|1010\cdots\rangle$. Exactly $L/2$ sites can flip initially, the resulting states are orthogonal, and $\langle H\rangle=0$. Hence $\langle H^2\rangle=(L/2)g^2$ and
+
+$$
+R_{\mathbb Z_2}(t)=1-\frac L2 g^2t^2+O(t^4).
+$$ {#eq-lab-short-time-return}
+
+This exact curvature check catches an accidental factor of two in the Hamiltonian. It also explains why a shrinking global return probability with $L$ need not mean that local oscillations disappear.
+
+```julia
+function pxp_demonstration(rng; L=10, g=1.0)
+    @assert iseven(L)
+    model = pxp_hamiltonian(L; g=g)
+    z2 = sum(1 << j for j in 0:2:L-1)
+    psi0 = zeros(ComplexF64, length(model.allowed))
+    psi0[model.index[z2]] = 1
+    @assert isapprox(real(dot(psi0, model.H * psi0)), 0; atol=1e-12)
+    @assert isapprox(norm(model.H * psi0)^2, (L/2)*g^2; atol=1e-12)
+    spectrum = eigen(Symmetric(model.H))
+    random_initial = haar_state(rng, length(model.allowed))
+    times = collect(range(0, 25/g; length=501))
+    Rz2 = [return_probability(spectrum, psi0, t) for t in times]
+    Rrandom = [return_probability(spectrum, random_initial, t) for t in times]
+    imbalance = [sum((-1.0)^(j-1) * (2*((s >> (j-1)) & 1)-1)
+                     for j in 1:L)/L for s in model.allowed]
+    Iz2 = [dot(imbalance, abs2.(evolved_state(spectrum, psi0, t)))
+            for t in times]
+    @assert isapprox(Rz2[1], 1; atol=1e-12)
+    @assert isapprox(Iz2[1], 1; atol=1e-12)
+    return (times=times, Rz2=Rz2, Rrandom=Rrandom, Iz2=Iz2,
+            energies=spectrum.values,
+            weights=abs2.(spectrum.vectors' * psi0))
+end
+pxp_data = pxp_demonstration(rng)
+```
+
+The imbalance is a diagonal local-observable average. Its initial value is one by construction, and it can remain visibly oscillatory even when global fidelity is small. The returned spectral weights let us examine the mechanism rather than just the time trace: unusually regular energy spacings matter only when the initial state substantially overlaps the associated eigenstates.
+
+![Return probabilities of the alternating product state and one Haar-random state in the open-chain blockade space, for ten sites. This is a finite-size exact-diagonalization illustration with flip amplitude one. The full script records the numerical traces in CSV form.](figs/pxp-revivals.svg){#fig-lab-pxp}
+
+The random allowed-space state in @fig-lab-pxp is a reference preparation, not a matched-energy experimental control. A careful scar study compares appropriate energy windows, resolves ordinary symmetries, examines entanglement and eigenstate observables, varies size, and checks perturbations. Every finite isolated spectrum has recurrences at sufficiently long times. A revival in one small chain does not establish thermodynamic persistence. Conversely, open-chain PXP basis connectivity is complete: removing excited sites reaches the all-zero configuration, so the special revivals are not explained by disconnected basis fragments. The relation to quantum scars and low-entanglement periodic trajectories is developed in @turner2018scars and @ho2019periodic.
+
+## From a numerical observation to an experimental claim
+
+A well-designed comparison begins by matching the actual preparation and measurement. For projected ensembles this includes the bath basis, postselection rules, conserved-charge resolution, and the target mean state. A charge-conserving experiment should not be judged against a full-space Haar target when the bath record reveals a local charge sector [@Chang2025]. For aperiodic drives, record every gate duration and distinguish uniform gate number from uniform laboratory time if durations differ. For blockade dynamics, quantify finite blockade leakage rather than treating the ideal constrained Hamiltonian as the complete apparatus.
+
+Noise can change an apparent universality class. Depolarization may make a reduced density matrix look maximally mixed while destroying the purity assumption behind a conditional-state design test. Readout errors mix bath labels and therefore mix conditional states; they do not merely perturb the probabilities of otherwise unchanged pure states. Conditioning on a small subset of records changes the ensemble and must be stated. A claim about retained information should therefore specify what information was lost in the experimental record before defining its theoretical target.
+
+Reproducibility requires more than a seed. Archive the model parameters, state and bit ordering, boundary conditions, time convention, Julia version, source revision, independent-sample count, estimator, and raw data. A fixed seed reproduces a sequence within a specified implementation; it is not a substitute for an uncertainty analysis and should not be assumed to guarantee identical bit streams across all future software versions. Record separate seeds for independent studies when comparing methods. Preserve the full figure-generation order if exact reproduction of this book's CSV files is desired: earlier random draws consume part of the same deterministic stream.
+
+For this project, run `julia --project=. scripts/generate_figures.jl` from the repository root. The script requires no external Julia packages, writes original SVG figures and numerical CSV data to `figs/`, and reports its built-in checks. The numerical evidence has a deliberately limited scope: finite-bath global-Haar concentration, a directly sampled Scrooge density, and finite-size constrained revivals. Broader claims in the textbook are supported by the cited analytical or experimental literature rather than inferred from these illustrations.
+
+## Exercises and research extensions
+
+1. **A target with a null space.** Derive @eq-lab-qubit-haar from Dicke states. For $k=2$, list all four eigenvalues and show why comparison with $I/4$ gives a nonzero trace distance even for Haar samples. The exact target eigenvalues are $1/3,1/3,1/3,0$.
+
+2. **Born weights cannot be replaced by counting.** Use $C=\operatorname{diag}(\sqrt{3/4},\sqrt{1/4})$. Compute the first and second moments with physical weights and with equal outcome weights. Show that only the former reproduces $CC^\dagger$. Then find the exact distance of the physical second moment from the qubit Haar target. *Check:* the nonzero eigenvalues of the difference on $|00\rangle,|11\rangle$ are $5/12$ and $-1/12$; the symmetric one-excitation state contributes $-1/3$.
+
+3. **Finite support versus finite sampling.** For the Bell projected ensemble, derive $\Delta_k=1-2/(k+1)$ for every integer $k\geq1$. Explain why collecting more bath shots cannot remove this discrepancy. Contrast this with the $1/N$ frame-potential bias of genuinely Haar-distributed independent samples.
+
+4. **An exact random-state benchmark.** Derive @eq-lab-global-haar-frame, including the Dirichlet weight average. At $k=1$, simplify it to $(d_A+d_B)/(d_A d_B+1)$, the mean reduced-state purity. Check it numerically with independent preparations and report uncertainty across preparations, without asserting exact equality of one finite sample average.
+
+5. **An unbiased estimator with an unphysical realization.** Prove @eq-lab-frame-bias and @eq-lab-moment-sampling-error. Construct a finite sample for which the estimator in @eq-lab-unbiased-frame lies below $1/D_k$. Explain why this does not violate the frame-potential bound for physical moments. Design an uncertainty estimate that does not treat all overlap pairs as independent.
+
+6. **Scrooge sampling and importance weights.** Verify normalization and mean $a$ of @eq-lab-scrooge-density by integration. Derive the acceptance probability $1/(d\lambda_{\max})$. Implement both the correct rejection sampler and the unadjusted transformation for $a=3/4$, and compare their limiting means with the exact formulas in the text. Test a higher moment or histogram as well as the mean.
+
+7. **A two-gate ordering audit.** For the chronological word $01$, calculate the final gate and both pre-gate prefixes by hand. Show that the final gate is $BA$, while the averaging channel is $(\mathrm{id}+\operatorname{Ad}_{A^{\otimes k}})/2$. Change the code deliberately to reverse the product or include the endpoint; identify which exact check detects each error.
+
+8. **Checkpoint bias.** Compare the true prefix moment and the equal-weight Fibonacci-endpoint moment for the same noncommuting gate pair. Use commuting rotations as a control. Explain why agreement over one time window cannot justify replacing one sampling measure with the other. Extend the block recursion to unequal gate durations if the state is measured only at boundaries, then discuss the additional information needed for continuous-time averages during each pulse.
+
+9. **PXP curvature and spectral support.** Derive @eq-lab-short-time-return directly from the number of allowed flips. Verify the two-site expression at its exact transfer and return times. For several even lengths, compare global return probability, staggered imbalance, and the initial state's energy weights. Which observations would distinguish an approximate scarred ladder from generic finite-size recurrences?
+
+10. **A research protocol.** Choose one frontier claim from this book and write a reproducible numerical or experimental test before running it. State the finite-size observable, constrained target, sampling measure, uncertainty estimator, relevant ordering of limits, and a control expected to fail the claim. Mark separately the exact checks, the numerical result the protocol could establish, and the stronger asymptotic conclusion it could only suggest.

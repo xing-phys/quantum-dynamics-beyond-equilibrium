@@ -1,0 +1,214 @@
+# Temporal entanglement and the complexity of quantum memory {#sec-temporal-entanglement}
+
+A rapidly relaxing local observable can coexist with an extraordinarily complicated bath. This is possible because relaxation of one expectation value constrains only a tiny part of a many-time experiment. If a probe is measured, rotated, reset, and coupled back to the same bath repeatedly, its later statistics can reveal information invisible in its unperturbed density matrix. The central question of this chapter is therefore operational: *which future predictions require a record of the past, and how large must that record be?*
+
+We build a process description from interventions, derive an influence functional by eliminating the bath, and explain why the resulting tensor can be entangled along a time direction. Temporal entanglement is a property of a specified representation and a specified cut. It must not be confused automatically with spatial system–bath entanglement or with every definition of non-Markovianity.
+
+## A process is a rule for responding to interventions
+
+At times $0,1,\ldots,T-1$, an experimenter can apply completely positive maps $\mathcal A_0,\ldots,\mathcal A_{T-1}$ to a probe $S$. A map may describe a unitary, a measurement outcome, or discarding and preparing a state. Between interventions, $S$ interacts with an inaccessible bath $B$ through unitary channels $\mathcal U_{j+1:j}$. The unnormalized final state is
+
+$$
+\begin{aligned}
+\mathfrak T_{T:0}[\mathcal A_{T-1},\ldots,\mathcal A_0]
+=\operatorname{Tr}_B\big[\mathcal U_{T:T-1}\circ
+(\mathcal A_{T-1}\otimes\operatorname{id}_B)\circ\cdots\\
+\circ\mathcal U_{1:0}\circ(\mathcal A_0\otimes\operatorname{id}_B)
+(\rho_{SB}^{(0)})\big].
+\end{aligned}
+$$ {#eq-tm-process}
+
+This is a **process tensor** written as a multilinear functional rather than as a large matrix. The trace of the output is the joint probability of all selected outcomes. Summing over outcomes of a complete instrument recovers a trace-preserving intervention. By retaining unnormalized maps, linearity survives even when conditioning is involved.
+
+The object does not require initially factorized $\rho_{SB}^{(0)}$. Initial correlations are part of the process. This is an advantage over trying to assign one CPTP map to arbitrary hypothetical system states while leaving an initially correlated bath unspecified. The available preparations themselves determine which inputs are operationally meaningful.
+
+To obtain a Choi representation, replace each intervention by its Choi operator as defined in @eq-cm-choi. Multilinearity implies that there is an operator $\Upsilon_{T:0}$ such that, with consistent input/output register ordering,
+
+$$
+p(E_T,\mathcal A_{T-1},\ldots,\mathcal A_0)
+=\operatorname{Tr}\left[
+\Upsilon_{T:0}\left(E_T\otimes
+J_{\mathcal A_{T-1}}^T\otimes\cdots\otimes J_{\mathcal A_0}^T\right)
+\right].
+$$ {#eq-tm-born}
+
+Here $E_T$ is a final measurement effect, and the transpose acts on each entire intervention Choi operator in the basis used to construct $\Upsilon$. The final effect is not transposed in this convention. Equivalent link-product conventions move transposes between factors. One should derive the contraction once from index sums before changing conventions. The process operator is positive and satisfies nested causal trace conditions: ignoring a future outcome cannot affect a past probability. It is consequently more restricted than an arbitrary positive operator on all time registers. The process-tensor and operational Markov frameworks were developed explicitly in @pollock2018framework and @pollock2018operational.
+
+### What the operational Markov condition actually says
+
+A process is memoryless, relative to its intervention times and accessible system, when its responses factor into an initial state and fixed step channels:
+
+$$
+\mathfrak T^{\mathrm{M}}_{T:0}[\mathcal A_{T-1},\ldots,\mathcal A_0]
+=\mathcal E_{T:T-1}\circ\mathcal A_{T-1}\circ\cdots
+\circ\mathcal E_{1:0}\circ\mathcal A_0(\rho_0).
+$$ {#eq-tm-markov}
+
+The channels must work for all permitted interventions. A successful fit to the one unperturbed trajectory supplies far less information. After a causal break that records a measurement result and prepares a fixed $\sigma$, the future in @eq-tm-markov depends on $\sigma$ but not on earlier outcomes. A bath-mediated dependence on earlier data disproves this factorization.
+
+Even here one must specify the accessible system. Enlarge $S$ to include an explicit memory register $M$, and a process that was non-Markovian for $S$ may become Markovian for $SM$. This is physically useful: the minimal memory needed for such an embedding quantifies simulation resources. It also shows why “the dynamics is non-Markovian” is incomplete without identifying the probe, its controls, and its time resolution.
+
+## Eliminating a bath: the influence functional
+
+An especially transparent coupling is controlled by the system basis:
+
+$$
+U_{SB}=\sum_{s=1}^{d_S}|s\rangle\langle s|\otimes V_s,
+$$
+
+with unitary bath operators $V_s$. Insert arbitrary system-only rotations between these interactions. Expanding the forward amplitude in basis histories $\mathbf s=(s_1,\ldots,s_T)$ produces a bath evolution $V_{s_T}\cdots V_{s_1}$. The backward amplitude has a separate history $\mathbf s'$. Tracing the bath gives
+
+$$
+\mathcal I[\mathbf s,\mathbf s']
+=\operatorname{Tr}_B\left[
+V_{s_T}\cdots V_{s_1}\rho_B
+V_{s'_1}^\dagger\cdots V_{s'_T}^\dagger
+\right].
+$$ {#eq-tm-influence}
+
+This **influence functional**, or influence matrix after discretizing indices, is independent of the inserted system rotations. Those appear as local tensors multiplying it. Every final probability is a sum of system-history amplitudes weighted by $\mathcal I$. The bath has disappeared from the displayed formula, but its memory survives in correlations among history indices.
+
+Several checks reveal the physics. For identical histories, unitarity gives $\mathcal I[\mathbf s,\mathbf s]=1$. The matrix indexed by full histories is positive: write $W_{\mathbf s}=V_{s_T}\cdots V_{s_1}$ and observe that $\mathcal I_{\mathbf s,\mathbf s'}=\operatorname{Tr}(W_{\mathbf s}\rho_BW_{\mathbf s'}^\dagger)$ is a Gram matrix. Off-diagonal entries quantify the distinguishability of bath states generated by different probe histories.
+
+If each time step uses an independent fresh bath, the trace factors:
+
+$$
+\mathcal I[\mathbf s,\mathbf s']
+=\prod_{j=1}^T i_j(s_j,s'_j),
+\qquad i_j(s,s')=\operatorname{Tr}(V_s\rho_{B_j}V_{s'}^\dagger).
+$$ {#eq-tm-factorized-influence}
+
+A reused bath generally prevents this factorization because its state after the first encounter depends on earlier history. This is the exact place where the usual memoryless approximation enters. It is a statement about the bath influence, not merely the visual smoothness of a relaxation curve.
+
+For general interactions, one expands the joint gate as $U=\sum_\alpha A_\alpha\otimes B_\alpha$ and follows the same forward/backward construction. The history label becomes an operator index $\alpha$ rather than a controlled-basis value $s$. No assumption of weak coupling is necessary for this tensor representation, although computational cost can become large.
+
+## Folding time into a one-dimensional tensor chain
+
+Group the forward and backward indices at each time into one local index $a_j=(s_j,s'_j)$ of dimension $d_S^2$. Regard the entries of the influence functional as coefficients of a vector:
+
+$$
+|\mathcal I\rangle=\sum_{a_1\cdots a_T}
+\mathcal I_{a_1\cdots a_T}|a_1\cdots a_T\rangle,
+\qquad |\widehat{\mathcal I}\rangle=
+\frac{|\mathcal I\rangle}{\sqrt{\langle\mathcal I|\mathcal I\rangle}}.
+$$ {#eq-tm-vector}
+
+The ket is a mathematical vector in a doubled history space. Its norm is not generally one and is not a probability normalization. The hat explicitly denotes Hilbert–Schmidt normalization. This distinction matters because a process Choi operator has causal trace normalization, whereas its vectorization has a different norm.
+
+Choose a time $m$ and split the history chain into $a_1\ldots a_m$ and $a_{m+1}\ldots a_T$. The Schmidt decomposition is
+
+$$
+|\widehat{\mathcal I}\rangle
+=\sum_{r=1}^{\chi_m}\lambda_r^{(m)}
+|L_r^{(m)}\rangle|R_r^{(m)}\rangle,
+\qquad \sum_r(\lambda_r^{(m)})^2=1.
+$$ {#eq-tm-schmidt}
+
+The corresponding temporal von Neumann entropy is
+
+$$
+S_{\mathrm{temp}}(m)=-\sum_r p_r\log p_r,
+\qquad p_r=(\lambda_r^{(m)})^2.
+$$ {#eq-tm-entropy}
+
+This is an entanglement entropy **across a past/future cut in the normalized history vector**. It is not the spatial entropy of $S$ at time $m$. Different influence representations, gauges that are not local unitaries in history space, boundary conditions, or choices of retained time legs can change it. A precise claim about temporal entanglement must specify these data.
+
+The factorized influence in @eq-tm-factorized-influence has Schmidt rank one and zero temporal entropy under this grouping. In a process Choi representation, however, even a memoryless identity channel has a maximally entangled input–output link. A chronological cut that severs this ordinary propagation link acquires a finite contribution. Grouping complete channel links, or accounting explicitly for this local baseline, is essential before interpreting a Choi-chain entropy as memory. A volume law cannot be explained by one bounded local link, but a nonzero constant can.
+
+![A folded influence-vector representation groups the forward and backward
+indices at each time into one site. Temporal entropy here is defined by a
+Schmidt cut between complete time sites, not by a spatial system–bath cut.
+Original diagram.](figs/temporal-cut.svg){#fig-tm-cut}
+
+## Why a Schmidt spectrum determines simulation cost
+
+A matrix product state writes
+
+$$
+\mathcal I_{a_1\cdots a_T}
+=\sum_{\alpha_1\cdots\alpha_{T-1}}
+A^{[1]a_1}_{\alpha_1}
+A^{[2]a_2}_{\alpha_1\alpha_2}\cdots
+A^{[T]a_T}_{\alpha_{T-1}}.
+$$ {#eq-tm-mps}
+
+The maximum bond dimension $\chi$ bounds every cut rank. Sequential singular-value decompositions construct this representation exactly. Each new temporal site is absorbed into a matrix, decomposed, and its singular index passed to the next site. Memory required to store a generic such chain is of order $Td_S^2\chi^2$, rather than exponential in $T$.
+
+An exact volume law $S_{\mathrm{temp}}\geq cT$ implies $\chi\geq e^{cT}$ because the entropy of a distribution on $\chi$ outcomes is at most $\log\chi$. This is an exact-representation obstruction. Approximation depends on the entire spectrum. Retaining the largest $\chi$ Schmidt coefficients at a cut discards weight
+
+$$
+\epsilon_\chi=\sum_{r>\chi}p_r.
+$$ {#eq-tm-tail}
+
+The unnormalized truncated vector differs in Euclidean norm by $\sqrt{\epsilon_\chi}$. If a contracted observable corresponds to a history vector $|F\rangle$, Cauchy–Schwarz gives
+
+$$
+|\langle F|\widehat{\mathcal I}\rangle-
+\langle F|\widehat{\mathcal I}_\chi\rangle|
+\leq\|F\|\sqrt{\epsilon_\chi}.
+$$
+
+Restoring the original influence norm and contracting many truncations requires additional care. A small relative vector error alone does not guarantee a small relative error in a tiny probability. Conversely, a large global vector error can coexist with accurate predictions for a restricted family of simple observables.
+
+### Worked example: a spectrum with two different messages
+
+Let one Schmidt weight be $p_0=1/2$, and distribute the remaining $1/2$ uniformly over $D$ weights $p_r=1/(2D)$. Then
+
+$$
+S_1=\log2+\tfrac12\log D,\qquad
+S_2=-\log\left(\tfrac14+\frac1{4D}\right)\longrightarrow\log4.
+$$ {#eq-tm-spectrum-example}
+
+If $D=e^{cT}$, the von Neumann entropy grows linearly while the second Rényi entropy remains bounded. Nevertheless, discarding all small weights loses half the norm. A bounded higher Rényi entropy does not by itself prove efficient approximation at arbitrarily small prescribed error. It indicates a prominent simple component, which can be useful if the target observables couple mainly to that component.
+
+Foligno, Zhou, and Bertini established temporal volume laws in chaotic circuits and identified cases where higher Rényi temporal entropies remain sublinear despite linear von Neumann entropy [@foligno2023temporal]. The simple spectrum above is a pedagogical construction, not their exact entanglement spectrum. Its purpose is to expose the logical distinction between entropy diagnostics and error-controlled compression.
+
+## Classical history correlations and genuinely quantum memory
+
+Temporal tensor entanglement need not mean that quantum information can be distilled between two laboratories at different times. Consider a bath that stores one classical bit $b$, selected with probability $1/2$, and applies the same operation $U_b$ at every encounter. Conditional on $b$, the dynamics is memoryless. Averaging over the unknown bit correlates all times. An operator representation can take the form
+
+$$
+\Upsilon=\tfrac12 J_{U_0}^{\otimes T}+\tfrac12 J_{U_1}^{\otimes T},
+$$
+
+up to the usual initial-state and link ordering. It is a mixture of products across time blocks, hence separable across those blocks. Yet its vectorization can have a nontrivial Schmidt rank because the same classical label occurs on both sides. Vectorized-operator entanglement measures representation complexity and classical correlations as well as quantum ones.
+
+For a **quantum** memory witness, ask whether the bath can convey coherence or entanglement across a causal break. For example, entangle $S$ with an isolated reference $R$, swap $S$ into a bath memory, reset $S$, and later swap the memory back. The final $RS$ state can recover the initial Bell pair. A classical register that only records a measurement outcome cannot preserve arbitrary entanglement in this way. Operationally restricted distillation or recovery protocols can therefore distinguish quantum memory from a shared classical hidden variable.
+
+This comparison does not make classical memory irrelevant. A single static hidden bit can produce long-lived temporal correlations and invalidate a system-only Markov model. It simply prevents overinterpreting every nonzero tensor entropy as coherent storage. An appropriate memory diagnosis must identify an information task and the interventions permitted in that task.
+
+## Temporal coarse-graining changes the question being asked
+
+Suppose full control is available at every microscopic time. The process then predicts an enormous family of experiments. If control is allowed only at every $\ell$th time, contract the unused intervention slots with the Choi operator of the specified undisturbed evolution. The resulting coarse-grained process predicts exactly the remaining allowed experiments. The bath has not been reset, measured, or approximated: the set of questions has been reduced.
+
+For the history vector, contraction of skipped slots is a projection onto the tensors determined by that undisturbed evolution. It is not generally a trace over a subsystem of a normalized state. Consequently one cannot invoke ordinary entanglement monotonicity to assert that each coarse-graining step must reduce the normalized vector entropy. Any area-law result requires an analysis of the model and of the chosen contraction.
+
+The November 2025 preprint by Vilkoviskiy and collaborators studies precisely this distinction. In an exactly analyzed random-unitary bath model, extensive temporal entanglement can reflect recoverable quantum memory while its effect on few-point temporal correlators is negligible. Restricting the allowed probe-operation frequency produces a volume-to-area-law transition; kicked-Ising analyses and numerical evidence support the mechanism more broadly. The compact influence matrices can then describe the restricted local dynamics [@vilkoviskiy2025transition]. The transition concerns a specified influence representation and operational resolution; it is not a proof that every chaotic bath is memoryless or efficiently simulable at arbitrary control frequency.
+
+A simple information-counting picture is helpful. The probe can inject a bounded amount of quantum information per intervention. Bath dynamics spreads that information into an expanding environment. Whether past information remains recoverable in future probe records depends on this injection rate relative to the effective dilution of information in the bath. Decreasing the number of permitted interventions reduces the rate at which fine temporal structure can be written and read. This picture motivates calculations but does not fix a universal threshold without specifying a model.
+
+## Solvable circuits as a bridge between bath physics and entropy growth
+
+A two-site unitary gate $U_{ab}^{cd}$ is unitary when input pair $(a,b)$ is contracted against output pair $(c,d)$. A **dual-unitary** gate remains unitary after an appropriate reshuffling of one input and one output index, for example $\widetilde U_{ac}^{bd}=U_{ab}^{cd}$. This is a second algebraic constraint, not an automatic property of any unitary. It lets tensor networks cancel in both time and space directions.
+
+To see why this helps, a local expectation value has a forward circuit and its conjugate. Away from the operator insertion, ordinary unitarity cancels gates vertically. Dual unitarity permits additional horizontal cancellations. What remains can be a narrow boundary tensor rather than the whole expanding light cone. Special initial states can simplify that boundary further. The exact result depends on the gate, initial state, and observable; “dual-unitary” alone does not mean all temporal entanglement vanishes.
+
+Liu and Ho's 2025 work constructs kicked-Ising circuits with generalized space–time dual properties and identifies initial-state families with simple Markovian influence structures [@liuho2025solvable]. This supplies controlled examples where the bath elimination is exact. Such examples help separate a genuinely simple influence functional from an approximation justified only by rapid decay of one correlator.
+
+The conceptual connection to @sec-channels-memory is now explicit. A single Kraus map resolves one final bath measurement. A process tensor resolves a sequence of interventions. An influence functional packages the bath response to all forward/backward histories. Temporal entanglement diagnoses the complexity of this package after conventions and operational restrictions have been fixed.
+
+## Exercises and open questions
+
+1. **A fresh-bath derivation.** Starting from @eq-tm-influence, give each time step its own ancilla with product initial state. Prove @eq-tm-factorized-influence and compute the cut entropy of the grouped history vector. *Hint:* traces over distinct bath tensor factors separate before any system-history sum.
+
+2. **A memory bit.** Let one bath bit choose either $I$ or $Z$ for every probe interaction. Find a two-time intervention protocol that distinguishes this bath from independent random $I/Z$ choices. *Hint:* prepare $|+\rangle$, measure $X$, prepare $|+\rangle$ again, and compare the two recorded signs.
+
+3. **Coherence across a reset.** Work through the reference-assisted double-SWAP protocol. Compute the final reference–probe density operator and its partial transpose. *Hint:* the first swap moves the reference's entangled partner into the memory, not into a classical record.
+
+4. **MPS rank and approximation.** For @eq-tm-spectrum-example, determine the minimum rank needed to discard weight at most $0.01$. Compare its growth with $S_2$. *Hint:* the small weights are individually tiny but their total is $1/2$.
+
+5. **Which cut?** Draw the Choi links of three successive identity channels. Compare a cut between complete channel factors with a cut that severs one channel's input–output Bell pair. *Hint:* entropy belongs to the specified tensor factorization, not just to the word “time.”
+
+6. **Allowed experiments after coarse-graining.** Given interventions at times $0,1,2,3$, contract the slots at $1,3$ with identity channels. Write the remaining process as a functional of $\mathcal A_0,\mathcal A_2$. Which original experiments can no longer be reconstructed? *Hint:* arbitrary rotations at the removed times cannot be recovered from the restricted process.
+
+7. **Open question: predictive rather than global error.** Design a compression objective that controls all correlators with at most four operator insertions but does not require approximating the full influence vector in norm. Specify the operator norm and normalization used in the error criterion. Establishing when such restricted accuracy gives scalable algorithms is an active problem; low temporal Rényi entropy alone does not settle it.

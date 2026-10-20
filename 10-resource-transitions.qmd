@@ -1,0 +1,273 @@
+# When thermal states conceal a transition: coherence and quantum resources {#sec-resource-transitions}
+
+A local density matrix can remain unchanged while the distribution of local pure states changes abruptly. This is possible because forming a density matrix averages over the very fluctuations that distinguish different ensembles. An equal mixture of computational basis states and a uniform distribution over all pure states both give $I/d$. They contain very different coherence, very different higher moments, and different resources for information processing.
+
+This chapter explains a concrete mechanism for such transitions. Dynamics that only permutes computational basis states can scramble information without producing new superpositions in that basis. Partial measurements then either resolve the scrambled state into nearly classical pieces or leave enough overlapping contributions to produce a universal random wavefunction. The competition is controlled by resources supplied in the preparation and in the measurement basis. We first derive the coherence example, then introduce the broader resource-theory proposal of @ergFeng2026, a 2026 preprint whose scope and assumptions should be kept distinct from established results.
+
+## Resources are defined relative to allowed operations
+
+A quantum resource theory specifies a set of free states and a set of free operations that cannot create a resource from a free input. The choice reflects a restriction on a task. For entanglement, spatial separation motivates local operations and classical communication. For coherence, a preferred basis defines states with no superposition. For magic, the efficiently simulable stabilizer setting defines a different free set. These are different theories, even when they use the same physical qubits. The general framework is reviewed in @ergChitambar2019.
+
+Fix a computational basis $\{|z\rangle\}$. Its dephasing map is
+
+$$
+\mathcal D(\rho)=\sum_z|z\rangle\langle z|\rho|z\rangle\langle z|.
+$$ {#eq-rt-dephasing}
+
+A state is incoherent in this basis if $\rho=\mathcal D(\rho)$. A useful measure is the relative entropy of coherence,
+
+$$
+C_r(\rho)=S(\mathcal D(\rho))-S(\rho),
+\qquad S(\rho)=-\operatorname{tr}(\rho\log_2\rho).
+$$ {#eq-rt-coherence}
+
+For a pure state $|\psi\rangle=\sum_zc_z|z\rangle$, this reduces to $-\sum_z|c_z|^2\log_2|c_z|^2$. It measures the uncertainty of the basis label in that superposition. Thus $C_r(|0\rangle)=0$, while $C_r(|+\rangle)=1$ for a qubit. The basis is part of the definition: $|+\rangle$ is incoherent in the $X$ eigenbasis. This framework and these measures originate in @ergBaumgratz2014.
+
+A computational-basis permutation $P_\pi|z\rangle=|\pi(z)\rangle$ cannot change the list of probabilities $|c_z|^2$, so it preserves $C_r$ of pure states. It also maps diagonal density matrices to diagonal ones. Yet it can entangle a coherent product state: the classical reversible gate CNOT maps $|+\rangle|0\rangle$ to $(|00\rangle+|11\rangle)/\sqrt2$. Preserving basis coherence therefore does not mean that no interesting quantum dynamics occurs.
+
+## A measurement can supply a resource
+
+Take the Bell state $|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2$. Measuring the second qubit in the $Z$ basis prepares $|0\rangle$ or $|1\rangle$ on the first, each with probability $1/2$. Measuring in the $X$ basis instead prepares $|+\rangle$ or $|-\rangle$. Both protocols leave the same unconditioned state $I/2$ on the first qubit, but their average pure-state coherences are zero and one bit respectively.
+
+The measurement basis is therefore an essential ingredient in the resource budget. There is no violation of a monotonicity principle: an $X$-basis measurement is not free in a resource theory whose free measurements resolve the $Z$ basis. Furthermore, conditional outcomes can have more resource than an unconditioned average. Any monotonicity statement must specify the allowed instrument and include the Born probabilities.
+
+For the projected ensemble $\mathcal E=\{p_z,|\psi_z\rangle\}$, define
+
+$$
+\overline C_r=\sum_zp_z C_r(|\psi_z\rangle).
+$$ {#eq-rt-average-coherence}
+
+This is generally different from $C_r(\rho_A)$, where $\rho_A=\sum_zp_z|\psi_z\rangle\langle\psi_z|$. In particular, $C_r(I/d)=0$ regardless of whether its decomposition is classical or highly coherent. The placement of the average outside the nonlinear quantity is what makes @eq-rt-average-coherence capable of detecting a deep thermalization transition.
+
+## Identical first moments, distinct phases of an ensemble
+
+On a $d$-dimensional subsystem, compare
+
+$$
+\mathcal E_{\mathrm{bit}}=\{d^{-1},|a\rangle\}_{a=1}^d,
+\qquad \mathcal E_{\mathrm H}=\text{Haar-distributed pure states}.
+$$ {#eq-rt-two-targets}
+
+Their first moments are both $I/d$. Their second moments are
+
+$$
+M_{\mathrm{bit}}^{(2)}=\frac1d\sum_a|aa\rangle\langle aa|,
+\qquad M_{\mathrm H}^{(2)}=\frac{I+S}{d(d+1)}.
+$$ {#eq-rt-two-second-moments}
+
+The inverse participation ratio of a state is $\operatorname{IPR}(\psi)=\sum_a|\langle a|\psi\rangle|^4$. It equals one for a basis vector and is small for a state spread over many basis elements. Since it is quadratic in the projector, its ensemble mean can be read from the second moment:
+
+$$
+\overline{\operatorname{IPR}}_{\mathrm{bit}}=1,
+\qquad
+\overline{\operatorname{IPR}}_{\mathrm H}=\frac2{d+1}.
+$$ {#eq-rt-ipr}
+
+The second equality follows by summing the $d$ diagonal fourth moments $2/[d(d+1)]$. This is a simple operational signature of a transition invisible to $\rho_A$.
+
+The trace distance between the two second moments can also be calculated exactly. In the symmetric subspace, the $d$ vectors $|aa\rangle$ have difference eigenvalue $1/d-2/[d(d+1)]$, while the $d(d-1)/2$ symmetrized off-diagonal vectors have difference eigenvalue $-2/[d(d+1)]$. Summing absolute values gives
+
+$$
+\frac12\|M_{\mathrm{bit}}^{(2)}-M_{\mathrm H}^{(2)}\|_1
+=\frac{d-1}{d+1}.
+$$ {#eq-rt-classical-distance}
+
+The discrepancy approaches its maximal value with increasing $d$. Equality of the first moment can coexist with nearly perfect distinguishability on two copies.
+
+## Random permutations and a counting mechanism
+
+Consider $N=N_A+N_B$ qubits. Prepare $\alpha_0N$ qubits in $|Y_+\rangle=(|0\rangle+i|1\rangle)/\sqrt2$ and the remaining qubits in $|0\rangle$. There are $K=2^{\alpha_0N}$ occupied computational strings, with equal magnitude and phases among $1,i,-1,-i$. A sufficiently random permutation distributes this sparse support through the full $2^N$ strings. Measure a fraction $\alpha_m$ of the bath qubits in the $X$ basis and the others in the $Z$ basis.
+
+For a fixed outcome, the $Z$ measurements select one particular pattern on $(1-\alpha_m)N_B$ bath bits. The $X$ measurements sum coherently over all $M=2^{\alpha_mN_B}$ possibilities for the remaining bath bits, with outcome-dependent signs. A local amplitude for a fixed subsystem string $a$ therefore sums the intersection of the $K$ occupied strings with a set of $M$ global strings.
+
+If the permutation distributes support uniformly, the expected number of terms in that amplitude is
+
+$$
+\lambda_a=\frac{KM}{2^N}
+=2^{(\alpha_0-1)N_A+(\alpha_0+\alpha_m-1)N_B}.
+$$ {#eq-rt-support-count}
+
+At fixed $N_A$, the sign of $\alpha_0+\alpha_m-1$ determines whether $\lambda_a$ vanishes or diverges as the bath grows. This exponential competition gives the mixed-basis threshold
+
+$$
+\alpha_0+\alpha_m=1.
+$$ {#eq-rt-coherence-threshold}
+
+Below the threshold, a uniformly chosen forced measurement outcome almost always has no surviving amplitude. The physical ensemble does not contain these null outcomes: their Born probabilities vanish. Conditioning on an actual outcome selects a rare nonempty intersection. In the sparse regime it usually contains a single contribution, so the local state approaches a basis vector. With enough initial support to sample all local strings and adequate scrambling, those basis vectors are distributed uniformly.
+
+Above the threshold, each local amplitude receives many contributions with fluctuating phases. A central-limit mechanism produces Gaussian coefficients; when their covariance is isotropic and the real and imaginary parts are balanced, normalization produces the complex Haar distribution. The last condition is substantive: independent Gaussian coordinates divided by their norm yield Haar because their joint density depends only on the norm. A Gaussian with unequal coordinate variances instead produces an anisotropic distribution.
+
+This counting explanation captures the analytically tractable mixed-basis model. The coherence-induced transition and its persistence under local random-permutation circuits are developed in @ergLiuIppoliti2026. The global random-permutation limit admits direct counting arguments; local circuits require enough depth to scramble the relevant support. A shallow circuit or an exceptional invariant input need not give the same limiting ensembles. For example, the all-$|+\rangle$ state is exactly invariant under every computational-basis permutation, so generic thermalization claims must exclude such special cases.
+
+The Born conditioning is not a small correction. Averaging uniformly over all formal outcomes in the sparse phase would be dominated by zero vectors, whose normalized states are undefined. Every numerical implementation must compute $p_z=\|\widetilde\psi_z\|^2$ and use it to weight the normalized states.
+
+## Why imaginary phases matter
+
+Suppose the input amplitudes, permutation matrices, and measurement vectors are all real in the computational basis. Every projected wavefunction can then be chosen real. Its ensemble cannot become the complex Haar distribution, which has fluctuating relative complex phases. With adequate mixing the natural uniform target is instead the real sphere, invariant under $O(d)$.
+
+The distinction appears in a simple fourth moment. For a uniform real unit vector $x$, rotational invariance requires
+
+$$
+\mathbb E[x_ix_jx_kx_l]=c\left(
+\delta_{ij}\delta_{kl}+\delta_{ik}\delta_{jl}+\delta_{il}\delta_{jk}\right).
+$$
+
+Sum over $i=j$ and $k=l$. The left side becomes $\mathbb E(\sum_ix_i^2)^2=1$, while the right side is $c(d^2+2d)$. Hence $c=1/[d(d+2)]$, so
+
+$$
+\overline{\operatorname{IPR}}_{\mathrm{real\ Haar}}=\frac3{d+2}.
+$$ {#eq-rt-real-ipr}
+
+Complex Haar instead gives $2/(d+1)$. A failure to reach the complex target can therefore reflect an exact reality constraint rather than a failure to randomize within the physically allowed class. **Imaginarity** is itself a basis-dependent resource, distinct from coherence. The state $|+\rangle$ has coherence but is real; $|Y_+\rangle$ supplies both.
+
+## A worked entropy calculation for Haar coherence
+
+For a complex Haar state in dimension $d$, the probabilities $p_a=|\langle a|\psi\rangle|^2$ are uniformly distributed on the simplex $\sum_ap_a=1$. A single coordinate has density $(d-1)(1-p)^{d-2}$ for $0\leq p\leq1$. Introduce
+
+$$
+I(q)=\mathbb E p^q
+=(d-1)\int_0^1p^q(1-p)^{d-2}dp
+=\frac{\Gamma(d)\Gamma(q+1)}{\Gamma(d+q)}.
+$$ {#eq-rt-haar-beta}
+
+Differentiation gives $I'(q)=\mathbb E[p^q\ln p]$. At $q=1$, $I(1)=1/d$ and $I'(1)=[\psi(2)-\psi(d+1)]/d$, where $\psi$ is the logarithmic derivative of the gamma function. The identity $\psi(n+1)=H_n-\gamma$, with $H_n=\sum_{r=1}^n1/r$, then yields
+
+$$
+\mathbb E_{\mathrm H}C_r(\psi)=\frac{H_d-1}{\ln2}.
+$$ {#eq-rt-haar-coherence}
+
+This is below the maximum $\log_2d$ by an order-one amount at large $d$. A Haar ensemble is maximally unbiased as a distribution of rays; its typical vectors do not each have exactly flat basis probabilities. Consequently a coherent phase should be compared with its correct Haar average, not with the maximal coherence of a single state.
+
+## Smoothly tilted bases: a boundary estimate is not an exact law
+
+A more natural laboratory preparation is a product of identical qubit states,
+
+$$
+|\theta,\phi\rangle=
+\cos(\theta/2)|0\rangle+e^{i\phi}\sin(\theta/2)|1\rangle.
+$$ {#eq-rt-tilted-qubit}
+
+Its coherence per qubit is the binary Shannon entropy $h_2(\cos^2(\theta/2))$. If both preparation and measurement are uniformly tilted, matching their entropy densities to the flat-support mixed-basis model suggests the approximate boundary
+
+$$
+h_2(\cos^2(\theta_0/2))+
+h_2(\cos^2(\theta_m/2))\approx1.
+$$ {#eq-rt-tilted-estimate}
+
+This argument discards the shape of the amplitude distribution and retains only its entropy. It is therefore an estimate. In the example $\theta_0=\phi_0=\pi/4$ with real measurement tilt, the entropy-matching estimate gives $\theta_m\approx0.181\pi$, whereas the numerical transition is near $0.193\pi$. The difference is a useful warning that equal total coherence does not guarantee identical finite-amplitude statistics. These values and their interpretation are reported in @ergLiuIppoliti2026.
+
+Finite-size crossings of moment distances and collapse of an order parameter provide evidence for a sharp thermodynamic transition. They do not by themselves identify an exact critical exponent or prove universality across every choice of local dynamics. The clean limit is a fixed local subsystem with $N_B\to\infty$; allowing $N_A$ to grow changes the counting and the resources needed to resolve the ensemble.
+
+## Blocks of Hilbert space and localizability
+
+The 2026 resource-localizability proposal generalizes the counting picture. Suppose the Hilbert space decomposes as
+
+$$
+\mathcal H=\bigoplus_i\mathcal B_i,
+\qquad p_i=\frac{\dim\mathcal B_i}{\dim\mathcal H}.
+$$ {#eq-rt-block-decomposition}
+
+Free pure states lie in individual blocks, and resources are superpositions across them. Free randomizing dynamics scrambles within blocks and, where allowed by the theory, permutes equivalent blocks. A preparation occupies a random set of blocks, and a measurement amplitude accesses another set. The central question becomes whether the measurement identifies a unique block or leaves many alternatives coherent. The paper calls this mechanism **block sharpening**. @ergFeng2026
+
+To see why collision entropy enters, sample two independent block labels with distribution $p_i$. Their chance to match is $\sum_ip_i^2$. If the preparation and measurement involve $A_0$ and $A_m$ effectively independent sparse samples, the expected number of matches is
+
+$$
+\Lambda\approx A_0A_m\sum_ip_i^2
+=A_0A_m\,2^{-H_2(\{p_i\})},
+\qquad H_2(\{p_i\})=-\log_2\sum_ip_i^2.
+$$ {#eq-rt-block-collision}
+
+Here $H_2$ is a Rényi entropy of order two, while $h_2$ in @eq-rt-tilted-estimate is binary Shannon entropy. The subscript has different meanings and should not be interchanged. Under a dilute independent-intersection approximation, the probability of no match is approximately $e^{-\Lambda}$. With $A_0\sim2^{\alpha_0N}$ and $A_m\sim2^{\alpha_mN}$,
+
+$$
+\Lambda\sim2^{(\alpha_0+\alpha_m)N-H_2(\{p_i\})}.
+$$ {#eq-rt-block-threshold-scale}
+
+If $H_2/N\to\sigma>0$, this mechanism predicts a finite-density threshold at $\alpha_0+\alpha_m=\sigma$. Below it, actual Born-selected events sharpen into a single free block; above it, many matches survive. For computational-basis coherence the blocks are one-dimensional, $p_i=2^{-N}$, so $H_2=N$ and @eq-rt-coherence-threshold is recovered.
+
+The framework classifies **threshold-localizable** resources, which exhibit such a finite-density threshold, and **smoothly localizable** resources, whose local content responds continuously. One reason the latter arise is that the number of relevant blocks grows subexponentially, making $H_2/N\to0$. A global $U(1)$ charge has only $N+1$ sectors for $N$ spin-$1/2$ sites, unlike the $2^N$ computational strings. Even here, details of block sizes, input states, and compatible measurements matter. The preprint develops these distinctions analytically in its random-scrambling models and checks them numerically; it does not prove a classification theorem for every possible abstract resource theory or local Hamiltonian.
+
+## Worked block entropies: parity, charge, and full coherence
+
+The block entropy distinguishes constraints that look superficially similar. Consider first total $Z$ parity on $N$ qubits. Its even and odd sectors have equal dimensions, so $p_+=p_-=1/2$ and $H_2=1$. The density $H_2/N$ tends to zero. Superposition between two parity sectors can be a useful resource, but there are only two alternatives for a measurement to distinguish; the random-intersection mechanism does not predict a positive density threshold from this block structure alone.
+
+For total excitation number $q$, there are $N+1$ blocks with dimensions $\binom Nq$, giving $p_q=2^{-N}\binom Nq$. Their collision probability is
+
+$$
+\sum_{q=0}^Np_q^2=4^{-N}\sum_{q=0}^N\binom Nq^2
+=4^{-N}\binom{2N}{N}.
+$$ {#eq-rt-charge-collision}
+
+The combinatorial identity follows by counting ways to choose $N$ objects from two sets of $N$: choosing $q$ from the first set requires choosing $N-q$ from the second. Stirling's approximation gives $\binom{2N}{N}\sim4^N/\sqrt{\pi N}$, so
+
+$$
+H_2(\{p_q\})\sim\frac12\log_2(\pi N).
+$$ {#eq-rt-charge-entropy}
+
+The collision entropy diverges, but subextensively. A finite-density threshold still vanishes in this counting picture, while finite-size crossovers can depend on logarithmic scales. This illustrates why counting the number of sectors is less precise than weighting sectors by their dimensions.
+
+Computational-basis coherence gives the opposite limit: there are $2^N$ one-dimensional blocks, every $p_z=2^{-N}$, and $H_2=N$. The measurement must remove an extensive amount of unresolved label information to sharpen the state into one block. A positive preparation-plus-measurement resource density can therefore separate sparse and dense intersections sharply.
+
+These elementary calculations supply the intuition behind the proposed localizability distinction. They do not determine the exact local projected distribution on their own. One must additionally specify how the global block decomposition is compatible with the subsystem tensor product, which measurements are free, and how scrambling acts within the blocks. A symmetry-resolved random state, a product input, and a coherent superposition of selected charge sectors can have the same symmetry operator while producing different conditional ensembles.
+
+## Coherence, entanglement, and magic are different
+
+For $n$ qubits, a pure stabilizer state is the unique common eigenstate of an independent commuting set of $n$ Pauli operators. Clifford gates map Pauli operators to Pauli operators under conjugation and preserve stabilizer states. Starting from computational-basis states, Clifford gates and Pauli measurements can generate highly entangled states while retaining an efficient stabilizer description.
+
+The qubit $|+\rangle$ is stabilized by $X$ and has maximal computational-basis coherence but no magic. A Bell state is stabilized by $XX$ and $ZZ$ and has entanglement but no magic. By contrast,
+
+$$
+|T\rangle=\frac{|0\rangle+e^{i\pi/4}|1\rangle}{\sqrt2}
+$$ {#eq-rt-t-state}
+
+has exactly the same computational probabilities and coherence as $|+\rangle$, but is not a stabilizer state. This is why a coherence-induced transition cannot automatically be described as a magic transition.
+
+One diagnostic for pure-state nonstabilizerness is the stabilizer Rényi entropy. Let $d=2^n$ and sum over the $4^n$ Hermitian Pauli strings $P$. Write $r_P=\langle\psi|P|\psi\rangle$. Orthogonality of Paulis and purity give $\sum_Pr_P^2=d$, so $q_P=r_P^2/d$ is a probability distribution. A useful order-two quantity is
+
+$$
+M_2(\psi)=-\log_2\!\left[\frac1d\sum_Pr_P^4\right].
+$$ {#eq-rt-stabilizer-entropy}
+
+For a stabilizer state exactly $d$ Pauli expectations have magnitude one and the rest vanish, giving $M_2=0$. For the qubit $T$ state the Bloch vector is $(1/\sqrt2,1/\sqrt2,0)$, so the bracket equals $[1+1/4+1/4]/2=3/4$, and $M_2=\log_2(4/3)$. This illustrates the diagnostic introduced in @ergLeone2022. Resource monotonicity and operational interpretations depend on the Rényi order and allowed protocols; no claim about every magic monotone follows from this one example.
+
+## Operator-space resources and the proposed magic transition
+
+The block viewpoint can also be applied to operators. Vectorize an operator using the normalized maximally entangled state,
+
+$$
+|O\rangle\!\rangle=(O\otimes I)\frac1{\sqrt d}\sum_a|a\rangle|a\rangle,
+\qquad
+\langle\!\langle O|Q\rangle\!\rangle=\frac{\operatorname{tr}(O^\dagger Q)}d.
+$$ {#eq-rt-operator-vectorization}
+
+Normalized Pauli strings form an orthonormal basis in this doubled space. An operator $O=\sum_Pc_PP$ has **Pauli coherence** $-\sum_P|c_P|^2\log_2|c_P|^2$ when $\sum_P|c_P|^2=1$. Clifford conjugation permutes Pauli strings up to signs. There are $4^N$ one-dimensional blocks for $N$ physical qubits, so the counting argument predicts a threshold of two bits per physical qubit when preparation and measurement Pauli coherences are added.
+
+This is a prediction about a particular doubled-system construction, not the assertion that every ordinary single-chain magic transition occurs at density two. Moreover, Pauli coherence is not magic. The Hadamard operator $H=(X+Z)/\sqrt2$ has one bit of Pauli coherence and is a Clifford gate; its vectorized state is stabilizer. Correlations among Clifford-induced Pauli permutations also preserve the Pauli multiplication algebra, so they are not unrestricted independent random permutations.
+
+The preprint uses the block-intersection picture to predict a robust non-magic phase, and reports numerical agreement of generic magic thresholds with its Pauli-coherence prediction, apart from Clifford exceptions. Extending the independent-intersection reasoning to all such constrained permutations is a conjectural step supported by those results. Its proposed zero-rate quantum-error-correcting-code transition is another frontier implication, not an established consequence of arbitrary codes. @ergFeng2026
+
+## What is hidden, what is detected, and what remains open
+
+A deep transition is detected by an ensemble-sensitive quantity: a higher moment, an average nonlinear resource, or a distribution of local wavefunctions. It need not be detected by the entropy or purity of the average density matrix. This motivates experimental protocols that retain outcome labels and estimate conditional state statistics, rather than discarding the measured bath record at the outset.
+
+The mechanism also suggests several distinct open questions. One is dynamical: how much circuit depth is needed before block intersections behave randomly? Another is statistical: how many outcomes and copies are needed to distinguish a resource-free projected ensemble from a resourceful one? A third is conceptual: which resource constraints lead to sharp thresholds, and which leave a continuous family of constrained random ensembles? Answering one does not settle the others. The broad aim is a statistical mechanics of wavefunction distributions in which both conservation laws and restrictions on information-processing resources enter the target ensemble.
+
+## Exercises and research directions
+
+1. **The same density matrix twice.** Construct projected ensembles from the Bell state using $Z$, $X$, and $Y$ measurements on the second qubit. Compute $\rho_A$ and $\overline C_r$ in each case. *Hint:* complex conjugation of the measurement vector enters the conditional state.
+
+2. **Two-copy discrimination.** Reproduce @eq-rt-classical-distance, then evaluate it for one, two, and three retained qubits. Explain why a first-moment measurement cannot reveal this difference. *Hint:* diagonal and off-diagonal symmetric vectors form two eigenspaces.
+
+3. **A sparse-support threshold.** Retain $N_A=2$ qubits and choose $\alpha_0=0.4$. Find the exponential dependence of $\lambda_a$ on $N_B$ for $\alpha_m=0.3$ and $0.8$. Explain why conditioning on a Born-allowed outcome matters in the first case. *Hint:* a vanishing unconditional count does not imply the physical projected state is zero.
+
+4. **Real versus complex states.** Derive the real fourth-moment tensor and @eq-rt-real-ipr. For $d=2$, compare the real-circle ensemble with the complex Bloch sphere. *Hint:* the amplitudes are real coordinates on $S^{d-1}$, which is not the same sphere as a qubit Bloch vector.
+
+5. **Coherence without magic.** Compute $C_r$ and $M_2$ for $|0\rangle$, $|+\rangle$, $|Y_+\rangle$, and $|T\rangle$. Which measures distinguish them? *Hint:* every Pauli eigenstate is stabilizer, including complex ones.
+
+6. **Unequal blocks.** Consider two blocks with probabilities $p$ and $1-p$. Compute $H_2$ and explain why a fixed two-block structure has no extensive threshold density. Contrast with $2^{\sigma N}$ equal blocks. *Hint:* divide the collision entropy by $N$ before taking the limit.
+
+7. **Research problem: test entropy matching.** For tilted product inputs, compare phase-boundary predictions based on Shannon entropy, collision entropy, and the full distribution of log amplitudes. Identify a numerical experiment that distinguishes them without fitting the transition point itself.
+
+8. **Research problem: local random permutations.** Study how the projected IPR approaches its limiting value in a one-dimensional reversible circuit. Vary subsystem size, bath size, and depth separately. Does the circuit depth needed to resolve the transition track ordinary entanglement saturation or a longer scrambling scale?
+
+9. **Research problem: robustness to imperfections.** Add a small gate that creates computational-basis coherence to an otherwise permutation-only circuit. Determine whether a sharp transition survives, rounds into a crossover, or moves on experimentally relevant times. State the order in which the perturbation strength, circuit depth, and bath size are taken to their limits.

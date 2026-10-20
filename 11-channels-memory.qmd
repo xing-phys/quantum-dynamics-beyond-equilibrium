@@ -1,0 +1,241 @@
+# Quantum channels and the information carried by a bath {#sec-channels-memory}
+
+A reduced density matrix answers a state question: *what can an observer measure on this subsystem now?* A quantum channel answers a dynamical question: *what would this subsystem do for every possible input?* A measurement record asks a still finer question: *which conditional transformation actually occurred?* These distinctions are essential when connecting thermalization to information scrambling. Two evolutions may send one chosen initial state to the same thermal density matrix while transforming other inputs differently. Even two identical channels can arise from different measurements of their environments.
+
+This chapter constructs these objects from a closed-system unitary. It then asks what is lost when a sequence of interactions is replaced by independent channels. The answer prepares the multi-time language of @sec-temporal-entanglement. Throughout, $S$ is the retained subsystem, $B$ its bath, $d_S$ and $d_B$ their dimensions, and $\operatorname{Tr}_B$ denotes the partial trace. The bath is initially independent of the input unless explicitly stated otherwise.
+
+## Why positivity must survive an untouched reference
+
+A density operator is positive semidefinite and has unit trace. A dynamical map $\mathcal E$ must preserve these properties for every physical input. Positivity alone is insufficient because the system might be entangled with an external reference $R$ that the map does not touch. The physical requirement is that
+
+$$
+(\mathcal E\otimes\operatorname{id}_R)(\rho_{SR})\geq0
+$$
+
+for every reference dimension and every positive $\rho_{SR}$. This is **complete positivity**. A completely positive, trace-preserving map is abbreviated CPTP.
+
+The need for the extra adjective can be seen without abstract operator theory. Transposition $T(\rho)=\rho^T$ preserves eigenvalues and hence positivity on a single system. Apply it to one half of the Bell state $|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2$. Partial transposition gives
+
+$$
+(T\otimes\operatorname{id})(|\Phi^+\rangle\langle\Phi^+|)
+=\frac12\begin{pmatrix}
+1&0&0&0\\0&0&1&0\\0&1&0&0\\0&0&0&1
+\end{pmatrix}.
+$$
+
+The middle block has eigenvalues $+1/2$ and $-1/2$. Transposition is therefore positive but not completely positive. It cannot be implemented deterministically on one member of an arbitrary entangled pair. This example also explains why a map fitted only to a restricted set of uncorrelated experimental inputs can fail when used in a larger protocol.
+
+## Deriving a Kraus map from unitary dynamics
+
+Suppose the bath begins in $|b_0\rangle$ and the joint system evolves by $U$. Insert an orthonormal basis $\{|z\rangle\}$ when taking the bath trace:
+
+$$
+\begin{aligned}
+\mathcal E(\rho)
+&=\operatorname{Tr}_B\!\left[U(\rho\otimes|b_0\rangle\langle b_0|)U^\dagger\right]\\
+&=\sum_z {}_B\langle z|U|b_0\rangle_B\,\rho\,
+{}_B\langle b_0|U^\dagger|z\rangle_B\\
+&=\sum_z K_z\rho K_z^\dagger,\qquad
+K_z={}_B\langle z|U|b_0\rangle_B.
+\end{aligned}
+$$ {#eq-cm-kraus}
+
+The $K_z$ are operators on $S$, called **Kraus operators**. They need not be Hermitian, unitary, or mutually orthogonal. Their defining normalization follows directly from unitarity:
+
+$$
+\begin{aligned}
+\sum_zK_z^\dagger K_z
+&={}_B\langle b_0|U^\dagger
+\left(I_S\otimes\sum_z|z\rangle\langle z|\right)U|b_0\rangle_B\\
+&={}_B\langle b_0|I_{SB}|b_0\rangle_B=I_S.
+\end{aligned}
+$$ {#eq-cm-completeness}
+
+This is **Kraus completeness**. It implies trace preservation by cyclicity of trace. Complete positivity is equally transparent: each term in $(\mathcal E\otimes\operatorname{id})(X)$ has the form $(K_z\otimes I)X(K_z^\dagger\otimes I)$ and is positive whenever $X$ is positive.
+
+For a mixed bath $\rho_B=\sum_bq_b|b\rangle\langle b|$, use $K_{zb}=\sqrt{q_b}\langle z|U|b\rangle$. The same proof works after summing over $b$. Equivalently, purify the bath by adjoining a reference and use the pure-state construction. The finite-dimensional dilation and complete-positivity framework is developed in the foundational work of Stinespring and Choi [@stinespring1955; @choi1975].
+
+Conversely, suppose matrices satisfy @eq-cm-completeness. Define the isometry
+
+$$
+V|\psi\rangle=\sum_z K_z|\psi\rangle\otimes|z\rangle.
+$$
+
+Its inner products obey $\langle\phi|V^\dagger V|\psi\rangle=\langle\phi|\psi\rangle$. Extend an orthonormal basis of its image to a complete basis of a sufficiently large joint space. This extends $V$ to a unitary acting on a fixed bath input. Thus a Kraus map is precisely the local description of a larger reversible evolution with discarded degrees of freedom. Irreversibility enters through discarding, not through any failure of global unitarity.
+
+### Measurement records and instruments
+
+If the bath is measured and outcome $z$ retained, the unnormalized conditional state is
+
+$$
+\widetilde\rho_z=K_z\rho K_z^\dagger,
+\qquad p_z(\rho)=\operatorname{Tr}\widetilde\rho_z,
+\qquad \rho_z=\widetilde\rho_z/p_z(\rho).
+$$ {#eq-cm-instrument}
+
+The collection of outcome-labeled completely positive maps is a **quantum instrument**. Summing the instrument gives the channel. Conditioning is nonlinear because of division by an input-dependent probability; the unnormalized map remains linear. This distinction prevents a common mistake: treating a normalized postselected trajectory as a deterministic linear quantum channel.
+
+Kraus representations are not unique. Rotate the measurement basis by a unitary $u$: $L_a=\sum_z u_{az}K_z$. Then $\sum_aL_a\rho L_a^\dagger=\sum_zK_z\rho K_z^\dagger$. The unconditioned dynamics is unchanged, while the recorded alternatives differ. A statement about a distribution of Kraus operators must therefore specify bath preparation, measurement basis, and sampling convention.
+
+## Worked example: spontaneous emission as amplitude damping
+
+Take a qubit with ground state $|0\rangle$, excited state $|1\rangle$, and a bath qubit initially $|0\rangle_B$. In the zero- and one-excitation sectors let
+
+$$
+U|00\rangle=|00\rangle,\qquad
+U|10\rangle=\sqrt{1-\eta}|10\rangle+\sqrt\eta|01\rangle,
+\qquad0\leq\eta\leq1.
+$$
+
+The specified images are orthonormal, so they can be completed to a unitary. Projection onto the two bath outputs yields
+
+$$
+K_0=\begin{pmatrix}1&0\\0&\sqrt{1-\eta}\end{pmatrix},
+\qquad K_1=\begin{pmatrix}0&\sqrt\eta\\0&0\end{pmatrix}.
+$$ {#eq-cm-amplitude-kraus}
+
+Adding $K_0^\dagger K_0=\operatorname{diag}(1,1-\eta)$ and $K_1^\dagger K_1=\operatorname{diag}(0,\eta)$ verifies completeness. Multiplying the matrices explicitly gives
+
+$$
+\mathcal E_\eta\!\begin{pmatrix}\rho_{00}&\rho_{01}\\\rho_{10}&\rho_{11}\end{pmatrix}
+=\begin{pmatrix}
+\rho_{00}+\eta\rho_{11}&\sqrt{1-\eta}\rho_{01}\\
+\sqrt{1-\eta}\rho_{10}&(1-\eta)\rho_{11}
+\end{pmatrix}.
+$$ {#eq-cm-amplitude-output}
+
+Excitation probability falls by $\eta\rho_{11}$, and the off-diagonal coherence is attenuated by the square root of the survival probability. The two effects are linked by the dilation; they cannot be chosen independently while retaining the same model.
+
+The $z=1$ record occurs with probability $\eta\rho_{11}$ and leaves $S$ in $|0\rangle$. It carries information about the input population. The $z=0$ record is also informative: an initially unknown excited component is selectively reduced. A no-click trajectory is therefore not generally unitary evolution. Unconditional averaging hides this information and produces the mixed-state channel.
+
+Set $\eta(t)=1-e^{-\kappa t}$. The excited population solves $\dot\rho_{11}=-\kappa\rho_{11}$ and coherence solves $\dot\rho_{01}=-(\kappa/2)\rho_{01}$. Combining both equations gives
+
+$$
+\dot\rho=\kappa\left(\sigma^-\rho\sigma^+
+-\tfrac12\{\sigma^+\sigma^-,\rho\}\right).
+$$
+
+This particular parameterization forms a semigroup: $\mathcal E_t\mathcal E_s=\mathcal E_{t+s}$. The Kraus representation alone did not imply the semigroup property; the exponential time dependence supplied the additional assumption.
+
+## A channel as a bipartite operator: fixing Choi conventions
+
+Let $|\Omega\rangle=\sum_{i=1}^{d_S}|i\rangle_S|i\rangle_R$ be **unnormalized**. We define the output-first Choi operator
+
+$$
+J_{\mathcal E}=(\mathcal E\otimes\operatorname{id}_R)
+(|\Omega\rangle\langle\Omega|)
+=\sum_{ij}\mathcal E(|i\rangle\langle j|)\otimes|i\rangle\langle j|.
+$$ {#eq-cm-choi}
+
+Its trace is $d_S$ for a trace-preserving map. The corresponding normalized Choi state is $j_{\mathcal E}=J_{\mathcal E}/d_S$. Partial trace over the output gives $\operatorname{Tr}_{\mathrm{out}}J_{\mathcal E}=I_R$. With vectorization $|K\rangle\!\rangle=\sum_iK|i\rangle\otimes|i\rangle$, the Kraus form becomes $J_{\mathcal E}=\sum_z|K_z\rangle\!\rangle\langle\!\langle K_z|$.
+
+The reconstruction formula contains a transpose:
+
+$$
+\mathcal E(\rho)=\operatorname{Tr}_R\left[J_{\mathcal E}(I\otimes\rho^T)\right].
+$$ {#eq-cm-choi-reconstruction}
+
+To check it, expand $\rho=\sum_{kl}\rho_{kl}|k\rangle\langle l|$. The factor $\operatorname{Tr}(|i\rangle\langle j|\rho^T)=\rho_{ij}$ selects precisely $\sum_{ij}\rho_{ij}\mathcal E(|i\rangle\langle j|)$. Omitting the transpose would conjugate the input convention incorrectly. When comparing papers, always inspect whether their Bell vector has a factor $1/\sqrt{d_S}$ and whether input or output appears first.
+
+For amplitude damping, ordered basis $(00,01,10,11)$ gives
+
+$$
+J_{\mathcal E_\eta}=\begin{pmatrix}
+1&0&0&\sqrt{1-\eta}\\
+0&\eta&0&0\\0&0&0&0\\
+\sqrt{1-\eta}&0&0&1-\eta
+\end{pmatrix}.
+$$
+
+It is positive because it is the sum of two outer products. Its output partial trace is $I$, and its total trace is $2$. These three easy checks catch most normalization and index mistakes before a calculation becomes complicated.
+
+## Why repeated CPTP maps need not describe a bath with memory
+
+A channel from time $0$ to time $t$ can be perfectly well defined even if the bath stores information that later returns. To expose the issue, take two qubits $S,B$, initially $\rho\otimes|0\rangle\langle0|$. Apply SWAP twice. After the first SWAP,
+
+$$
+\rho_{SB}^{(1)}=|0\rangle\langle0|_S\otimes\rho_B.
+$$
+
+The system has been reset for **every** input. After the second SWAP, $\rho_S^{(2)}=\rho$. If a system-only map $\mathcal V$ between the two times existed independently of history, it would have to obey $\mathcal V(|0\rangle\langle0|)=\rho$ for all $\rho$, which is impossible. The missing information is in $B$.
+
+An intervention makes the memory operational. At the intermediate time, discard $S$ and prepare a fixed state $\sigma$. The second SWAP still returns $\rho$ to $S$. Different earlier preparations yield different future outputs despite the same prepared intermediate system state. This is a **causal-break test**: the bath bridges the intervention.
+
+Contrast this with a collision model using a fresh independent bath qubit at every step. After discarding each ancilla, the next ancilla has no record of earlier inputs. The system state is then a sufficient predictor and the evolution factors into fixed channels. If outgoing ancillas interact with incoming ones, or the same ancilla is reused, that factorization generally fails.
+
+A family $\mathcal E_{t:0}$ is **CP divisible** when for each $t\geq s$ there is a CPTP map $\mathcal V_{t:s}$ with $\mathcal E_{t:0}=\mathcal V_{t:s}\mathcal E_{s:0}$. This tests propagation of unperturbed reduced states. Operational multi-time Markovianity instead tests all allowed intervening operations. The latter requires more information than a family of one-time channels. Pollock and collaborators formulate this distinction in terms of processes and interventions [@pollock2018operational; @pollock2018framework].
+
+![The same environment stores the input after one SWAP and returns it after
+the second. The intermediate system state alone cannot predict the future.
+Resetting the bath would define a different experiment. Original diagram of
+the exact two-qubit example.](figs/swap-memory.svg){#fig-cm-swaps}
+
+## From state ensembles to ensembles of transformations
+
+For a fixed pure input $|\psi\rangle$, a bath measurement produces unnormalized vectors $K_z|\psi\rangle$. Their squared norms are Born probabilities; their normalized directions form the projected ensemble discussed earlier in the book. Changing $|\psi\rangle$ probes a different column combination of each $K_z$. A full Kraus ensemble therefore describes many projected ensembles simultaneously.
+
+There are two sampling measures. An **outcome-counting measure** selects a bath string uniformly among the $d_B$ possible strings. An **experimental measure** samples $z$ with $p_z(\rho)$. These are generally different. For maximally mixed input,
+
+$$
+\overline p_z=\frac1{d_S}\operatorname{Tr}(K_z^\dagger K_z)
+=\frac{\|K_z\|_F^2}{d_S},
+$$ {#eq-cm-norm-probability}
+
+where $\|K\|_F^2=\sum_{ij}|K_{ij}|^2$ is the Frobenius norm. Operator norm fluctuations thus have an immediate measurement meaning.
+
+The 2026 preprint by Huang, Mok, Haug, and Ho proposes, for fixed small $S$ in chaotic one-dimensional circuits without conservation laws, the scaling form
+
+$$
+\sqrt{d_Sd_B}\,K\ \sim\ YG,
+\qquad \log Y\sim\mathcal N(-\sigma^2,\sigma^2),
+\qquad \sigma^2=\frac{\lambda N_B}{\gamma^t}.
+$$ {#eq-cm-frontier-law}
+
+Here $G$ has independent standard complex Gaussian entries, $Y$ is independent of $G$, and the ensemble uses outcome counting. The constants $\lambda\geq0$ and $\gamma>1$ are model dependent, $N_B$ counts bath sites, and $t$ counts circuit time steps. Global-Haar and specified dual-unitary limits admit proofs; generic-circuit joint limits are an ansatz supported by analytical arguments and numerics. The log-normal factor retains outcome-probability structure even when normalized projected states are Haar distributed [@huang2026kraus]. This statement is a statistical scaling limit, not a claim that finitely many independent draws satisfy exact Kraus completeness.
+
+### Understanding the Gaussian and radial pieces
+
+The following elementary calculations explain the consequences of any Gaussian-times-scalar model. A standard complex Gaussian $g=(x+iy)/\sqrt2$ has $x,y$ independent real unit-variance Gaussians, $\mathbb E|g|^2=1$, and a rotationally invariant distribution. A column $v=G|\psi\rangle$ for normalized fixed $|\psi\rangle$ is again a vector of independent standard complex Gaussians: each component is a normalized linear combination of independent Gaussians. Its density depends only on $\|v\|$, so $v/\|v\|$ is uniformly distributed over complex unit vectors. Multiplication by a positive scalar leaves this direction unchanged.
+
+Radial statistics are much less featureless. If $X=\log Y$ is Gaussian with mean $\mu$ and variance $\sigma^2$, completing the square in its Gaussian integral gives
+
+$$
+\mathbb E[Y^q]=\mathbb E[e^{qX}]
+=\exp(q\mu+q^2\sigma^2/2).
+$$ {#eq-cm-lognormal-moments}
+
+With $\mu=-\sigma^2$, $\mathbb E[Y^2]=1$, while $\mathbb E[Y^4]=e^{4\sigma^2}$. The second moment can match a normalization constraint although higher moments fluctuate strongly. For $d_S^2$ independent Gaussian matrix entries, $R=\|G\|_F^2$ is a sum of $d_S^2$ independent exponential variables. Consequently $\mathbb E R=d_S^2$ and $\mathbb E R^2=d_S^2(d_S^2+1)$. A broad scalar factor changes norms without changing normalized matrix directions.
+
+Born weighting multiplies the joint density by $Y^2\|G\psi\|^2$. Because the factors were independent, this tilt separates into a radial reweighting of $Y$ and another of $G\psi$. Gaussian isotropy still leaves the direction Haar distributed. Thus the cancellation of a scalar in a normalized wavefunction is not, by itself, sufficient reasoning: one must also check that weighting by the outcome probability does not introduce a directional bias. Independence and isotropy supply that check.
+
+For comparison, the mean channel in this model is depolarizing. Independence gives
+
+$$
+\mathbb E[G\rho G^\dagger]=\operatorname{Tr}(\rho)I_S,
+$$
+
+because $\mathbb E[G_{ai}G^*_{bj}]=\delta_{ab}\delta_{ij}$. Summing $d_B$ contributions of scale $1/(d_Sd_B)$ yields $I_S/d_S$ for unit-trace input. Yet individual conditional transformations remain fluctuating matrices. A featureless average therefore does not eliminate conditional information.
+
+## What can be recovered when the record is known?
+
+A unitary channel has one Kraus operator proportional to a unitary, so its action can be reversed. A known outcome $z$ instead gives one generally nonunitary $K_z$. Its singular-value decomposition $K_z=W_zD_zV_z^\dagger$ separates reversible rotations from unequal attenuation. If $D_z=c_zI$ on a code subspace, conditional reversal is unitary there. If singular values differ, deterministic inversion would amplify some components more than others and cannot generally be implemented as a trace-preserving operation.
+
+A probabilistic filter can nevertheless reverse an invertible $K_z$. Choose $F_z=cK_z^{-1}$ with $|c|\leq s_{\min}(K_z)$ so that $F_z^\dagger F_z\leq I$. Then $F_zK_z=cI$ on successful trials. The price is a success probability limited by the smallest singular value. This calculation shows concretely why a classical bath record can help recovery without making every chaotic conditional map exactly reversible.
+
+An averaged channel, a measured instrument, and a multi-time process answer different operational questions. The next chapter keeps the bath across time and asks how much information is required to represent its influence for an entire sequence of interventions.
+
+## Exercises and research directions
+
+1. **Dephasing from a controlled bath rotation.** Let $U=|0\rangle\langle0|\otimes I+|1\rangle\langle1|\otimes e^{-i\theta X_B}$ and $B$ begin in $|0\rangle$. Derive the two Kraus operators and the factor multiplying $\rho_{01}$. When is the channel unitary? *Hint:* project the two bath states onto $\langle0|$ and $\langle1|$ before tracing.
+
+2. **Choi reconstruction.** Starting from @eq-cm-choi, prove that $J\geq0$ and $\operatorname{Tr}_{\mathrm{out}}J=I$ suffice to construct a CPTP map. *Hint:* spectrally decompose $J$ and reshape each eigenvector into a matrix, absorbing the square root of its eigenvalue.
+
+3. **Two amplitude-damping steps.** Compose damping parameters $\eta_1,\eta_2$ and find the effective parameter. Determine the condition for a differentiable survival function $q(t)$ to define CP-divisible amplitude damping where $q(s)>0$. *Hint:* the intermediate survival probability is $q(t)/q(s)$ and must lie between zero and one.
+
+4. **Same average, different records.** Write complete dephasing as an equally weighted mixture of $I$ and $Z$, and also as the instrument $\{|0\rangle\langle0|,|1\rangle\langle1|\}$. Compare the conditional states for input $|+\rangle$. *Hint:* the first record labels a random phase operation; the second records a basis measurement.
+
+5. **Memory witnessed after a reset.** For the double-SWAP example, insert a complete depolarizing channel on $S$ between the two swaps. Compute the final state for inputs $|0\rangle$ and $|1\rangle$. Explain why information survives even though the intermediate system is identical. *Hint:* track the joint tensor-product factors.
+
+6. **Radial diagnostics.** For $K=YG/\sqrt{d_Sd_B}$, calculate the coefficient of variation of $\|K\|_F^2$. Which part persists as $d_S\to\infty$ at fixed $\sigma$? *Hint:* use independence and @eq-cm-lognormal-moments; the Gaussian radial variance alone decreases as $1/d_S^2$.
+
+7. **Open question: conserved dynamics.** Formulate an analogue of a Kraus ensemble when total charge is conserved and the bath is measured in a charge basis. Which matrix entries are symmetry forbidden? Which assumptions behind an unrestricted Ginibre matrix must change? A complete universality classification for constrained physical settings should be treated as a research problem, not inferred by replacing one dimension in @eq-cm-frontier-law.

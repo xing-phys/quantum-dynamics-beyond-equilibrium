@@ -120,7 +120,7 @@ $$
 $$ {#eq-tb-haar-components}
 
 The numerator is the matrix element of $\sum_\pi U_\pi$.
-Using $P_{\rm sym}=\sum_\pi U_\pi/k!$ recovers the Haar moment formula
+Using $P_{\mathrm{sym}}=\sum_\pi U_\pi/k!$ recovers the Haar moment formula
 without assuming prior knowledge of representation theory.
 
 The gamma function is

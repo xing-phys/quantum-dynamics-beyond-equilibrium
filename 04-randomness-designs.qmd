@@ -56,7 +56,7 @@ moments. Full moment operators test more information.
 ## Deriving the Haar moment
 
 The $k$th moment is
-$M_k^{\rm H}=\int d\psi(|\psi\rangle\langle\psi|)^{\otimes k}$.
+$M_k^{\mathrm{H}}=\int d\psi(|\psi\rangle\langle\psi|)^{\otimes k}$.
 Every vector $|\psi\rangle^{\otimes k}$ lies in the completely symmetric
 subspace of $\mathcal H^{\otimes k}$. Therefore the moment has support
 only there. It also commutes with $U^{\otimes k}$ for every $U$.
@@ -65,7 +65,7 @@ operator with this invariance is scalar on that subspace. Normalizing its
 trace gives
 
 $$
-M_k^{\rm H}=\frac{P_{\rm sym}^{(k)}}{D_k},
+M_k^{\mathrm{H}}=\frac{P_{\mathrm{sym}}^{(k)}}{D_k},
 \qquad
 D_k=\dim\operatorname{Sym}^k(\mathbb C^d)
 =\binom{d+k-1}{k}.
@@ -76,13 +76,13 @@ $n_1+\cdots+n_d=k$, $n_a\geq0$. The stars-and-bars count gives the binomial
 coefficient. The symmetric projector can be written
 
 $$
-P_{\rm sym}^{(k)}=\frac1{k!}\sum_{\pi\in S_k}U_\pi,
+P_{\mathrm{sym}}^{(k)}=\frac1{k!}\sum_{\pi\in S_k}U_\pi,
 $$
 
 where $U_\pi$ permutes the copies. At second order,
 
 $$
-M_2^{\rm H}=\frac{I+F}{d(d+1)}.
+M_2^{\mathrm{H}}=\frac{I+F}{d(d+1)}.
 $$ {#eq-rd-haar2}
 
 This also supplies a direct check of the amplitude moments: contract with
@@ -99,7 +99,7 @@ the symmetric subspace.
 A weighted pure-state ensemble is a state **$k$-design** if
 
 $$
-M_k(\mathcal E)=M_k^{\rm H}.
+M_k(\mathcal E)=M_k^{\mathrm{H}}.
 $$ {#eq-rd-design}
 
 By tracing out copies, a $k$-design is also a $j$-design for every $j<k$.
@@ -109,7 +109,7 @@ this ensemble from Haar. This definition extends to continuous ensembles;
 finiteness is useful but not necessary @ambainis2007.
 
 An approximate design needs a specified metric. We use
-$\Delta_k=\tfrac12\|M_k-M_k^{\rm H}\|_1$.
+$\Delta_k=\tfrac12\|M_k-M_k^{\mathrm{H}}\|_1$.
 Some sources instead use multiplicative operator bounds or a rescaled
 Hilbert–Schmidt distance. These metrics have different dimension dependence.
 An unqualified “small design error” is therefore ambiguous.
@@ -147,11 +147,11 @@ Since $M_k$ is supported in a space of dimension $D_k$ and has unit trace,
 Cauchy–Schwarz gives $F_k\geq1/D_k$.
 Equality holds exactly for a $k$-design.
 
-More explicitly, $M_k^{\rm H}=P_{\rm sym}/D_k$ implies
-$\operatorname{Tr}(M_kM_k^{\rm H})=1/D_k$. Expanding the square,
+More explicitly, $M_k^{\mathrm{H}}=P_{\mathrm{sym}}/D_k$ implies
+$\operatorname{Tr}(M_kM_k^{\mathrm{H}})=1/D_k$. Expanding the square,
 
 $$
-\|M_k-M_k^{\rm H}\|_2^2=F_k-\frac1{D_k}.
+\|M_k-M_k^{\mathrm{H}}\|_2^2=F_k-\frac1{D_k}.
 $$ {#eq-rd-frame-gap}
 
 Since the difference is supported on the symmetric subspace,
@@ -173,7 +173,7 @@ Suppose $N$ independent Haar states are sampled with equal weights.
 The empirical frame potential includes $N$ self-overlaps of one:
 
 $$
-\mathbb EF_k^{\rm empirical}
+\mathbb EF_k^{\mathrm{empirical}}
 =\frac1N+\left(1-\frac1N\right)\frac1{D_k}.
 $$ {#eq-rd-sample-floor}
 

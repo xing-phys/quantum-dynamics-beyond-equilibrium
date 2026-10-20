@@ -44,7 +44,7 @@ because the numerator $e^{i\omega T}-1$ stays bounded while the denominator
 $i\omega T$ grows. Hence
 
 $$
-\overline{\rho(t)}=\rho_{\rm diag}
+\overline{\rho(t)}=\rho_{\mathrm{diag}}
 =\sum_n|c_n|^2|n\rangle\langle n|.
 $$ {#eq-th-diagonal}
 
@@ -54,7 +54,7 @@ Coherences inside a degenerate eigenspace survive.
 
 Dephasing does not make each phase small. It makes their sum cancel for
 particular observables or under time averaging. Nor does dephasing alone
-make $\rho_{\rm diag}$ Gibbs: it retains all initial populations.
+make $\rho_{\mathrm{diag}}$ Gibbs: it retains all initial populations.
 
 Assume, more strongly, that nonzero energy gaps are nondegenerate.
 Subtracting the average in @eq-th-observable and squaring gives
@@ -72,8 +72,8 @@ bound the right side by
 
 $$
 \|O\|_\infty^2\sum_np_n^2
-=\frac{\|O\|_\infty^2}{d_{\rm eff}},
-\qquad d_{\rm eff}=\frac1{\sum_np_n^2}.
+=\frac{\|O\|_\infty^2}{d_{\mathrm{eff}}},
+\qquad d_{\mathrm{eff}}=\frac1{\sum_np_n^2}.
 $$
 
 A large effective number of occupied levels suppresses temporal fluctuations.

@@ -1,0 +1,418 @@
+# Beyond finite spins: Gaussian universality and nonlocal conditioning {#sec-gaussian-nonlocal}
+
+Two assumptions made in elementary discussions of thermalization deserve closer examination. First, a local Hilbert space need not be finite: an optical mode has infinitely many number states. Second, a subsystem can be geometrically local while the information used to condition its wavefunction is gathered from the entire environment.
+
+These observations lead to two useful stress tests of the projected-ensemble framework. What replaces a Haar distribution for bosons? How can remote boundaries affect conditional local statistics when ordinary local observables obey a finite propagation speed? We answer the first question through Gaussian quantum mechanics and the second through an explicit measurement example and a solvable driven-spin setting.
+
+## Bosonic modes and phase space
+
+A bosonic mode has annihilation and creation operators satisfying $[a,a^\dagger]=1$. Define dimensionless quadratures
+
+$$
+q=\frac{a+a^\dagger}{\sqrt2},\qquad
+p=\frac{a-a^\dagger}{i\sqrt2},\qquad [q,p]=i.
+$$ {#eq-ga-quadratures}
+
+For $m$ modes collect them into $R=(q_1,p_1,\ldots,q_m,p_m)^T$. Then $[R_i,R_j]=i\Omega_{ij}$, where $\Omega$ is a direct sum of blocks $\begin{pmatrix}0&1\\-1&0\end{pmatrix}$. A covariance matrix and a displacement vector are
+
+$$
+d_i=\langle R_i\rangle,\qquad
+V_{ij}=\frac12\langle
+(R_i-d_i)(R_j-d_j)+(R_j-d_j)(R_i-d_i)
+\rangle.
+$$ {#eq-ga-covariance-convention}
+
+Our convention assigns the vacuum covariance $V_{\mathrm{vac}}=I/2$. Some papers, including the Gaussian deep-thermalization paper discussed below, define the covariance without the factor $1/2$ and thus assign vacuum covariance $I$. Their matrices must be divided by two before comparing them with ours. Covariance of the classical displacement distribution, however, is an ordinary statistical covariance and does not acquire this factor.
+
+A **Gaussian state** is a quantum state whose Wigner phase-space representation is a Gaussian function,
+
+$$
+W(x)=\frac{\exp[-(x-d)^TV^{-1}(x-d)/2]}
+{(2\pi)^m\sqrt{\det V}}.
+$$ {#eq-ga-wigner}
+
+The Wigner representation can be a quasiprobability for general states, but a Gaussian state's Wigner function is positive. Gaussianity therefore permits many calculations with classical Gaussian integrals. Quantum restrictions survive in the allowed covariances:
+
+$$
+V+\frac i2\Omega\succeq0.
+$$ {#eq-ga-uncertainty}
+
+For one mode, this implies $\det V\geq1/4$. A one-mode Gaussian state is pure exactly when equality holds. For several modes, purity requires all symplectic eigenvalues to equal $1/2$; equivalently $V\Omega V=\Omega/4$. Ordinary eigenvalues alone do not characterize multimode quantum purity.
+
+The standard Gaussian formalism encompasses optical squeezing, beam splitters, phase shifts, homodyne detection, and heterodyne detection [@Weedbrook2012]. We will derive the ingredients needed here instead of presuming prior familiarity with quantum optics.
+
+### Coherent and squeezed states
+
+A coherent state satisfies $a\lvert\alpha\rangle=\alpha\lvert\alpha\rangle$ and has the expansion
+
+$$
+\lvert\alpha\rangle
+=e^{-|\alpha|^2/2}\sum_{n=0}^{\infty}
+\frac{\alpha^n}{\sqrt{n!}}\lvert n\rangle.
+$$ {#eq-ga-coherent}
+
+Its displacement is $(\sqrt2\operatorname{Re}\alpha,\sqrt2\operatorname{Im}\alpha)$ and covariance $I/2$. Coherent states differ from one another only by displacement. They are not orthogonal:
+$|\langle\alpha|\beta\rangle|^2=e^{-|\alpha-\beta|^2}$.
+
+A squeezed vacuum has zero displacement and, for a suitable quadrature orientation,
+
+$$
+V_s=\frac12
+\begin{pmatrix}e^{2s}&0\\0&e^{-2s}\end{pmatrix}.
+$$ {#eq-ga-squeezed}
+
+It reduces one quadrature's uncertainty at the cost of increasing the other's. Its determinant remains $1/4$, so it is pure. The mean occupation follows from $a^\dagger a=(q^2+p^2-1)/2$:
+
+$$
+\overline n=\frac{\operatorname{Tr}V_s-1}{2}=\sinh^2s.
+$$ {#eq-ga-squeezing-number}
+
+For several modes, a pure Gaussian covariance can be built by squeezing a product vacuum and applying a symplectic transformation. A **passive** Gaussian transformation preserves total particle number and is represented in quadratures by an orthogonal symplectic matrix $O$. It mixes modes without changing their total energy for identical oscillator frequencies. Passive mixing can entangle initially independent squeezed modes even though it does not create particles.
+
+## Why there is no infinite-dimensional Haar equilibrium
+
+There is no normalized identity density operator on the Hilbert space of an oscillator: $\operatorname{Tr}I=\sum_{n=0}^{\infty}1$ diverges. Likewise, a putative distribution invariant under all unitaries would assign equal mean populations to all number states, which cannot sum to one unless all are zero.
+
+One must keep an energy or occupation constraint. Maximizing the von Neumann entropy subject to fixed $\langle a^\dagger a\rangle=\overline n$ gives
+
+$$
+\rho_{\mathrm{th}}
+=(1-r)\sum_{n=0}^{\infty}r^n\lvert n\rangle\langle n\rvert,
+\qquad
+r=\frac{\overline n}{\overline n+1}.
+$$ {#eq-ga-thermal-state}
+
+To derive it, vary $-\sum_np_n\log p_n$ with multipliers for $\sum_np_n=1$ and $\sum_nnp_n=\overline n$. Stationarity gives $p_n\propto e^{-\beta n}$, a geometric series; normalization fixes $1-r$, and its mean $r/(1-r)$ fixes $r$.
+
+This state has covariance $V_{\mathrm{th}}=(\overline n+1/2)I$. It describes an average, not its unique pure-state decomposition. In particular, its diagonal number-state ensemble and a continuous coherent-state ensemble can realize exactly the same operator.
+
+## Gaussian measurement and the conditional-state formula
+
+Let a zero-displacement global Gaussian state have block covariance
+
+$$
+V_{AB}=
+\begin{pmatrix}
+V_A&C\\ C^T&V_B
+\end{pmatrix}.
+$$ {#eq-ga-blocks}
+
+A rank-one Gaussian measurement on $B$ consists of displaced copies of a pure Gaussian seed of covariance $V_M$. Its continuous outcome $y$ estimates the bath quadratures with measurement noise represented by $V_M$. Heterodyne measurement uses coherent states and $V_M=I/2$. Homodyne measurement of one quadrature is a singular, infinitely squeezed limit.
+
+Gaussian integration gives a conditional state on $A$ with covariance and displacement
+
+$$
+\begin{aligned}
+V_{A|y}&=V_A-C(V_B+V_M)^{-1}C^T,\\
+d_{A|y}&=C(V_B+V_M)^{-1}y,\\
+y&\sim\mathcal N(0,V_B+V_M).
+\end{aligned}
+$$ {#eq-ga-conditioning}
+
+The formula has a direct statistical interpretation. Regard $x_B$ as a latent Gaussian variable of covariance $V_B$ and the detector outcome as $y=x_B+\xi$, with independent Gaussian noise $\xi$ of covariance $V_M$. Then $\operatorname{Cov}(x_A,y)=C$ and $\operatorname{Cov}(y)=V_B+V_M$.
+
+Define $L=C(V_B+V_M)^{-1}$. The residual $u=x_A-Ly$ is uncorrelated with $y$, since
+$\operatorname{Cov}(u,y)=C-L(V_B+V_M)=0$. Joint Gaussianity upgrades lack of correlation to independence. The covariance of $u$ is $V_A-C(V_B+V_M)^{-1}C^T$, giving the first line of @eq-ga-conditioning, and the conditional mean is $Ly$. In a Wigner-function calculation the same algebra follows by multiplying the global Gaussian by the Gaussian measurement kernel and integrating $x_B$.
+
+Unlike the spin examples, every measurement outcome has the same conditional covariance. Only its mean moves. The covariance of these means is
+
+$$
+\Sigma_d=\mathbb E_y\,d_{A|y}d_{A|y}^T
+=C(V_B+V_M)^{-1}C^T,
+\qquad
+V_A=V_{A|y}+\Sigma_d.
+$$ {#eq-ga-total-covariance}
+
+The last identity is the law of total covariance. It separates uncertainty within each quantum state from classical uncertainty over its displacement. If the global state and Gaussian seed are pure, each conditional state is pure. If either is mixed, that conclusion does not follow.
+
+### Worked example: heterodyne measurement of a squeezed pair
+
+The two-mode squeezed vacuum has
+
+$$
+V_A=V_B=\frac c2 I,\qquad
+C=\frac s2 Z,\qquad
+c=\cosh2r,\quad s=\sinh2r,\quad Z=\operatorname{diag}(1,-1).
+$$ {#eq-ga-two-mode}
+
+The notation $s$ in this example is $\sinh2r$, not the single-mode squeezing parameter in @eq-ga-squeezed. The identity $c^2-s^2=1$ ensures purity of the two-mode state.
+
+For heterodyne measurement, $V_M=I/2$. Equation @eq-ga-conditioning becomes
+
+$$
+V_{A|y}
+=\frac12\left(c-\frac{s^2}{c+1}\right)I
+=\frac12I,
+\qquad
+d_{A|y}=\frac{s}{c+1}Zy.
+$$ {#eq-ga-pair-heterodyne}
+
+Every conditional state is therefore coherent. Its mean displacement has covariance
+
+$$
+\Sigma_d=\frac{c-1}{2}I=\overline n I,
+\qquad \overline n=\sinh^2r.
+$$ {#eq-ga-pair-displacement}
+
+Because $\alpha=(d_q+id_p)/\sqrt2$, the corresponding complex amplitude has distribution
+
+$$
+P(\alpha)=\frac1{\pi\overline n}
+\exp\left(-\frac{|\alpha|^2}{\overline n}\right).
+$$ {#eq-ga-coherent-cloud}
+
+The limit $\overline n=0$ is a point mass at the vacuum. This is an exact finite-system example of a thermal coherent-state ensemble, rather than an appeal to typicality.
+
+Now measure only the $q$ quadrature of $B$. Its outcome has variance $c/2$ and correlation $s/2$ with $q_A$. Updating that coordinate gives
+
+$$
+V_{A|q_B}=
+\begin{pmatrix}
+1/(2c)&0\\0&c/2
+\end{pmatrix}.
+$$ {#eq-ga-pair-homodyne}
+
+The determinant is $1/4$, so these states remain pure, but they are squeezed whenever $r\neq0$. This counterexample shows why basis-independent coherent-state universality cannot hold for every finite entangled Gaussian state. The many-mode, large-bath limit is essential to the stronger universality claim.
+
+## A thermal state as a cloud of coherent states
+
+The ensemble in @eq-ga-coherent-cloud averages to @eq-ga-thermal-state. It is useful to verify this explicitly rather than merely compare covariances:
+
+$$
+\int_{\mathbb C}\frac{\mathrm d^2\alpha}{\pi\overline n}
+e^{-|\alpha|^2/\overline n}\,
+\lvert\alpha\rangle\langle\alpha\rvert
+=\sum_{n=0}^{\infty}
+\frac{\overline n^n}{(\overline n+1)^{n+1}}
+\lvert n\rangle\langle n\rvert.
+$$ {#eq-ga-coherent-thermal}
+
+Insert the coherent-state expansion. Integration over the phase of $\alpha$ removes off-diagonal number-state terms. For the remaining diagonal element, use
+$\int_0^\infty u^ne^{-Au}\,\mathrm du=n!/A^{n+1}$ with
+$A=1+\overline n^{-1}$. This gives the coefficient on the right, a geometric distribution of mean $\overline n$.
+
+For several modes with an isotropic, factorized amplitude distribution, the conditional state is a product of coherent states and the average is a product of thermal states. The global generator can be highly entangled even though the small subsystem's conditional states are unentangled. Entanglement is consumed or redirected by conditioning; it need not remain as entanglement among the retained modes.
+
+This differs from a finite-dimensional Haar ensemble on a composite subsystem, whose typical members are entangled across an internal bipartition. The relevant constraints change what maximal randomness looks like.
+
+![A thermal one-mode Gaussian state can be decomposed into coherent states
+whose displacements have covariance $\bar n I$. Each component has vacuum
+covariance $I/2$, so the total is $(\bar n+1/2)I$. Points are an original
+finite sample with $\bar n=2$; the plot window clips the Gaussian tails.
+The red circle indicates one component's quadrature width.](figs/gaussian-ensemble.svg){#fig-ga-cloud}
+
+## Gaussian deep thermalization: statement and limits
+
+Liu, Huang, and Ho studied uniformly squeezed product states mixed by a Haar-random passive transformation and proved that, for a fixed number of retained modes and coherent-state measurements on an increasingly large complement, the conditional covariance approaches vacuum covariance and the displacement distribution approaches an isotropic Gaussian [@Liu2024]. Its variance is fixed by the occupation density.
+
+Their numerical work also supports this limiting ensemble for other product Gaussian measurement seeds, including homodyne limits, and for suitable deep local optical circuits. Those extensions have numerical support rather than the same rigorous theorem. The limit keeps local mode number and squeezing fixed; it is not a statement about arbitrary bosonic states, non-Gaussian measurements, or occupation densities that grow without bound.
+
+The random passive model is particularly transparent. Its covariance is
+
+$$
+V=\frac12O\left[
+\bigoplus_{j=1}^{N}
+\operatorname{diag}(e^{2s},e^{-2s})
+\right]O^T,
+\qquad
+\overline n=\sinh^2s,
+$$ {#eq-ga-random-passive}
+
+with $O$ an orthogonal symplectic matrix associated with a unitary transformation on the $N$ annihilation operators. Passive invariance makes the average local covariance isotropic:
+$\mathbb E V_A=(\overline n+1/2)I$.
+For a fixed small set of modes, individual covariance entries become sums of many weakly correlated contributions from the mode-mixing matrix. Their fluctuations diminish with $N$.
+
+This already suggests ordinary thermalization, but it does not prove deep thermalization. The conditional covariance contains an inverse of the *whole bath block* in @eq-ga-conditioning. Establishing that it approaches $I/2$ requires controlling this Schur complement, not only the local block $V_A$. Once that has been established, @eq-ga-total-covariance fixes $\Sigma_d\rightarrow\overline n I$. Gaussianity then determines the entire distribution of means from that covariance. This is why the Gaussian problem admits an economical complete description even though the local Hilbert space is infinite.
+
+### A Gaussian analog of Scrooge distortion
+
+The coherent states resolve the identity:
+
+$$
+\int_{\mathbb C}\frac{\mathrm d^2\alpha}{\pi}
+\lvert\alpha\rangle\langle\alpha\rvert=I.
+$$ {#eq-ga-coherent-resolution}
+
+This measure is not a probability distribution over the plane. Nevertheless, distortion by a trace-one operator makes an adjusted normalized measure:
+
+$$
+\mathrm d\mu(\alpha)
+=\frac{\mathrm d^2\alpha}{\pi}
+\langle\alpha|\rho_{\mathrm{th}}|\alpha\rangle,
+\qquad
+\lvert\psi(\alpha)\rangle
+=\frac{\sqrt{\rho_{\mathrm{th}}}\lvert\alpha\rangle}
+{\sqrt{\langle\alpha|\rho_{\mathrm{th}}|\alpha\rangle}}.
+$$ {#eq-ga-distortion}
+
+The average projector is $\rho_{\mathrm{th}}$ by the identity resolution, exactly as in the finite-dimensional construction with a Haar reference.
+
+Using @eq-ga-coherent and @eq-ga-thermal-state gives
+
+$$
+\sqrt{\rho_{\mathrm{th}}}\lvert\alpha\rangle
+=\sqrt{1-r}\,
+e^{-(1-r)|\alpha|^2/2}
+\lvert\sqrt r\,\alpha\rangle.
+$$ {#eq-ga-thermal-filter}
+
+The input adjusted amplitude has Gaussian variance $(1-r)^{-1}=\overline n+1$. The output amplitude $\beta=\sqrt r\,\alpha$ therefore has variance
+$r/(1-r)=\overline n$. The resulting ensemble is exactly the coherent-state cloud in @eq-ga-coherent-cloud. This construction motivates the name **Gaussian Scrooge distribution**.
+
+There is an important scope distinction. The reference states and allowed ensemble family here are Gaussian; this Gaussian Scrooge distribution should not be identified with the unrestricted finite-dimensional Scrooge construction on a Fock-space cutoff. Such a cutoff is an approximation with a different reference measure. The information-minimizing statements in the Gaussian setting are made within the relevant Gaussian ensemble family and their assumptions.
+
+The information principle is physically useful because the limiting distribution is not selected by $\rho_{\mathrm{th}}$ alone. Results on Gaussian accessible information supply the necessary optimization input [@Holevo2020; @Holevo2021]. The Gaussian thermalization work applies these tools to identify the information-stingy Gaussian unraveling.
+
+### Worked example: how much can a heterodyne receiver learn?
+
+Suppose $\alpha$ is distributed according to @eq-ga-coherent-cloud and the receiver heterodynes $\lvert\alpha\rangle$. The observed amplitude is
+$\beta=\alpha+\xi$, where $\xi$ is a circular complex Gaussian noise of variance one. The two real quadratures each have noise variance $1/2$.
+
+A circular complex Gaussian of variance $v$ has differential entropy $\log(\pi e v)$. Therefore
+
+$$
+I(\alpha:\beta)
+=h(\beta)-h(\beta|\alpha)
+=\log[\pi e(\overline n+1)]-\log(\pi e)
+=\log(1+\overline n).
+$$ {#eq-ga-heterodyne-information}
+
+For this isotropic coherent Gaussian signal ensemble, heterodyne detection attains the accessible information, as follows from Gaussian optimization results [@Holevo2020]. The calculation above establishes its achieved information; optimality against every possible POVM is the additional theorem.
+
+By contrast, the number-state ensemble of the same thermal state has mutually orthogonal signals and accessible information
+
+$$
+S(\rho_{\mathrm{th}})
+=(\overline n+1)\log(\overline n+1)
+-\overline n\log\overline n.
+$$ {#eq-ga-thermal-entropy}
+
+These values differ even though the two ensembles have identical average occupation and identical density operators. This is the continuous-variable counterpart of the Bell-pair distinction.
+
+## Why conditioning can be nonlocal
+
+Now return to finite-dimensional systems. For short-range Hamiltonians, distant operations cannot appreciably affect the unconditioned state of a local subsystem until information has had time to propagate. In a local circuit this is exact outside the circuit light cone; in a Hamiltonian system a Lieb–Robinson bound makes the influence exponentially small outside an effective light cone.
+
+Projected ensembles use more data: a joint measurement record over the bath. Their dependence on remote measurements does not imply a violation of causality. The distinction is already visible in a three-qubit example.
+
+### Worked example: steering through a cluster chain
+
+Prepare
+
+$$
+\lvert C_3\rangle
+=\mathrm{CZ}_{12}\mathrm{CZ}_{23}
+\lvert+\rangle^{\otimes3}
+=\frac1{\sqrt8}
+\sum_{a,b,c=0}^1(-1)^{ab+bc}\lvert abc\rangle.
+$$ {#eq-ga-cluster}
+
+Keep qubit $1$ as $A$. Measure qubit $2$ in the $X$ basis, with outcome $x=0,1$ corresponding to the bra
+$\langle x_X|=(\langle0|+(-1)^x\langle1|)/\sqrt2$.
+
+First measure qubit $3$ in the $Z$ basis, with outcome $c$. The remaining amplitude of $\lvert a\rangle$ is proportional to
+
+$$
+\sum_{b=0}^1(-1)^{b(a+c+x)}
+=2\,\delta_{a,c\oplus x}.
+$$ {#eq-ga-cluster-z}
+
+Thus the projected state is the computational basis vector $\lvert c\oplus x\rangle$. The ensemble consists of the two $Z$ eigenstates with equal aggregate probabilities.
+
+Instead measure qubit $3$ in the $X$ basis, with outcome $y$. The amplitude becomes
+
+$$
+\sum_{b,c=0}^1(-1)^{ab+bc+xb+yc}
+=2(-1)^{y(a+x)}.
+$$ {#eq-ga-cluster-x}
+
+The sum over $c$ fixes $b=y$; the residual phase depending on $x$ is global. The projected state is $\lvert+\rangle$ for $y=0$ and $\lvert-\rangle$ for $y=1$. Hence changing the remote measurement basis rotates the conditional ensemble from the $Z$ axis to the $X$ axis:
+
+| Measurement on qubit 2 | Measurement on qubit 3 | Ensemble on qubit 1 | $\mathbb E\langle Z\rangle^2$ |
+|:--|:--|:--|:--|
+| $X$ | $Z$ | $\{\lvert0\rangle,\lvert1\rangle\}$ | $1$ |
+| $X$ | $X$ | $\{\lvert+\rangle,\lvert-\rangle\}$ | $0$ |
+
+Both ensembles have $\rho_1=I/2$. Qubit $1$ alone cannot tell which basis was chosen. The distinction becomes available only after receiving the bath measurement data and comparing conditional statistics.
+
+Longer cluster chains extend this idea: local measurements can transfer and expose correlations along a prepared entangled chain. The preparation is local and obeys its own causal constraints; extracting a conditional ensemble uses classical records from the full measured region.
+
+### The no-signaling identity
+
+Let an arbitrary trace-preserving operation act on $B$ with Kraus operators $K_\mu$, where $\sum_\mu K_\mu^\dagger K_\mu=I_B$. The unconditioned state on $A$ is
+
+$$
+\begin{aligned}
+\rho'_A
+&=\sum_\mu\operatorname{Tr}_B
+[(I\otimes K_\mu)\rho_{AB}(I\otimes K_\mu^\dagger)]\\
+&=\operatorname{Tr}_B
+[\rho_{AB}(I\otimes\sum_\mu K_\mu^\dagger K_\mu)]
+=\rho_A.
+\end{aligned}
+$$ {#eq-ga-no-signaling}
+
+The second step uses cyclicity of the partial trace for operators supported on $B$. If the outcome $\mu$ is retained, the separate terms can define different conditional states; only their sum is constrained to be unchanged. Higher projected moments are nonlinear in these normalized conditional states, so the cancellation that fixes the first moment does not fix them.
+
+## Boundary topology and deep-thermalization rates
+
+A striking many-body version concerns an interval $A$ in the bulk of a kicked spin chain. In one geometry the distant ends of the chain are open; in another they are joined to form a ring. For a fixed short physical time, those distant boundaries lie outside the local light cone of $A$. Ordinary local dynamics cannot resolve their difference in the thermodynamic limit.
+
+Shrotriya and Ho analyzed a self-dual kicked Ising setting and found identical ordinary thermalization times but different late-time projected-ensemble relaxation rates [@Shrotriya2025]. For their bulk geometry, ordinary thermalization occurs at $t=\lceil N_A/2\rceil$ in the model's time convention. Higher-moment deviations decay asymptotically as $2^{-t}$ for open boundaries and $2^{-2t}$ for periodic boundaries, with moment-dependent prefactors. The calculation uses a replica continuation and is supported by direct numerical sampling; it is not a topology-independent theorem for general Hamiltonians.
+
+The order of limits is central: first take a large measured bath at fixed subsystem and time, then examine large time. The bath measurement probes how entanglement is organized across both sides of $A$. Joining distant ends changes the contraction of the conditioned tensor network even when it does not change the unconditioned local density operator.
+
+### Why unitary integrals and replicas enter
+
+A normalized projected moment can be written in terms of unnormalized vectors as
+
+$$
+M^{(k)}=\sum_z
+\frac{(\lvert\widetilde\psi_z\rangle
+\langle\widetilde\psi_z\rvert)^{\otimes k}}
+{p_z^{k-1}}.
+$$ {#eq-ga-normalization-obstacle}
+
+The denominator prevents direct evaluation by polynomial unitary averages. A replica method introduces an auxiliary power $p_z^n$, performs polynomial calculations at nonnegative integer $n$, and seeks the continuation $n\rightarrow1-k$. Analytic continuation is an extra step: knowing a formula at integer replica number does not by itself prove a unique continuation to negative integers.
+
+In the space–time rotated kicked Ising network, the measured bath generates effective Haar-unitary integrals on a dimension $D=2^t$. At polynomial order $m$, these integrals pair unstarred and starred matrix elements through permutations:
+
+$$
+\int \prod_{\ell=1}^mU_{i_\ell j_\ell}
+\prod_{\ell=1}^mU^*_{i'_\ell j'_\ell}\,\mathrm dU
+=\sum_{\sigma,\tau\in S_m}
+\left[\prod_\ell\delta_{i_\ell,i'_{\sigma(\ell)}}
+\delta_{j_\ell,j'_{\tau(\ell)}}\right]
+\mathrm{Wg}_D(\sigma^{-1}\tau).
+$$ {#eq-ga-weingarten}
+
+The coefficients $\mathrm{Wg}_D$ form the unitary Weingarten function. Their role is to invert the nonorthogonal overlap matrix of different permutation contractions. For $m=2$,
+$\mathrm{Wg}_D(e)=1/(D^2-1)$ and
+$\mathrm{Wg}_D((12))=-1/[D(D^2-1)]$.
+Swapping one contraction is suppressed by $1/D$ relative to the identity contraction.
+
+Closed index loops add powers of $D$; topology determines which loops are closed and how many survive. Periodic and open bath contractions therefore assign different powers of $D$ to the subleading permutations. In the cited calculation, the leading surviving corrections have powers $D^{-2}$ and $D^{-1}$, respectively. Substituting $D=2^t$ gives the two exponential rates above. This loop-counting mechanism explains why a global connectivity can affect conditional statistics while being absent from the first moment. The complete all-order contraction and its replica continuation are the model-specific parts of the result.
+
+The result does not imply that remote topology always affects projected ensembles at a finite rate. Purification in the rotated dynamics can erase the influence of distant outcome records. Conversely, circuits without such purification can retain sensitivity to global connectivity. Which behavior survives generic perturbations remains a substantive dynamical question.
+
+## Exercises and open investigations
+
+1. **Covariance conventions.** Starting from @eq-ga-quadratures, calculate the vacuum's $q$ and $p$ variances and verify $V_{\mathrm{vac}}=I/2$. Translate @eq-ga-conditioning to the convention with vacuum covariance $I$. *Hint:* quantum covariances double, while the coordinates of a physical displacement and their classical statistical covariance do not.
+
+2. **Schur complement and purity.** Derive @eq-ga-pair-heterodyne directly from @eq-ga-two-mode. Repeat for a pure seed $V_M=\operatorname{diag}(e^{2u},e^{-2u})/2$ and verify that the conditional determinant is $1/4$. *Hint:* use $c^2-s^2=1$ before simplifying.
+
+3. **Homodyne information.** For the coherent cloud @eq-ga-coherent-cloud, compute the mutual information obtained by measuring only $q$. Compare it with @eq-ga-heterodyne-information for small and large $\overline n$. *Hint:* the classical mean $d_q$ has variance $\overline n$ and the vacuum measurement noise variance is $1/2$.
+
+4. **Thermal filtering.** Reproduce @eq-ga-thermal-filter term by term in the number basis. Show that the adjusted input amplitude distribution has variance $\overline n+1$ and the output has variance $\overline n$. *Hint:* keep the coherent-state normalization exponent until the final step.
+
+5. **Displacement versus state uncertainty.** For the homodyne-conditioned two-mode squeezed state, calculate the covariance of conditional means and verify @eq-ga-total-covariance separately for $q$ and $p$. *Hint:* an unmeasured bath momentum does not produce a known conditional shift of the retained momentum.
+
+6. **Cluster-chain certification.** Compute the probabilities of all four pairs of outcomes in each measurement scheme in the table. Then construct the second moment on qubit $1$ explicitly. *Hint:* keep normalization factors in @eq-ga-cluster-z and @eq-ga-cluster-x; aggregate outcomes preparing the same state only at the end.
+
+7. **No signaling with an incomplete record.** In the cluster example, suppose the receiver learns $x$ but does not learn the outcome on qubit $3$. Determine the conditional state on qubit $1$ for both remote basis choices. *Hint:* average the unnormalized conditional projectors over the missing outcome before normalizing.
+
+8. **A controlled numerical Gaussian experiment.** In Julia, generate a Haar unitary on $N$ modes by QR decomposition of a complex Gaussian matrix, convert it to a real orthogonal symplectic transformation, and evaluate @eq-ga-conditioning for one retained mode. Test heterodyne and several finite squeezed seeds as $N$ increases. *Hint:* verify symplecticity and global purity first; solve linear systems instead of explicitly inverting $V_B+V_M$. Report sample-to-sample variation and distinguish a finite-size trend from a proof.
+
+Several questions connect the two parts of this chapter. Does non-Gaussian measurement of an otherwise Gaussian bath restore entangled conditional states on small subsystems? Which non-Gaussian resources change the limiting distribution, and which merely change convergence rates? For lossy optical circuits, the projected states are mixed; a theory of their full distribution requires a target beyond the pure-state Gaussian construction.
+
+For spatial systems, one can ask how much of a distant record must be retained to see topology, and how detector errors affect this sensitivity. A finite classical recording length is a physical restriction on the conditional ensemble, separate from a quantum propagation bound. Understanding the relation between those restrictions may provide practical ways to measure scrambling and temporal memory without reconstructing a global wavefunction.

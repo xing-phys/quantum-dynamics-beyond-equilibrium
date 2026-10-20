@@ -1,0 +1,461 @@
+# Constrained randomness: Scrooge ensembles and conserved charge {#sec-scrooge-symmetry}
+
+Uniform exploration of Hilbert space is incompatible with a nonuniform equilibrium density operator. A qubit that is almost certainly in its ground state cannot be represented by a uniform distribution of pure states. The correct question is therefore conditional: what is the most structureless ensemble consistent with the information that survives?
+
+There are two layers of constraint. The mean local density operator may be fixed by temperature, charge density, or entanglement. In addition, a measurement record from the bath may reveal information about local conserved quantities. This chapter separates these layers, derives a useful constrained ensemble, and works through the case of a conserved particle number. Throughout, $\rho$ denotes an average density operator and $M^{(k)}$ an ensemble moment; they contain different amounts of information.
+
+## Why a density operator does not determine randomness
+
+Take a full-rank density operator $\rho=\sum_i\lambda_i\lvert i\rangle\langle i\rvert$. One ensemble realizing it consists of the orthogonal eigenvectors $\lvert i\rangle$ with probabilities $\lambda_i$. A measurement in that eigenbasis identifies the sampled label perfectly. Another realization can use a continuous collection of strongly overlapping states. In that case no measurement on one copy can identify the label reliably.
+
+This difference is captured by **accessible information**. Suppose a sender draws a classical label $X=x$ with probability $p_x$ and supplies the pure state $\lvert\psi_x\rangle$. A receiver performs a measurement described by positive operators $\{E_y\}$ satisfying $\sum_yE_y=I$. Such a collection is a positive operator-valued measure, or POVM. Its outcome probabilities are
+
+$$
+p(y|x)=\langle\psi_x|E_y|\psi_x\rangle,
+\qquad
+p(y)=\sum_xp_xp(y|x).
+$$ {#eq-sc-povm}
+
+The classical mutual information of labels and outcomes is
+
+$$
+I(X:Y)=\sum_{x,y}p_xp(y|x)
+\log\frac{p(y|x)}{p(y)},
+\qquad
+I_{\mathrm{acc}}(\mathcal E)=\sup_{\{E_y\}}I(X:Y).
+$$ {#eq-sc-accessible}
+
+Integrals replace sums for continuous labels. We use natural logarithms, so information is in nats; divide by $\log2$ to obtain bits. Accessible information asks how much a measurement can learn *about the ensemble label*. It is neither the entropy of $\rho$ nor the entropy of a distribution of classical measurement outcomes alone.
+
+Among pure-state ensembles realizing $\rho$, the eigenvector ensemble has accessible information $S(\rho)=-\operatorname{Tr}\rho\log\rho$. A theorem of Jozsa, Robb, and Wootters gives a universal lower bound called subentropy and constructs an ensemble attaining it [@Jozsa1994]. The resulting **Scrooge ensemble** is information-stingy: it minimizes the information available from one received quantum state while respecting the fixed average.
+
+The operational qualification matters. The minimum refers to optimizing a single-copy measurement for a known signal ensemble. It does not imply that no information can be extracted, that multi-copy coding is impossible, or that the ensemble is hidden from someone who already possesses its classical label.
+
+## Constructing the Scrooge ensemble
+
+Let $d$ be the dimension of the support of $\rho$, and let $\mathrm d\mu_{\mathrm H}(\phi)$ denote normalized Haar measure on that support. Define
+
+$$
+q(\phi)=\langle\phi|\rho|\phi\rangle,\qquad
+\lvert\psi(\phi)\rangle=\frac{\sqrt\rho\lvert\phi\rangle}{\sqrt{q(\phi)}},
+\qquad
+\mathrm d\mu_{\mathrm{Sc}}(\phi)=d\,q(\phi)\,\mathrm d\mu_{\mathrm H}(\phi).
+$$ {#eq-sc-construction}
+
+This prescription changes both states and their probabilities. The positive operator $\sqrt\rho$ stretches some directions more than others; the adjustment $dq$ accounts for their statistical weights.
+
+Normalization and the first moment follow directly from $\int\lvert\phi\rangle\langle\phi\rvert\,\mathrm d\mu_{\mathrm H}=I/d$:
+
+$$
+\int d\,q(\phi)\,\mathrm d\mu_{\mathrm H}=1,
+\qquad
+\int \lvert\psi(\phi)\rangle\langle\psi(\phi)\rvert\,
+\mathrm d\mu_{\mathrm{Sc}}(\phi)=\rho.
+$$ {#eq-sc-mean}
+
+When $\rho=I/d$, the state transformation cancels on normalization and the weight equals one. The Scrooge ensemble then reduces to Haar measure. When $\rho$ has rank one, there is only one physical pure state. Intermediate spectra interpolate between these extremes.
+
+Its moment operator is
+
+$$
+M_{\mathrm{Sc}(\rho)}^{(k)}
+=d\int
+\frac{
+\bigl(\sqrt\rho\lvert\phi\rangle\langle\phi\rvert\sqrt\rho\bigr)^{\otimes k}
+}{q(\phi)^{k-1}}\,
+\mathrm d\mu_{\mathrm H}(\phi).
+$$ {#eq-sc-moments}
+
+The denominator is important. Merely multiplying the Haar moment by $\rho^{\otimes k}$ does not generally give the normalized Scrooge moment. At higher order, state-dependent normalization prevents that shortcut.
+
+### Worked example: distorting a qubit
+
+Write $\rho=a\lvert0\rangle\langle0\rvert+b\lvert1\rangle\langle1\rvert$, where $a+b=1$ and $a,b>0$. A Haar qubit has the form
+
+$$
+\lvert\phi\rangle
+=\sqrt{x}\lvert0\rangle
++e^{i\theta}\sqrt{1-x}\lvert1\rangle,
+\qquad
+x\sim\mathrm{Uniform}[0,1],\quad
+\theta\sim\mathrm{Uniform}[0,2\pi).
+$$ {#eq-sc-qubit-input}
+
+Under @eq-sc-construction the output population of $\lvert0\rangle$ is
+
+$$
+y=\frac{ax}{ax+b(1-x)}.
+$$ {#eq-sc-qubit-map}
+
+To obtain its density, solve $x=by/[a+(b-a)y]$. With $D(y)=a+(b-a)y$ one finds $q=ab/D$ and $\mathrm dx/\mathrm dy=ab/D^2$. Multiplying the Jacobian by the adjusted input weight $2q$ gives
+
+$$
+f_{\mathrm{Sc}}(y)=\frac{2a^2b^2}{[a+(b-a)y]^3},
+\qquad 0\leq y\leq1.
+$$ {#eq-sc-qubit-density}
+
+The relative phase remains uniform. The mean identity @eq-sc-mean guarantees $\int yf_{\mathrm{Sc}}(y)\,\mathrm dy=a$.
+
+If we omit the adjustment and only normalize $\sqrt\rho\lvert\phi\rangle$, the mean instead equals
+
+$$
+\int_0^1\frac{ax}{b+(a-b)x}\,\mathrm dx
+=\frac{a}{a-b}\left[1-\frac{b}{a-b}\log\frac ab\right]
+$$ {#eq-sc-wrong-weight}
+
+for $a\neq b$. For $a=3/4$ this is $3/2-(3/4)\log3$, approximately $0.676$, rather than $0.75$. This explicit discrepancy is a useful way to detect an incorrectly sampled Scrooge ensemble.
+
+![The exact qubit Scrooge probability density for a mean eigenvalue
+$\lambda=0.8$, together with 40,000 samples from the adjusted rejection
+procedure. The dashed line is the uniform Haar probability density.
+Normalizing distorted Haar vectors without adjusting their sampling
+weights would give a different distribution. Original Julia calculation.](figs/scrooge-qubit.svg){#fig-sc-density}
+
+### A Gaussian route: adjust, then project
+
+There is an equivalent construction that explains the name **Gaussian adjusted projected**, or GAP, ensemble, developed in the equilibrium-wavefunction literature [@GoldsteinGAP2006]. Draw an unnormalized complex Gaussian vector $g$ with covariance $\mathbb E\,gg^\dagger=\rho$. Reweight its probability measure by $\|g\|^2$ and then project radially onto the unit sphere, $g\mapsto g/\|g\|$. Because $\mathbb E\|g\|^2=\operatorname{Tr}\rho=1$, the adjusted distribution is normalized.
+
+Its average projector is particularly simple:
+
+$$
+\mathbb E_{\mathrm{adjusted}}\frac{gg^\dagger}{\|g\|^2}
+=\mathbb E_{\mathrm{Gaussian}}gg^\dagger=\rho.
+$$ {#eq-sc-gap}
+
+To see why it equals @eq-sc-construction, write a standard isotropic Gaussian as $h=r\phi$, with independent radius $r$ and Haar direction $\phi$, and set $g=\sqrt\rho\,h$. Adjustment contributes $r^2q(\phi)$. Integrating the radius gives the factor $\mathbb E r^2=d$; normalization leaves precisely the state and directional weight in @eq-sc-construction. This calculation also shows why adjusting after radial projection would lose information about the required weights.
+
+## A concrete meaning of information-stinginess
+
+For the Haar ensemble in dimension $d$, any rank-one POVM element can be written $E_y=c_y\lvert u_y\rangle\langle u_y\rvert$. Its outcome probability is $c_y/d$. Inserting this into @eq-sc-accessible gives
+
+$$
+I=\sum_y c_y\int x_y\log(dx_y)\,\mathrm d\mu_{\mathrm H},
+\qquad x_y=|\langle u_y|\phi\rangle|^2.
+$$ {#eq-sc-haar-information}
+
+Unitary invariance makes the integral independent of $u_y$, and $\sum_yc_y=d$ follows by taking the trace of POVM completeness. For a Haar direction, one squared component has density $(d-1)(1-x)^{d-2}$. Its mean is $1/d$, and differentiating the beta integral gives
+
+$$
+\mathbb E[x\log x]=\frac{1-H_d}{d},
+\qquad H_d=\sum_{j=1}^d\frac1j.
+$$ {#eq-sc-beta-information}
+
+Thus every rank-one POVM yields $I=\log d+1-H_d$. Refining a higher-rank measurement into rank-one outcomes cannot reduce the information, so this is the accessible information itself:
+
+$$
+I_{\mathrm{acc}}(\mathrm H)=\log d+1-H_d.
+$$ {#eq-sc-haar-accessible}
+
+For a qubit it is $\log2-1/2$, approximately $0.193$ nats. The orthogonal ensemble realizing the same $I/2$ gives $\log2$ nats. Both labels are random before measurement, but the continuous Haar label is much harder to interrogate.
+
+For general nondegenerate eigenvalues, subentropy can be written
+
+$$
+Q(\rho)
+=-\sum_i
+\frac{\lambda_i^d\log\lambda_i}
+{\prod_{j\neq i}(\lambda_i-\lambda_j)}.
+$$ {#eq-sc-subentropy}
+
+Coincident eigenvalues are treated by continuity. The nontrivial theorem is that every pure-state ensemble of mean $\rho$ obeys $I_{\mathrm{acc}}\geq Q(\rho)$ and the Scrooge ensemble attains equality [@Jozsa1994]. Our Haar calculation verifies one symmetric case; it is not a proof of the full theorem.
+
+Calling this a maximum-entropy principle requires specifying which entropy is meant. Maximizing the ordinary differential entropy of a density over Haar measure subject to its mean gives an exponential-family optimization, not automatically @eq-sc-construction. The operational principle used here is minimization of accessible information. Recent work connects such constrained ensemble principles with many-body equilibration [@Mark2024]; one should preserve the distinction between this principle and the usual von Neumann entropy maximization that produces a Gibbs density operator.
+
+## Conserved charge: the simplest nontrivial constraint
+
+Consider $N$ qubits with local occupation $n_i=\lvert1\rangle_i\langle1\rvert$ and total charge
+
+$$
+Q=\sum_{i=1}^N n_i,\qquad [U,Q]=0.
+$$ {#eq-sc-charge}
+
+The conservation law means that evolution cannot move amplitude between different total-charge sectors. The dimension of the sector with $Q=q$ is $\binom Nq$, since a computational basis state is specified by choosing its $q$ occupied sites.
+
+Split the system into $N_A$ and $N_B$ sites. At fixed total charge $Q_0$,
+
+$$
+\mathcal H_{Q_0}
+=\bigoplus_q
+\mathcal H_{A,q}\otimes\mathcal H_{B,Q_0-q},
+\qquad
+d_{A,q}=\binom{N_A}{q},\quad
+d_{B,Q_0-q}=\binom{N_B}{Q_0-q}.
+$$ {#eq-sc-charge-decomposition}
+
+Inadmissible binomial coefficients are zero. The combinatorial identity
+$\sum_qd_{A,q}d_{B,Q_0-q}=\binom N{Q_0}$ simply counts all global configurations by first counting the occupied sites inside $A$.
+
+Suppose the global state is Haar random within this sector and measure $B$ in its occupation basis. An outcome with charge $Q_B$ leaves $A$ in the definite sector $q=Q_0-Q_B$. A conditional state cannot then be Haar random across all of $\mathcal H_A$, because it has no coherence between different $q$.
+
+The natural limiting ensemble is obtained by first choosing $q$ with probability
+
+$$
+\pi_q=\frac{\binom{N_A}{q}\binom{N_B}{Q_0-q}}
+{\binom N{Q_0}},
+$$ {#eq-sc-hypergeometric}
+
+and then choosing a Haar state inside $\mathcal H_{A,q}$. This is a direct-sum ensemble, whose moment is
+
+$$
+M_{\mathrm{DS}}^{(k)}
+=\sum_q\pi_q
+\frac{P_{\mathrm{sym},q}^{(k)}}{\binom{d_{A,q}+k-1}{k}}.
+$$ {#eq-sc-direct-sum}
+
+The projector in each term acts on $\mathcal H_{A,q}^{\otimes k}$, embedded in the full replicated space. Notice the single factor $\pi_q$, rather than $\pi_q^k$: all replicas share the same chosen sector.
+
+We can rederive the weights and directions from independent Gaussian amplitudes. For each bath basis string of charge $Q_0-q$, the allowed column is a Gaussian vector with $d_{A,q}$ components. Its direction is Haar within that sector. Its mean squared norm is proportional to $d_{A,q}$, and there are $d_{B,Q_0-q}$ such columns. Dividing their combined weight by the total number of Gaussian components gives @eq-sc-hypergeometric. A large bath supplies many columns, allowing their empirical moments to concentrate around these averages.
+
+Chang, Shrotriya, Ho, and Ippoliti proved such typical-state convergence for fixed total charge and charge-revealing measurements, and proposed a broader constrained ensemble for general charge fluctuations and measurement bases [@Chang2025]. Their broader theory has different levels of support: a rigorous result in the fixed-charge revealing case, analytical replica calculations in additional restricted cases, and numerical evidence in the general case. Generic finite-time charge-conserving dynamics are not covered by a universal convergence theorem.
+
+### Worked example: four sites and two particles
+
+Let $N_A=N_B=2$ and $Q_0=2$. The three local sectors have dimensions $1,2,1$, and their probabilities are
+
+$$
+\pi_0=\frac16,\qquad \pi_1=\frac46,\qquad \pi_2=\frac16.
+$$ {#eq-sc-four-sites}
+
+The sector $q=0$ contains only $\lvert00\rangle$, the sector $q=2$ only $\lvert11\rangle$, and the middle sector contains arbitrary superpositions of $\lvert01\rangle$ and $\lvert10\rangle$. The ideal direct-sum first moment is
+
+$$
+\rho_A=\frac16\lvert00\rangle\langle00\rvert
++\frac13\bigl(\lvert01\rangle\langle01\rvert+
+\lvert10\rangle\langle10\rvert\bigr)
++\frac16\lvert11\rangle\langle11\rvert.
+$$ {#eq-sc-four-sites-density}
+
+For the ideal target, $\mathbb E\langle Q_A\rangle^2=(1/6)0+(4/6)1+(1/6)4=4/3$. Its variance is $1/3$ because the mean is one. An ensemble of states with the same mean density but fixed $\langle Q_A\rangle=1$ on every member would have zero variance of this conditional expectation. This difference concerns fluctuations *between conditional states*, not the quantum variance of charge within a single state.
+
+The four-site calculation illustrates the target's algebra. It does not assert that one four-site random state already realizes the target accurately: its bath has only four outcomes.
+
+## Revealing and erasing information about charge
+
+Measuring occupations tells us $Q_B$ exactly. For fixed $Q_0$, it also tells us $Q_A$. Measuring every bath qubit in the $X$ basis has a different property: each basis vector has equal overlap magnitude with every occupation string. Its outcome probabilities in the sector-averaged state do not discriminate between occupation configurations.
+
+In that sense the $X$ measurement is charge non-revealing. It does not violate charge conservation during prior dynamics. The measurement itself need not commute with $Q_B$, and its basis can coherently combine charge sectors. A physical implementation requires an appropriate reference when a fundamental superselection rule would otherwise forbid such operations.
+
+The one-particle Bell state $(\lvert01\rangle+\lvert10\rangle)/\sqrt2$ shows the distinction exactly. An occupation measurement leaves $\lvert0\rangle$ or $\lvert1\rangle$, both with sharp charge. An $X$ measurement leaves $\lvert+\rangle$ or $\lvert-\rangle$, both with $\langle n\rangle=1/2$ and quantum charge variance $1/4$. Averaging gives the same $\rho_A=I/2$.
+
+For a large scrambled system, a revealing record therefore calls for a mixture of constrained ensembles indexed by inferred charge information. A non-revealing record can collapse these distinctions and yield a single Scrooge ensemble. This is a claim about the relevant scrambled-state limit, not an assertion that every finite entangled state measured in the $X$ basis produces a Scrooge ensemble.
+
+### Deriving the conditional density operators
+
+Allow the initial state to have conserved sector probabilities $p_{\mathrm{in}}(Q)$. An ideal sector-scrambled generator ensemble has average
+
+$$
+\overline\rho_{AB}
+=\sum_Qp_{\mathrm{in}}(Q)\frac{\Pi_Q}{\binom NQ},
+$$ {#eq-sc-generator-mean}
+
+where $\Pi_Q$ projects onto global charge $Q$. For an arbitrary bath basis vector $\lvert\nu\rangle$, define its sector profile
+
+$$
+w_\nu(r)=\langle\nu|\Pi_{B,r}|\nu\rangle.
+$$ {#eq-sc-basis-profile}
+
+Using the direct-sum decomposition of $\Pi_Q$, the unnormalized conditional average on $A$ is
+
+$$
+R_\nu=\sum_q
+\left[\sum_Q\frac{p_{\mathrm{in}}(Q)\,w_\nu(Q-q)}
+{\binom NQ}\right]\Pi_{A,q},
+\qquad
+\overline p_\nu=\operatorname{Tr}R_\nu,\quad
+\rho_{A|\nu}=\frac{R_\nu}{\overline p_\nu}.
+$$ {#eq-sc-conditional-mean}
+
+This equation follows from linear algebra and the ideal generator assumption; it does not assume the Scrooge ansatz. It tells us exactly which mean each class of measurement outcomes must reproduce.
+
+The generalized Scrooge proposal is then
+
+$$
+\mathcal E_{\mathrm{GSc}}
+=\sum_{[\nu]}\overline p_{[\nu]}\,
+\mathrm{Scrooge}(\rho_{A|[\nu]}),
+$$ {#eq-sc-generalized}
+
+where outcomes with the same conditional mean are grouped into a class $[\nu]$. At the level of moments this is an ordinary convex combination of the corresponding $M_{\mathrm{Sc}}^{(k)}$.
+
+Grouping is physically significant. An expression with one unrelated parameter for every exponentially numerous bath string would describe microscopic information rather than an economical thermodynamic law. For uniform product measurement directions, permutation symmetry groups strings by their number of outcomes of each type, leaving at most $N_B+1$ classes. The input distribution itself has $N+1$ probabilities. These polynomial data can retain more information than a single chemical potential while remaining far simpler than a full many-body wavefunction.
+
+For occupation measurements, $w_\nu(r)=\delta_{r,Q_B(\nu)}$ and @eq-sc-conditional-mean becomes a form of Bayes' rule for the remaining charge. For $X$-basis product states, $w_\nu(r)=\binom{N_B}{r}/2^{N_B}$ independently of $\nu$. Every conditional mean is then identical, so the ansatz reduces to one Scrooge ensemble.
+
+## Why thermodynamic local states often look grand canonical
+
+For fixed $N_A$ and $N\rightarrow\infty$ with $Q_0/N\rightarrow n$, the hypergeometric distribution in @eq-sc-hypergeometric approaches
+
+$$
+\pi_q\longrightarrow \binom{N_A}{q}n^q(1-n)^{N_A-q}.
+$$ {#eq-sc-binomial}
+
+One way to obtain the limit is to sample the $N_A$ sites without replacement from $Q_0$ occupied and $N-Q_0$ empty sites. For a finite sample, removing any one site changes the remaining filling by only $O(1/N)$, so the occupations become independent Bernoulli variables.
+
+Dividing each sector probability by its dimension gives a product density operator,
+
+$$
+\rho_A\longrightarrow
+\bigotimes_{i\in A}\left[(1-n)\lvert0\rangle_i\langle0\rvert+
+n\lvert1\rangle_i\langle1\rvert\right]
+=\frac{e^{-\eta Q_A}}{(1+e^{-\eta})^{N_A}},
+\qquad e^{-\eta}=\frac n{1-n}.
+$$ {#eq-sc-grand-canonical}
+
+This first-moment result loses the detailed sector correlations visible to higher projected moments. It also requires an ordinary thermodynamic concentration assumption: arbitrary initial distributions with macroscopic weight at very different fillings need not reduce to one grand-canonical state fixed by their mean filling.
+
+The projected ensemble can retain information about the full $p_{\mathrm{in}}(Q)$ because measurement outcomes interrogate the complement, correlating inferred global and local charges. The conserved *probability distribution* supplies exact invariants of unitary evolution, even when ordinary local observables become insensitive to most of them.
+
+## What the 2026 design framework adds
+
+An exact continuous distribution is an ideal target. A **Scrooge $k$-design** instead reproduces $M_{\mathrm{Sc}(\rho)}^{(k)}$; approximate versions allow error. The 2026 framework of Mok, Haug, Ho, and Preskill establishes sufficient conditions in three settings: long-time temporal ensembles, global design states followed by bath measurement, and entangled states measured in a scrambled bath basis [@Mok2026].
+
+The hypotheses matter. Temporal results assume a $k$th-order no-resonance condition and low diagonal-ensemble purity. Global-to-local results require control of a global $2k$-design with sufficiently small relative error and appropriate size and purity limits. Scrambled-basis results likewise require an approximate unitary $2k$-design and sufficient bath size. A general local target can be a mixture of Scrooge ensembles. These are quantitative sufficient conditions, not a claim that arbitrary entanglement or arbitrary chaos automatically supplies them.
+
+To understand relative error, let $T$ be a target moment. Additive error controls $\frac12\|M-T\|_1$. Relative error instead requires
+
+$$
+(1-\epsilon)T\preceq M\preceq(1+\epsilon)T,
+$$ {#eq-sc-relative-error}
+
+where $X\preceq Y$ means that $Y-X$ is positive semidefinite. The latter controls deviations even in directions where $T$ has tiny eigenvalues. An additive bound can hide a large relative error there. This explains why an additive temporal-design theorem cannot simply be inserted into a theorem requiring a relative global design; the difference is substantive.
+
+A useful elementary diagnostic for the temporal setting is the random-phase ensemble. With $\lvert\psi(\boldsymbol\theta)\rangle=\sum_j\sqrt{p_j}e^{i\theta_j}\lvert E_j\rangle$, its second moment is
+
+$$
+M_{\mathrm{phase}}^{(2)}
+=\sum_{i,j}p_ip_j
+\left(\lvert ij\rangle\langle ij\rvert+
+\lvert ij\rangle\langle ji\rvert\right)
+-\sum_ip_i^2\lvert ii\rangle\langle ii\rvert.
+$$ {#eq-sc-random-phase-second}
+
+Independent phase averaging retains a term precisely when the multisets of bra and ket indices match. The subtraction corrects double counting for $i=j$. This exact moment is generally different from a Scrooge moment: fixed populations do not become fluctuating populations by time evolution. Their finite-order closeness emerges only in a limit with many weakly occupied levels. The inverse purity $1/\sum_jp_j^2$ is a useful effective dimension indicating when repeated-index corrections can be small.
+
+### A quantitative temporal theorem and its small parameter
+
+Write the diagonal ensemble as $\sigma_{\mathrm{diag}}=\sum_jp_j|E_j\rangle\langle E_j|$, and define
+
+$$
+\mathcal P=\operatorname{Tr}\sigma_{\mathrm{diag}}^2=\sum_jp_j^2,
+\qquad d_{\mathrm{eff}}=\mathcal P^{-1},
+\qquad \|\sigma_{\mathrm{diag}}\|_2=\sqrt{\mathcal P}.
+$$ {#eq-sc-effective-dimension}
+
+The inverse purity $d_{\mathrm{eff}}$ counts effectively occupied energy levels: it is $D$ for equal populations on $D$ levels and one for an eigenstate. It need not equal the full Hilbert-space dimension.
+
+The required $k$th no-resonance condition is precise. If
+
+$$
+E_{i_1}+\cdots+E_{i_k}=E_{j_1}+\cdots+E_{j_k},
+$$
+
+then the two index lists must agree as multisets, including repetitions. An energy degeneracy violates the first-order condition; an equality of distinct energy gaps violates the second-order condition. Nondegenerate individual energies alone do not guarantee higher orders.
+
+Under this condition, the infinite-time temporal moment has additive Scrooge error
+
+$$
+\Delta_k\bigl(\mathcal E_{\mathrm{time}},\mathrm{Sc}(\sigma_{\mathrm{diag}})\bigr)
+=O\!\left(\frac{k}{\sqrt{d_{\mathrm{eff}}}}\right),
+\qquad \frac{k^2}{\sqrt{d_{\mathrm{eff}}}}\ll1.
+$$ {#eq-sc-temporal-bound}
+
+This is the improved version-3 theorem of @Mok2026. It concerns $T\to\infty$ and supplies no finite observation-time bound. Its stated controlled regime requires $d_{\mathrm{eff}}\gg k^4$; extrapolating the error formula alone to larger $k$ is unjustified.
+
+We can understand the ingredients explicitly. A term of the $k$th evolving projector has phase
+$\exp[-it(\sum_rE_{i_r}-\sum_rE_{j_r})]$. Its time average is one when the frequency vanishes and zero otherwise, since for $\omega\ne0$,
+
+$$
+\frac1T\int_0^T e^{-i\omega t}\,dt
+=\frac{1-e^{-i\omega T}}{i\omega T}\longrightarrow0.
+$$
+
+No resonance therefore selects exactly the contractions selected by independent phase averaging. This proves the reduction to a random-phase ensemble. The remaining step compares that ensemble with a normalized Scrooge distribution. Its difficulty is fluctuations of normalization, which we can already quantify using elementary Haar moments.
+
+For any density matrix $\sigma$ on dimension $D$, take a Haar vector $\phi$ and set $X=D\langle\phi|\sigma|\phi\rangle$. Then
+
+$$
+\mathbb EX=1,\qquad
+\mathbb EX^2=\frac D{D+1}(1+\operatorname{Tr}\sigma^2),
+\qquad
+\operatorname{Var}X=\frac{D\operatorname{Tr}\sigma^2-1}{D+1}
+\leq\operatorname{Tr}\sigma^2.
+$$ {#eq-sc-norm-fluctuation}
+
+The first identity uses the Haar first moment. For the second, insert $(I+F)/[D(D+1)]$ and use
+$\operatorname{Tr}[(\sigma\otimes\sigma)F]=\operatorname{Tr}\sigma^2$. Subtracting $(\mathbb EX)^2$ gives the variance. Thus a low-purity density matrix makes the random normalization sharply concentrated near one.
+
+Indeed, let $u=\sqrt{D\sigma}\,\phi$. Its squared norm is $X$, and the normalized Scrooge moment is
+
+$$
+M_{\mathrm{Sc}(\sigma)}^{(k)}
+=\mathbb E_\phi\frac{(uu^\dagger)^{\otimes k}}{X^{k-1}}.
+$$
+
+If one could replace $X$ by one, the Haar integral would be polynomial:
+$\mathbb E(uu^\dagger)^{\otimes k}=(D\sigma)^{\otimes k}M_{\mathrm{H}}^{(k)}$.
+The variance calculation explains why purity enters and why increasing $k$ makes normalization errors more consequential. It is not a full error proof: inverse powers of $X$ require controlling rare small norms, and tensor powers amplify tails. The theorem supplies that additional control. This separation identifies exactly what the elementary calculation establishes and where the harder concentration argument enters.
+
+### Worked example: fixed populations can approximate fluctuating populations
+
+Take $p_j=1/D$ on $D$ levels, so $\sigma_{\mathrm{diag}}=I/D$ and the Scrooge target is Haar. The exact random-phase second moment from @eq-sc-random-phase-second becomes
+
+$$
+M_{\mathrm{phase}}^{(2)}=\frac1{D^2}
+\left(I+F-\sum_j|jj\rangle\langle jj|\right).
+$$
+
+On the $D$ vectors $|jj\rangle$ its eigenvalue is $1/D^2$; on the $D(D-1)/2$ off-diagonal symmetric vectors it is $2/D^2$. Haar assigns $2/[D(D+1)]$ to every symmetric vector. The diagonal differences are negative and the off-diagonal ones positive, so either total absolute weight gives the trace distance:
+
+$$
+\Delta_2(\mathcal E_{\mathrm{phase}},\mathrm H)
+=\frac{D-1}{D(D+1)}\longrightarrow0.
+$$ {#eq-sc-flat-phase-distance}
+
+For $D=2$ this is $1/6$, the equatorial-qubit discrepancy. For large $D$ it is of order $1/D$, even smaller than the general sufficient bound. Every member still has exactly flat energy populations. The two probability measures retain different supports, yet experiments using only two identical copies become unable to distinguish them reliably. Small finite-order moment distance and exact equality of distributions are different statements.
+
+### How a global design generates local conditional randomness
+
+A second useful quantitative statement concerns a generator $|\Psi\rangle_{AB}$ drawn from an approximate global state $2k$-design. Let $d=\dim\mathcal H_A$, $b=\dim\mathcal H_B$, and let $\varepsilon$ be its relative moment error. The infinite-temperature corollary gives, for $k^2\ll d$ and $d,b\gg1$,
+
+$$
+\mathbb E_\Psi\big\|M_{\mathcal E_\Psi}^{(k)}-M_{\mathrm H,A}^{(k)}\big\|_1
+\leq\sqrt{\frac{d^k}{k!}\left[\frac1b+O(\varepsilon)\right]}.
+$$ {#eq-sc-global-local-bound}
+
+The target ensemble is the projected ensemble of one sampled generator; the outer expectation samples generators. The output error is additive, although the input error is relative [@Mok2026].
+
+This inequality resolves three questions. First, bath size matters: even an exact global design has a finite sampling error on its local ensemble. Second, deeper moments cost more: the leading factor $d^k/k!$ is the large-$d$, fixed-$k$ scale of the symmetric dimension $\binom{d+k-1}{k}$. Third, a small global preparation error can be amplified when the local moment space grows. Merely saying that a circuit is approximately random leaves these resource requirements unspecified.
+
+Define the right side as $R_k$. The expectation of our trace distance is at most $R_k/2$. Markov's inequality then gives the explicit typical-state interpretation
+
+$$
+\mathbb P_\Psi\!\left[\Delta_k(\mathcal E_\Psi,\mathrm H)>\delta\right]
+\leq\frac{R_k}{2\delta}.
+$$ {#eq-sc-generator-probability}
+
+Thus the mean bound proves a useful high-probability statement only when $R_k$ is small compared with the desired tolerance. For example, in the exact-design case, the leading asymptotic condition is $b\gg d^k/k!$. With qubits, this roughly requires $N_B$ to exceed $kN_A$ at fixed $k$, with additional bits of bath size needed for a specified accuracy and confidence. This is a sufficient condition from this bound; it is not an optimal bath-size theorem.
+
+Why is the order $2k$ natural? The variance of a degree-$k$ moment estimate contains two copies of that estimate and hence a polynomial of degree $2k$ in the state projector. A global $2k$-design supplies the corresponding fluctuation control. Normalizing conditional states complicates the polynomial calculation, which is why concentration and the relative-error hypothesis are essential. This reasoning motivates the order; it does not replace the proof of @eq-sc-global-local-bound.
+
+The simplest nontrivial case is $k=2$: a sufficiently accurate global $4$-design is enough. A $3$-design need not be enough. For a maximally entangled stabilizer generator measured in a stabilizer bath basis, the local ensemble can contain only an orthonormal stabilizer basis. Its first moment is $I/d$, but its second moment has rank at most $d$, compared with Haar rank $d(d+1)/2$. The earlier rank bound gives
+$\Delta_2\geq(d-1)/(d+1)$. This explicit obstruction explains why good global low-order statistics alone cannot justify arbitrary claims about local projected statistics; the relevant order and the measurement protocol both matter.
+
+## Exercises and research directions
+
+1. **Check the qubit density.** Integrate @eq-sc-qubit-density to verify normalization and first moment. Calculate $\mathbb E y^2$ either analytically or with controlled one-dimensional quadrature. *Hint:* substitute $u=a+(b-a)y$; check the limit $a=b=1/2$ before using the result near degeneracy.
+
+2. **Accessible information of a sphere.** Derive @eq-sc-beta-information by differentiating $\int_0^1x^\alpha(1-x)^{d-2}\,\mathrm dx$. Evaluate @eq-sc-haar-accessible for $d=2,3$ and its limit as $d\rightarrow\infty$. *Hint:* $H_d=\log d+\gamma+o(1)$, with Euler's constant $\gamma$.
+
+3. **Revealing versus non-revealing.** Use @eq-sc-conditional-mean for fixed $Q_0$ to derive the direct-sum target for occupation measurements and the common mean for $X$ measurements. *Hint:* evaluate $w_\nu(r)$ before doing the sum over $Q$.
+
+4. **A tilted measurement basis.** Let each bath measurement state be an eigenvector of $\cos\vartheta\,Z+\sin\vartheta\,X$. Derive a generating function whose coefficient of $t^r$ is $w_\nu(r)$. Show that the profile depends only on the number of each type of outcome. *Hint:* multiply the one-site polynomials $|\langle0|\nu_i\rangle|^2+t|\langle1|\nu_i\rangle|^2$.
+
+5. **Macroscopic input fluctuations.** Compare an input of fixed filling $n=1/2$ with an equal incoherent sector average concentrated at fillings $1/4$ and $3/4$. Determine the one-site and two-site limiting reduced states. *Hint:* the one-site mean can agree while the two-site occupation covariance does not. This is why thermodynamic assumptions about initial fluctuations must be stated.
+
+6. **Failure of a naive theorem composition.** Construct diagonal $2\times2$ density operators $M,T$ with small trace distance but large relative error on one eigenvector. *Hint:* take one eigenvalue of $T$ to be much smaller than the additive error.
+
+7. **Temporal moment corrections.** For uniform $p_j=1/D$, evaluate the weight of the subtraction term in @eq-sc-random-phase-second. Compare with the Haar second moment at large $D$. *Hint:* the subtracted operator has trace $1/D$; include the differing normalization of the nonsubtracted term.
+
+Open problems include the effect of several noncommuting conserved charges, quantitative finite-time bounds in systems with diffusive transport, and economical coarse graining for energy-revealing measurements of interacting Hamiltonians. The last problem is harder than the occupation example because local energy terms need not commute, and measurement outcomes cannot generally be interpreted as a list of sharply known local energies.
+
+Another direction asks which resources are supplied by the state and which by the measurement apparatus. A weakly entangled state can yield constrained randomness under a sufficiently complicated bath measurement, whereas a highly entangled stabilizer state measured in a stabilizer basis can remain far from a Haar design. The relevant resource is attached to the entire preparation-and-measurement protocol.

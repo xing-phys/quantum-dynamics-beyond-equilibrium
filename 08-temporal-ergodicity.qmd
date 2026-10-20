@@ -1,0 +1,247 @@
+# Ergodicity as exploration of Hilbert space {#sec-temporal-ergodicity}
+
+A gas in a box explores positions and momenta. What does an isolated quantum system explore? Its wavefunction moves through a space of rays, but this motion need not resemble the equilibrium distribution suggested by local observables. A spin can have vanishing average polarization while visiting only an equator of its Bloch sphere. A many-body state can look thermal on every small region while preserving its populations in the global energy eigenbasis forever. These observations motivate a hierarchy of questions: which averages become thermal, which fluctuations become universal, and when does the entire distribution of evolving pure states become uniform?
+
+This chapter develops a precise language for those questions. We distinguish a temporal ensemble, obtained by selecting a time along one trajectory, from a projected ensemble, obtained by selecting a measurement outcome at a fixed time. We derive diagnostic moments and obstructions, explain why ordinary thermalization is compatible with the failure of Hilbert-space ergodicity, and identify how the complexity of a drive enters. The research framework is developed in @ergPilatowsky2024; its relationship to deep thermalization is surveyed in @ergMark2026.
+
+## The ensemble is specified by its sampling experiment
+
+Consider a normalized state in a finite-dimensional Hilbert space, $\mathcal H\cong\mathbb C^d$. Closed dynamics takes the form
+
+$$
+|\psi(t)\rangle=U(t)|\psi_0\rangle,
+\qquad
+U(t)=\mathcal T\exp\!\left[-i\int_0^t H(s)\,ds\right],
+$$ {#eq-te-evolution}
+
+with $\hbar=1$. The time-ordering symbol places later operators to the left. Because an overall phase is unobservable, the physical state is the rank-one projector $P(t)=|\psi(t)\rangle\langle\psi(t)|$, an element of complex projective space $\mathbb{CP}^{d-1}$. This space has real dimension $2d-2$: a complex vector has $2d$ real coordinates, normalization removes one, and overall phase removes another.
+
+Choose a time uniformly from $[0,T]$. The resulting probability distribution of $P(t)$ is a **temporal ensemble**. Its $k$th moment operator is
+
+$$
+M_T^{(k)}=\frac1T\int_0^T P(t)^{\otimes k}\,dt.
+$$ {#eq-te-temporal-moment}
+
+For a circuit sampled after each gate, replace the integral by $T^{-1}\sum_{n=0}^{T-1}P(n)^{\otimes k}$. The choice of clock matters: recording once each drive period discards all motion within a period. Continuous-time and stroboscopic ensembles can therefore have different properties even for the same laboratory drive.
+
+In a projected ensemble, instead take $\mathcal H=\mathcal H_A\otimes\mathcal H_B$, fix $t$, and measure $B$. With measurement vectors $|z\rangle_B$,
+
+$$
+|\widetilde\psi_z\rangle_A={}_B\langle z|\psi(t)\rangle,
+\qquad p_z=\langle\widetilde\psi_z|\widetilde\psi_z\rangle,
+\qquad |\psi_z\rangle=|\widetilde\psi_z\rangle/\sqrt{p_z}.
+$$ {#eq-te-projected-comparison}
+
+Here the random variable is $z$, drawn with the Born probability $p_z$. The projected moment is $\sum_zp_z(|\psi_z\rangle\langle\psi_z|)^{\otimes k}$. It acts on copies of $A$, whereas @eq-te-temporal-moment acts on copies of the full system. One can average a projected moment over time, but that is a third, explicitly combined experiment. Establishing universality for one of these distributions does not automatically establish a statement about every other distribution.
+
+## Uniformity and the Haar moments
+
+A distribution of pure states is uniform if applying any fixed unitary leaves its distribution unchanged. One construction draws $V$ with Haar measure on the unitary group and sets $|\phi\rangle=V|0\rangle$. Its moments are
+
+$$
+M_{\mathrm H}^{(k)}=\int d\phi\,
+(|\phi\rangle\langle\phi|)^{\otimes k}
+=\frac{\Pi_{\mathrm{sym}}^{(k)}}{D_k},
+\qquad D_k=\binom{d+k-1}{k}.
+$$ {#eq-te-haar-moment}
+
+The symmetric subspace consists of vectors unchanged by permutations of the $k$ copies. To derive the expression, first note that $|\phi\rangle^{\otimes k}$ is symmetric, so the moment vanishes outside that subspace. Second, Haar invariance implies that the moment commutes with every $V^{\otimes k}$. The representation on the symmetric subspace is irreducible, so its only invariant operator is a multiple of the identity there. Finally, its trace is one, fixing the multiple to $D_k^{-1}$. Equivalently,
+
+$$
+\Pi_{\mathrm{sym}}^{(k)}=\frac1{k!}\sum_{\pi\in S_k}V_\pi,
+\qquad
+M_{\mathrm H}^{(2)}=\frac{I+S}{d(d+1)},
+$$ {#eq-te-permutations}
+
+where $V_\pi$ permutes tensor factors and $S$ swaps two copies.
+
+A temporal ensemble is a state $k$-design when its limiting $k$th moment equals @eq-te-haar-moment. **Hilbert-space $k$-ergodicity**, abbreviated $k$-HSE, requires this for every initial pure state under a specified drive. **Complete Hilbert-space ergodicity**, CHSE, requires it for every finite $k$. These are properties of a dynamical protocol; a specially selected trajectory can form a design even when the protocol fails the requirement for other initial states.
+
+A useful distance is
+
+$$
+\Delta_T^{(k)}=\frac12\|M_T^{(k)}-M_{\mathrm H}^{(k)}\|_1.
+$$ {#eq-te-distance}
+
+Its operational meaning is exact. Imagine receiving $k$ identical copies of a state drawn either from the temporal distribution or from Haar measure, with equal prior probabilities. The largest success probability of distinguishing the sources in one joint measurement is $(1+\Delta_T^{(k)})/2$. Higher moments therefore encode experimental distinctions that cannot be seen with a single copy.
+
+Taking a partial trace over one replica maps $P^{\otimes k}$ to $P^{\otimes(k-1)}$. Since trace distance contracts under this operation,
+
+$$
+\Delta_T^{(1)}\leq\Delta_T^{(2)}\leq\cdots.
+$$ {#eq-te-hierarchy}
+
+Matching the second moment forces the first to match, but the reverse implication fails. The uniform distribution over any orthonormal basis has first moment $I/d$, although it has only $d$ possible states. A maximally mixed average therefore says little about how thoroughly the pure states explore their space.
+
+## What the hierarchy says about observables
+
+For a Hermitian observable $O$, write $o(t)=\langle\psi(t)|O|\psi(t)\rangle$. Then
+
+$$
+\overline{o(t)^k}=\operatorname{tr}\!\left[O^{\otimes k}M_\infty^{(k)}\right].
+$$ {#eq-te-observable-moments}
+
+This formula follows by multiplying $k$ copies of $\operatorname{tr}(OP)$ and using the tensor-product identity $\prod_j\operatorname{tr}(A_j)=\operatorname{tr}(\bigotimes_j A_j)$. The first two Haar averages are
+
+$$
+\mathbb E_{\mathrm H}o=\frac{\operatorname{tr}O}{d},
+\qquad
+\mathbb E_{\mathrm H}o^2=
+\frac{\operatorname{tr}(O^2)+(\operatorname{tr}O)^2}{d(d+1)}.
+$$ {#eq-te-observable-haar}
+
+For the second equality, insert @eq-te-permutations and use $\operatorname{tr}[(A\otimes B)S]=\operatorname{tr}(AB)$. If $O$ is traceless, its Haar variance is $\operatorname{tr}(O^2)/[d(d+1)]$. For a Pauli observable on $L$ qubits, $O^2=I$ and $d=2^L$, so the variance is $1/(d+1)$. Most Haar states thus have very small local polarization, although they remain globally pure.
+
+This concentration explains how state-space ergodicity leads to conventional equilibration in a large system. If the temporal first and second moments match Haar, Chebyshev's inequality gives
+
+$$
+\limsup_{T\to\infty}\frac{\operatorname{meas}\{t\in[0,T]:|o(t)|>\epsilon\}}{T}
+\leq\frac{\operatorname{tr}(O^2)}{d(d+1)\epsilon^2}
+$$ {#eq-te-chebyshev}
+
+for traceless $O$. The right side becomes small with $d$ for bounded observables. The statement concerns the fraction of exceptional times, not monotonic relaxation or the permanent disappearance of recurrences. It also uses a full-space Haar target, appropriate when no exact conserved quantity restricts the accessible states.
+
+## A worked qubit example: zero average is not a sphere
+
+Let a qubit precess under $H=\omega Z/2$ from $|+\rangle=(|0\rangle+|1\rangle)/\sqrt2$. Its Bloch vector is
+
+$$
+\boldsymbol r(t)=(\cos\omega t,\sin\omega t,0),
+\qquad P(t)=\frac12(I+\boldsymbol r(t)\cdot\boldsymbol\sigma).
+$$ {#eq-te-equator}
+
+Averaging over a period gives $\overline{\boldsymbol r}=0$, hence $M_\infty^{(1)}=I/2$. Yet the spin never leaves its equator. On that equator,
+
+$$
+\overline{r_x^2}=\overline{r_y^2}=\frac12,
+\qquad \overline{r_z^2}=0,
+$$
+
+whereas a uniform sphere has $\mathbb E r_i r_j=\delta_{ij}/3$. In particular, measuring $Z$ on two copies distinguishes the ensembles through the correlation $\langle Z\otimes Z\rangle$: it is zero for the equatorial ensemble and $1/3$ for Haar states.
+
+The exact second temporal moment is diagonal in the symmetric basis $\{|00\rangle,(|01\rangle+|10\rangle)/\sqrt2,|11\rangle\}$, with eigenvalues $(1/4,1/2,1/4)$. This follows by expanding $|\psi(t)\rangle^{\otimes2}$ and averaging its phase factors. The Haar moment has eigenvalues $(1/3,1/3,1/3)$ in the same basis, so
+
+$$
+\Delta_\infty^{(2)}=\frac12\left(\frac1{12}+\frac16+\frac1{12}\right)=\frac16.
+$$ {#eq-te-equator-distance}
+
+There is no contradiction between its perfectly mixed average and this persistent second-moment discrepancy. The average loses the distinction between a circular orbit and a uniform sphere.
+
+## Why a static Hamiltonian cannot produce complete exploration
+
+Diagonalize a time-independent Hamiltonian as $H|a\rangle=E_a|a\rangle$, and expand $|\psi_0\rangle=\sum_ac_a|a\rangle$. Evolution gives
+
+$$
+|\psi(t)\rangle=\sum_a c_a e^{-iE_at}|a\rangle,
+\qquad |\langle a|\psi(t)\rangle|^2=|c_a|^2=:p_a.
+$$ {#eq-te-static-populations}
+
+Every population $p_a$ is fixed. Time changes only phases. Even an incommensurate energy spectrum can at most explore a torus of phases with fixed amplitudes, rather than the whole projective space. This is a stronger restriction than conservation of the expectation value of energy: the entire vector $(p_1,\ldots,p_d)$ remains fixed.
+
+A simple moment argument proves that no initial state can have both first and second moments equal to the full Haar distribution for $d>1$. Haar matching at first order would require $p_a=1/d$ for every $a$, because the observable $|a\rangle\langle a|$ has average $p_a$. But then its squared expectation is $p_a^2=1/d^2$, whereas Haar averaging gives
+
+$$
+\mathbb E_{\mathrm H}|\langle a|\phi\rangle|^4=\frac{2}{d(d+1)}.
+$$ {#eq-te-static-obstruction}
+
+These differ whenever $d>1$. If the populations are not flat, the obstruction already occurs at first order. Degeneracies and energy resonances cannot remove this argument, since they do not alter conservation of the individual spectral-basis populations.
+
+For a generic nondegenerate spectrum the infinite-time first moment is the diagonal ensemble, $\sum_ap_a|a\rangle\langle a|$. Local observables can nevertheless agree with a Gibbs state when their diagonal matrix elements vary smoothly with energy and the energy distribution is narrow. That is the domain of the eigenstate thermalization mechanism. It does not require a static system to wander through all global wavefunctions. The two descriptions answer different questions at different resolutions.
+
+## The frame potential: a scalar test of an entire moment
+
+A distance between two states requires constructing their moment matrices. Sometimes a more convenient quantity is the **frame potential**,
+
+$$
+F_T^{(k)}=\frac1{T^2}\int_0^T\!dt\int_0^T\!ds\,
+|\langle\psi(t)|\psi(s)\rangle|^{2k}
+=\operatorname{tr}\big[(M_T^{(k)})^2\big].
+$$ {#eq-te-frame-potential}
+
+The equality follows from $\operatorname{tr}(P(t)P(s))=|\langle\psi(t)|\psi(s)\rangle|^2$. Because the moment is a trace-one operator supported on a $D_k$-dimensional symmetric subspace, its purity is at least $1/D_k$. More explicitly,
+
+$$
+\|M_T^{(k)}-M_{\mathrm H}^{(k)}\|_2^2
+=F_T^{(k)}-\frac1{D_k}\geq0.
+$$ {#eq-te-frame-gap}
+
+To check the middle step, expand the square. The cross term is $\operatorname{tr}(M_T\Pi_{\mathrm{sym}}/D_k)=1/D_k$, and the Haar purity is also $1/D_k$. Equality holds exactly for a $k$-design. This method is part of the general design toolkit developed in @ergGross2007.
+
+The frame potential makes recurrence physically transparent. If many pairs of times yield nearly identical states, their overlap contributions are large and increase $F_T^{(k)}$. A good design distributes trajectories sufficiently broadly to reach the minimum. But a scalar gap is not numerically equivalent to trace distance with dimension-independent constants:
+
+$$
+\frac12\sqrt{F_T^{(k)}-D_k^{-1}}
+\leq\Delta_T^{(k)}
+\leq\frac12\sqrt{D_k\big(F_T^{(k)}-D_k^{-1}\big)}.
+$$ {#eq-te-frame-norms}
+
+The inequalities use $\|A\|_2\leq\|A\|_1\leq\sqrt{D_k}\|A\|_2$. Since $D_k$ grows with $d$ and $k$, small unnormalized frame-potential errors should be interpreted with care.
+
+## From state ergodicity to unitary ergodicity
+
+A drive determines not just one trajectory but a whole family, one for each $|\psi_0\rangle$. Its time-averaging channel on $k$ copies is
+
+$$
+\mathcal N_T^{(k)}(X)=\frac1T\int_0^T
+U(t)^{\otimes k}XU(t)^{\dagger\otimes k}\,dt.
+$$ {#eq-te-twirling-channel}
+
+Complete unitary ergodicity, CUE, asks that this channel tend to the Haar twirl for every fixed $k$. Here CUE denotes an ergodicity property, not the circular unitary random-matrix ensemble. Applying the channel to $P_0^{\otimes k}$ proves immediately that unitary $k$-ergodicity implies $k$-HSE. The unitary condition also controls inputs entangled across replicas and correlations among outputs for different initial states, making it stronger.
+
+At first order the Haar twirl is the completely depolarizing map $X\mapsto\operatorname{tr}(X)I/d$. At higher order it preserves permutation operators, which commute with every $U^{\otimes k}$. Thus the higher-copy Haar twirl is not the completely depolarizing channel on the full replicated Hilbert space. Its invariant algebra reflects the fact that the copies experience the same sampled unitary.
+
+## Floquet motion, quasiperiodic tori, and theorem hypotheses
+
+For $H(t+\tau)=H(t)$, Floquet theory writes $U(t)=P(t)e^{-iQt}$ with periodic $P(t)$. At stroboscopic times, the eigenstates of $Q$ are stationary rays. When continuously sampled, each such eigenstate traces a closed micromotion curve. A finite-length curve cannot carry the uniform measure on a space of real dimension $2d-2\geq2$. A finite action $\int_0^\tau\|H(t)\|dt$ bounds its length and establishes the obstruction even with idealized kicks.
+
+A subtler situation arises for $m$ rationally independent driving frequencies. Suppose a piecewise-smooth generalized Floquet decomposition exists,
+
+$$
+U(t)=P(\boldsymbol\omega t)e^{-iQt},
+\qquad P:\mathbb T^m\longrightarrow U(d).
+$$ {#eq-te-generalized-floquet}
+
+For an eigenstate of $Q$, its ray lies in the image of an $m$-torus. Piecewise-smooth maps do not increase Hausdorff dimension. Hence full coverage requires $m\geq2(d-1)$. For unitary exploration, the quasienergy phases add at most $d-1$ independent angles, while the projective unitary group has dimension $d^2-1$; consequently $m\geq d(d-1)$ is necessary. These are conditional no-go statements: the state result needs a piecewise-smooth quasienergy eigenstate, and the unitary result needs a basis of them. Reducibility is not automatic for multiple frequencies. The same work constructs CUE examples with $m=d^2-2$, leaving a gap between necessity and known sufficiency in general dimension. @ergPilatowsky2024
+
+Two cautions prevent common misreadings. First, counting frequencies without checking the quasienergy eigenstates does not prove nonergodicity. A symbolic aperiodic drive can lack the requisite regular eigenstates. Second, complete ergodicity and a fixed finite design order differ sharply. A periodic drive can be engineered to reproduce any prescribed finite moment, with growing control resources, while one fixed finite-action drive still fails the all-orders requirement.
+
+## A geometric view of the control cost
+
+The finite-action condition in the Floquet obstruction has a useful physical interpretation. Consider a normalized state following Schrödinger evolution over a short time $dt$. Its Fubini–Study speed is the instantaneous energy uncertainty, $ds/dt=\sqrt{\langle H^2\rangle-\langle H\rangle^2}$, which is bounded by an appropriate Hamiltonian norm after removing an irrelevant scalar term. The integrated action therefore bounds how far a state can travel during one period. Ideal kicks also carry a finite rotation angle and consume part of this distance budget.
+
+Why must uniform coverage require unbounded distance? Let the target manifold have real dimension $D=2d-2$. A collection of mutually separated points with spacing $\delta$ has size of order $\delta^{-D}$. If a closed curve comes within $\epsilon<\delta/3$ of every point, consecutive visits to distinct target neighborhoods require a distance at least $\delta-2\epsilon$. Its total length must therefore grow at least as $\delta^{1-D}$. This diverges as the requested resolution improves, because $D\geq2$. A finite-length micromotion orbit cannot approach all those neighborhoods. This packing argument explains the obstruction without relying only on the visual example of a Bloch sphere.
+
+At a fixed moment order, the resolution is finite and a finite control budget can suffice. One quantitative lower bound for a periodic protocol that achieves $k$-HSE is
+
+$$
+B=\int_0^\tau\|H(t)\|_\infty dt
+\geq\frac{\sqrt2}{3k}\left[\binom{d+k-1}{k}-1\right].
+$$ {#eq-te-action-bound}
+
+This is one of the bounds established in @ergPilatowsky2024. It is not claimed to be optimal. The binomial factor is precisely the symmetric-subspace dimension $D_k$, so resolving deeper moments requires a larger within-period trajectory. For fixed $k$, the bound grows as $d^k$; the prefactor and additional bounds matter when changing which limit is held fixed.
+
+The apparent tension with the existence of periodic finite-order designs disappears once the quantifiers are written out. For each prescribed $k$, one can choose a different sufficiently complicated periodic drive. Complete ergodicity instead asks for one fixed drive that works for every $k$. The resource budget may increase along the first sequence of constructions but is fixed in the second statement. This is the same logical distinction that separates approximating a continuous function to any specified tolerance from representing it exactly with one finite approximation.
+
+## Orders of limits and experimental meaning
+
+The statement of CHSE is: for each finite $d$, each fixed $k$, and every initial state, take $T\to\infty$ and obtain the Haar moment. It does not assert convergence uniformly in $k$, a bounded equilibration time as $d\to\infty$, or independent random samples at neighboring times. An orbit may have exactly the correct limiting distribution while retaining long temporal correlations.
+
+For experiments, fixing $k$ is unavoidable. Tomography of a single spin makes several low moments accessible, whereas direct moment reconstruction scales rapidly with subsystem dimension. The diamond-spin study @ergLiu2026 compared Floquet, smooth quasiperiodic, and Fibonacci protocols, observing successively deeper moment agreement. The finite-time data support the theoretical hierarchy; they cannot certify infinitely many moments or an infinite-time limit. This distinction preserves the value of the experiment while stating exactly what its evidence establishes.
+
+## Exercises and research directions
+
+1. **A latitude is enough to fail.** Repeat the equatorial calculation for a Bloch trajectory at fixed $r_z=z_0$. Find its first moment and determine whether any latitude matches both the first and second Haar moments. *Hint:* first-order matching forces $z_0=0$; then compare $r_z^2$.
+
+2. **Cross-observable covariances.** Derive $\mathbb E_{\mathrm H}[\langle O\rangle\langle Q\rangle]$ for Hermitian $O,Q$. Subtract the product of the means. *Hint:* use $\operatorname{tr}[(O\otimes Q)S]=\operatorname{tr}(OQ)$.
+
+3. **A finite first design.** Show that a uniform orthonormal basis has $F^{(k)}=1/d$ for every positive integer $k$. Compare with $D_k^{-1}$ and find the gap for $k=2$. *Hint:* distinct basis vectors have zero overlap.
+
+4. **Rank and sample complexity.** An empirical ensemble contains $T$ equally weighted states. Prove that its $k$th moment has rank at most $T$, and deduce $\Delta_T^{(k)}\geq1-T/D_k$ when $T<D_k$. *Hint:* measure the projector onto the support of the empirical moment.
+
+5. **A symmetry-restricted target.** Suppose $U(t)$ preserves a subspace of dimension $d_q$. Formulate HSE within that subspace and rederive the Haar second moment with $d_q$. Explain why full-space HSE is impossible for an initial state in that subspace. *Hint:* the projector onto the subspace has conserved expectation one.
+
+6. **A quantitative static obstruction.** For a fixed energy basis, use first- and second-moment witnesses $|a\rangle\langle a|$ and its two-copy version to bound the design error in terms of $p_a$. Can optimizing these witnesses give a useful dimension-dependent lower bound? *Hint:* $|\operatorname{tr}(AX)|\leq\|A\|_\infty\|X\|_1$.
+
+7. **Research problem: physically accessible witnesses.** Global obstructions use energy-basis projectors, which are difficult to measure. For a local spin chain, determine whether a bounded-support observable can distinguish a temporal ensemble from Haar with an error that remains nonzero as $L$ increases. Distinguish the theorem about full moments from the strength of the observable available to an experiment.
+
+8. **Research problem: ergodicity without rapid mixing.** Construct a protocol whose temporal moments converge but whose correlation time diverges. Specify whether you count control steps or physical time. A useful starting point is to hold each point of a design for increasingly long intervals while controlling the relative time weights.

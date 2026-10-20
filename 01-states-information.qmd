@@ -215,7 +215,7 @@ measurement effect $0\leq E\leq I$ triggers the guess “$\rho$.”
 The success probability is
 
 $$
-P_{\rm success}
+P_{\mathrm{success}}
 =\frac12\operatorname{Tr}(E\rho)
 +\frac12\operatorname{Tr}[(I-E)\sigma]
 =\frac12+\frac12\operatorname{Tr}[E(\rho-\sigma)].
@@ -226,7 +226,7 @@ onto its positive eigenspace. The sum of its positive eigenvalues is
 $\|\rho-\sigma\|_1/2$. Therefore
 
 $$
-P_{\rm success}^{\rm opt}=\frac12[1+D(\rho,\sigma)].
+P_{\mathrm{success}}^{\mathrm{opt}}=\frac12[1+D(\rho,\sigma)].
 $$
 
 Trace distance is consequently a physical measure of distinguishability.

@@ -1,0 +1,355 @@
+# The statistical mechanics of conditional wavefunctions {#sec-projected-ensembles}
+
+Ordinary thermalization answers a question about averages: what will a local observer measure after a closed many-body system evolves for a long time? A more detailed question becomes possible if that observer also receives a measurement record from the rest of the system. Conditioned on the record, the observer assigns a different local wavefunction on every run. What statistical law describes these wavefunctions?
+
+This chapter develops the tools needed to make that question precise. The central distinction is between a mixed density operator and an ensemble of pure states realizing it. We will derive a hierarchy of tests of ensemble randomness, identify what each test measures, and explain why equilibration of a density operator leaves substantial physics unresolved. The examples and calculations below are elementary constructions; their purpose is to expose the mathematical structure underlying the research literature.
+
+## Measuring a bath produces an ensemble
+
+Let a finite quantum system have Hilbert space $\mathcal H_A\otimes\mathcal H_B$, with dimensions $d_A$ and $d_B$. The letters $A$ and $B$ designate the retained subsystem and the measured environment. Calling $B$ a bath does not assume that it is an external thermostat: the complete state can be pure and its dynamics unitary.
+
+Expand that state in a chosen orthonormal basis of $B$:
+
+$$
+\lvert\Psi\rangle_{AB}
+=\sum_{a=1}^{d_A}\sum_{z=1}^{d_B}\Psi_{az}
+\lvert a\rangle_A\lvert z\rangle_B
+=\sum_z\lvert\widetilde\psi_z\rangle_A\lvert z\rangle_B.
+$$ {#eq-pe-expansion}
+
+The tilde indicates that a vector is not normalized. A projective measurement of $B$ gives outcome $z$ with probability
+
+$$
+p_z=\langle\widetilde\psi_z\vert\widetilde\psi_z\rangle,
+\qquad
+\lvert\psi_z\rangle=\frac{\lvert\widetilde\psi_z\rangle}{\sqrt{p_z}}.
+$$ {#eq-pe-born}
+
+Outcomes with $p_z=0$ can be omitted. The **projected ensemble** is the probability distribution
+
+$$
+\mathcal E_{\Psi,B}=\{p_z,\lvert\psi_z\rangle\}_z.
+$$ {#eq-pe-definition}
+
+The Born weights are essential. Giving every nonzero outcome equal weight generally defines a different distribution and need not reproduce any physical reduced state.
+
+Indeed, averaging the projectors in @eq-pe-born gives
+
+$$
+\sum_zp_z\lvert\psi_z\rangle\langle\psi_z\rvert
+=\sum_z\lvert\widetilde\psi_z\rangle\langle\widetilde\psi_z\rvert
+=\operatorname{Tr}_B\lvert\Psi\rangle\langle\Psi\rvert
+\equiv\rho_A.
+$$ {#eq-pe-average}
+
+The cancellation of normalization factors makes this identity exact. It also explains why ordinary local measurements see only $\rho_A$ when the bath record is discarded.
+
+There are two distinct sources of probability here. Quantum measurement generates $z$ with Born probability even when $\lvert\Psi\rangle$ is fixed. Separately, a theorist may sample $\lvert\Psi\rangle$ from a distribution, for example an ensemble of random circuits. Averaging over the latter is a mathematical or preparation average. A statement about the projected ensemble of a typical single state is stronger than a statement only about its average over preparations.
+
+### Worked example: a Bell pair has many local ensembles
+
+Consider
+
+$$
+\lvert\Phi^+\rangle
+=\frac{\lvert00\rangle+\lvert11\rangle}{\sqrt2}.
+$$ {#eq-pe-bell}
+
+Measuring the second qubit in the $Z$ basis prepares $\lvert0\rangle$ or $\lvert1\rangle$ on the first, each with probability $1/2$. Measuring it in the $X$ basis prepares $\lvert+\rangle$ or $\lvert-\rangle$, where $\lvert\pm\rangle=(\lvert0\rangle\pm\lvert1\rangle)/\sqrt2$. Both ensembles average to $I/2$. Nevertheless, their conditional $Z$ expectation values have different fluctuations:
+
+$$
+\begin{aligned}
+\mathbb E_{\mathcal E_Z}\langle Z\rangle_\psi^2&=1,\\
+\mathbb E_{\mathcal E_X}\langle Z\rangle_\psi^2&=0.
+\end{aligned}
+$$ {#eq-pe-bell-variance}
+
+This is already a measurable difference between ensembles that share a density operator. It requires knowing which bath outcome occurred and estimating the local expectation value for that conditional state. It cannot be inferred from a single unconditioned local measurement.
+
+The freedom to obtain different ensembles by measuring a purification is general. The Hughston–Jozsa–Wootters classification describes all pure-state decompositions of a fixed density operator and their realization by suitable measurements on an auxiliary system [@hjw1993]. Fixed local projective measurements constitute a physically important restricted choice within this broader freedom.
+
+## Moments turn distributions into quantum states
+
+A probability distribution over pure states can be characterized by averages of products of amplitudes and their complex conjugates. The convenient quantum object collecting these averages is
+
+$$
+M_{\mathcal E}^{(k)}
+=\sum_zp_z
+\bigl(\lvert\psi_z\rangle\langle\psi_z\rvert\bigr)^{\otimes k},
+\qquad k=1,2,\ldots .
+$$ {#eq-pe-moments}
+
+It is a positive, unit-trace operator acting on $k$ copies of $\mathcal H_A$. It is not generally equal to $\rho_A^{\otimes k}$. In the latter object each copy is drawn independently, whereas @eq-pe-moments uses the *same conditional state* on all copies before averaging its label.
+
+For observables $O_1,\ldots,O_k$,
+
+$$
+\mathbb E_{\mathcal E}
+\prod_{j=1}^k\langle O_j\rangle_\psi
+=\operatorname{Tr}\left[
+(O_1\otimes\cdots\otimes O_k)M_{\mathcal E}^{(k)}
+\right].
+$$ {#eq-pe-nonlinear-observable}
+
+Thus the first moment gives mean expectation values, the second gives variances and covariances, and higher moments resolve more detailed fluctuations. A thermal density operator fixes the first of these and leaves the others undetermined.
+
+Taking a partial trace over any copy of $M^{(k)}$ gives $M^{(k-1)}$, because a normalized pure-state projector has trace one. Consequently, matching a higher moment automatically matches every lower moment.
+
+For two target ensembles define
+
+$$
+\Delta_k(\mathcal E,\mathcal F)
+=\frac12\left\|M_{\mathcal E}^{(k)}
+-M_{\mathcal F}^{(k)}\right\|_1,
+\qquad
+\|X\|_1=\operatorname{Tr}\sqrt{X^\dagger X}.
+$$ {#eq-pe-distance}
+
+This trace distance has an operational meaning. Suppose an experimenter receives $k$ identical copies of a state whose unknown label was drawn from either ensemble. The best collective measurement distinguishes the two possibilities with success probability $(1+\Delta_k)/2$, for equal prior probabilities. The statement concerns indistinguishability of these *averaged $k$-copy experiments*; it does not say that the two probability measures are close in every conceivable metric.
+
+Partial trace cannot increase trace distance, so $\Delta_{k-1}\leq\Delta_k$. A second-moment discrepancy cannot hide behind a matching third moment.
+
+## What does uniform randomness mean?
+
+The **Haar ensemble** of pure states is the distribution invariant under every unitary transformation on a $d$-dimensional Hilbert space. One construction is to sample $d$ independent standard complex Gaussian variables $g_a$ and normalize their vector:
+
+$$
+\lvert\phi\rangle=\frac{\sum_ag_a\lvert a\rangle}
+{\sqrt{\sum_a|g_a|^2}}.
+$$ {#eq-pe-gaussian-haar}
+
+The complex Gaussian density depends only on $\sum_a|g_a|^2$ and is unchanged by unitary rotations. Its direction is therefore uniform. This construction makes clear that Haar randomness concerns the direction of a state vector, with overall phase physically irrelevant.
+
+We can derive its moment operator without integrating individual amplitudes. Every vector $\lvert\phi\rangle^{\otimes k}$ lies in the fully symmetric subspace of $\mathcal H^{\otimes k}$, since exchanging any two copies leaves it unchanged. Haar invariance also makes its averaged projector commute with $U^{\otimes k}$ for every unitary $U$. The action on the symmetric subspace is irreducible, so this average is proportional to its identity operator, the symmetric projector $P_{\mathrm{sym}}^{(k)}$. Unit trace fixes the constant:
+
+$$
+M_{\mathrm H}^{(k)}
+=\frac{P_{\mathrm{sym}}^{(k)}}{D_k},
+\qquad
+D_k=\binom{d+k-1}{k},
+\qquad
+P_{\mathrm{sym}}^{(k)}
+=\frac1{k!}\sum_{\pi\in S_k}U_\pi.
+$$ {#eq-pe-haar-moments}
+
+Here $S_k$ is the permutation group and $U_\pi$ permutes tensor factors. The dimension formula counts occupations of $k$ indistinguishable objects among $d$ basis states: nonnegative integers $n_1+\cdots+n_d=k$.
+
+For $k=2$, the only permutations are the identity and the swap $F$, with $F\lvert a,b\rangle=\lvert b,a\rangle$. Therefore
+
+$$
+M_{\mathrm H}^{(2)}
+=\frac{I+F}{d(d+1)}.
+$$ {#eq-pe-haar-second}
+
+Using $\operatorname{Tr}[(O\otimes P)F]=\operatorname{Tr}(OP)$ yields
+
+$$
+\mathbb E_{\mathrm H}\langle O\rangle_\phi\langle P\rangle_\phi
+=\frac{\operatorname{Tr}O\,\operatorname{Tr}P+
+\operatorname{Tr}(OP)}{d(d+1)}.
+$$ {#eq-pe-haar-covariance}
+
+For traceless Hermitian $O$, its conditional expectation has variance $\operatorname{Tr}(O^2)/[d(d+1)]$. In particular, a Haar-random qubit has $\mathbb E\langle Z\rangle^2=1/3$, between the two values in @eq-pe-bell-variance. Randomness is therefore quantitatively different from either ensemble of orthogonal antipodal states.
+
+### Worked example: the Bloch sphere and a finite design
+
+A pure qubit projector is
+
+$$
+\rho_{\boldsymbol n}=\frac{I+\boldsymbol n\cdot\boldsymbol\sigma}{2},
+\qquad |\boldsymbol n|=1.
+$$ {#eq-pe-bloch}
+
+Its first moment depends on $\mathbb E n_i$; its second also depends on $\mathbb E n_in_j$. Uniform spherical measure obeys $\mathbb E n_i=0$ and $\mathbb E n_in_j=\delta_{ij}/3$. These follow from rotational invariance and $\sum_i n_i^2=1$.
+
+Now choose the four unit vectors
+
+$$
+\frac{(1,1,1)}{\sqrt3},\quad
+\frac{(1,-1,-1)}{\sqrt3},\quad
+\frac{(-1,1,-1)}{\sqrt3},\quad
+\frac{(-1,-1,1)}{\sqrt3}
+$$ {#eq-pe-tetrahedron}
+
+with equal probabilities. Their mean vanishes, each diagonal second moment is $1/3$, and each off-diagonal second moment cancels. Their ensemble therefore reproduces the Haar first and second moments exactly, although it contains only four states.
+
+Such an ensemble is a **state $2$-design**. More generally a state $k$-design satisfies $M_{\mathcal E}^{(k)}=M_{\mathrm H}^{(k)}$. A finite design need not resemble a continuous cloud visually; it reproduces a specified set of experiments. The tetrahedral ensemble is not a $3$-design: its average $n_xn_yn_z$ equals $1/(3\sqrt3)$, whereas the spherical average vanishes.
+
+## Frame potentials and finite-environment limitations
+
+A useful scalar diagnostic is the frame potential
+
+$$
+\mathcal F_k(\mathcal E)
+=\sum_{z,z'}p_zp_{z'}|\langle\psi_z\vert\psi_{z'}\rangle|^{2k}
+=\operatorname{Tr}\bigl[(M_{\mathcal E}^{(k)})^2\bigr].
+$$ {#eq-pe-frame-potential}
+
+To establish the second equality, multiply two rank-one tensor projectors and take their trace. Each copy contributes $|\langle\psi_z\vert\psi_{z'}\rangle|^2$.
+
+Because $M_{\mathcal E}^{(k)}$ lives in a space of dimension $D_k$, its purity is at least $1/D_k$. Equality holds only for $P_{\mathrm{sym}}^{(k)}/D_k$, so
+
+$$
+\mathcal F_k\geq\frac1{D_k},
+\qquad
+\left\|M_{\mathcal E}^{(k)}-M_{\mathrm H}^{(k)}\right\|_2^2
+=\mathcal F_k-\frac1{D_k}.
+$$ {#eq-pe-frame-excess}
+
+In this equation $\|X\|_2=\sqrt{\operatorname{Tr}(X^\dagger X)}$. The last identity follows by expanding the square and using $\operatorname{Tr}(M_{\mathcal E}^{(k)}P_{\mathrm{sym}}^{(k)})=1$. Frame-potential excess is exactly a squared Hilbert–Schmidt distance. Turning it into trace distance can introduce a dimension factor through $\|X\|_1\leq\sqrt{D_k}\|X\|_2$; small unnormalized frame-potential excess alone can therefore be misleading as $d$ or $k$ grows.
+
+There is also a simple obstruction to exact designs at finite bath size. A rank-one projective measurement has at most $d_B$ outcomes, so $M_{\mathcal E}^{(k)}$ has rank at most $d_B$. Let its support have dimension $r\leq d_B$. The target Haar moment puts probability $(D_k-r)/D_k$ outside that support, while the actual moment puts probability zero there. Measuring the projector onto the complement gives
+
+$$
+\Delta_k(\mathcal E,\mathrm H)
+\geq 1-\frac{r}{D_k}
+\geq 1-\frac{d_B}{D_k}
+\quad\text{if }d_B<D_k.
+$$ {#eq-pe-rank-bound}
+
+Thus a finite bath cannot produce an exact design of arbitrarily high order on a nontrivial subsystem. Claims of simultaneous equality of every moment in dynamical models must specify a thermodynamic limit. For a fixed order $k$, an adequately large finite bath can approximate the required statistics.
+
+## Why random many-body states give Haar-like projected ensembles
+
+The Gaussian construction offers an intuitive derivation. Generate a random global state by a $d_A\times d_B$ matrix $G$ of independent complex Gaussian entries and normalize all entries together. Its $z$th column can be written $G_z=r_z\phi_z$, where $\phi_z$ is a Haar direction on $A$ and $r_z\geq0$ is its length.
+
+Gaussian rotational invariance makes $\phi_z$ independent of $r_z$. The projected ensemble is
+
+$$
+p_z=\frac{r_z^2}{\sum_{z'}r_{z'}^2},
+\qquad \lvert\psi_z\rangle=\lvert\phi_z\rangle.
+$$ {#eq-pe-random-columns}
+
+Since the weight depends only on radii, it introduces no preferred direction. Averaging over global preparations therefore gives $\mathbb E_\Psi M_{\mathcal E_\Psi}^{(k)}=M_{\mathrm H}^{(k)}$ exactly for every finite $k$.
+
+That identity alone does not prove that one global state supplies an approximate design. For that stronger conclusion, fix $d_A,k$ and increase $d_B$. The numerator of the weighted average in @eq-pe-random-columns is a sum of independent random matrices, while its denominator is a sum of independent positive random variables. Their relative fluctuations become small. Entrywise laws of large numbers suffice in this fixed finite-dimensional moment space to give convergence of the single-state moment to its Haar value. Quantitative high-probability statements require bounds controlling dimension, desired error, and design order together.
+
+This calculation distinguishes entanglement from sufficient complexity. A maximally entangled state with $d_A=d_B$ has a maximally mixed $\rho_A$, yet a fixed orthonormal measurement produces only $d_A$ orthogonal states. Its second moment cannot be Haar by @eq-pe-rank-bound. Large entanglement supplies many possible local states; scrambling arranges their probabilities and directions appropriately.
+
+The physical question is whether local dynamics can generate the statistics suggested by this random-state benchmark, and how rapidly. The ensemble is physically obtained by measuring one evolved many-body state. It need not require choosing a new random global unitary for every member of the ensemble.
+
+![Projected-moment trace distances for a qubit coupled to a finite global
+Haar-random state. Each point averages 48 independent states; error bars are
+standard errors across those states. Increasing bath dimension improves
+agreement at orders $k=1,2,3$. This original finite-bath illustration does
+not represent a time evolution or establish a design-time scaling law.
+Julia code and data are included.](figs/projected-convergence.svg){#fig-pe-convergence}
+
+## Exact dynamical results and the hierarchy of design times
+
+Ho and Choi proved finite-time emergence of exact projected state designs in a special chaotic kicked Ising setting, after taking an infinite-bath limit [@HoChoi2022]. These results are existence theorems for specified dynamics, initial states, measurement bases, and limits. They establish that a locally thermal reduced state can be accompanied by much stronger universal statistics; they do not establish identical finite-time behavior for arbitrary chaotic Hamiltonians.
+
+The structural idea is **space–time duality**. A circuit amplitude is a tensor network with a physical time direction and a spatial direction. Fixing the final bath outcomes turns the contraction along space into a sequence of effective maps on degrees of freedom associated with the time boundary. A map that is unitary in the original time direction need not be unitary after this rotation. In special circuits it is unitary in both directions, a property called dual unitarity. Compatible boundary states and measurement bases then prevent the rotated dynamics from selecting preferred directions.
+
+Why should that help? Unitary mixing can redistribute amplitudes without revealing information about them. A nonunitary effective map can instead filter components unequally, making outcome records distinguish different inputs. Repeated filtering can purify an initially mixed effective state. The relation between this **dynamical purification** and projected designs is developed by Ippoliti and Ho [@IppolitiHo2023]. Under their nonpurifying conditions, exact design times can coincide. Departing from those conditions allows the time for high moments to exceed ordinary thermalization.
+
+To make the hierarchy precise, choose an error tolerance $\epsilon$ and an equilibrium target. A stable late-time definition is
+
+$$
+t_k(\epsilon)=\inf\{t:\Delta_k(t')\leq\epsilon
+\text{ for every }t'\geq t\}.
+$$ {#eq-pe-design-time}
+
+In a finite isolated system with recurrences, this definition may be inappropriate. One can instead specify a time window, a time-averaged distance, or the fraction of late times satisfying the bound. The convention must be stated before comparing scaling laws. At a fixed time, the moment hierarchy gives $t_{k+1}\geq t_k$ whenever the definition is meaningful with a common tolerance.
+
+A solvable subsystem coupled through a narrow constriction to an infinite random-matrix bath explicitly realizes distinct design times [@IppolitiHo2022]. Its significance is mechanistic: a large bath does not remove a bottleneck through which information about the subsystem must pass. Relaxing a few mean observables can require less information transfer than producing an isotropic distribution of conditional wavefunctions.
+
+The difference can also be understood without a dynamical solution. Suppose an ensemble is supported on many states close to an equatorial circle of a qubit. It may have mean $I/2$ while $\langle Z\rangle_\psi^2$ stays much smaller than the Haar value $1/3$. First-moment relaxation has happened; angular information survives. A proof of ordinary thermalization cannot discard that information because its hypotheses and conclusion never address it.
+
+## A fully specified example: the self-dual kicked Ising chain {#sec-pe-kicked-ising}
+
+We can make the exact-design statement concrete. On an open chain, use Pauli operators $Y_i,Z_i$ and set the time of each Ising segment to one:
+
+$$
+\begin{aligned}
+U_F&=\exp\!\left(-ih\sum_{i=1}^N Y_i\right)\exp(-iH_Z),\\
+H_Z&=J\sum_{i=1}^{N-1}Z_iZ_{i+1}+g\sum_{i=1}^N Z_i
++\frac\pi4(Z_1+Z_N),\qquad J=h=\frac\pi4.
+\end{aligned}
+$$ {#eq-pe-kicked-ising}
+
+Prepare $|+\rangle^{\otimes N}$, apply $U_F$ an integer $t$ times, retain the first $N_A$ spins, and measure all remaining spins in the $Z$ basis. For $g\notin(\pi/8)\mathbb Z$, the exact result is
+
+$$
+\lim_{N_B\to\infty}M_{\mathcal E(t)}^{(k)}
+=\frac{P_{\mathrm{sym},A}^{(k)}}{\binom{2^{N_A}+k-1}{k}}
+\qquad (t\geq N_A,\ k\text{ fixed}).
+$$ {#eq-pe-ising-theorem}
+
+Thus every finite moment reaches its target at the same edge-subsystem time $t_k=N_A$, after taking the bath limit. The boundary fields, preparation, measurement basis, and excluded $g$ values belong to this theorem [@HoChoi2022].
+
+### Why these gates are special
+
+The Ising interaction and the kick are simple matrices, so the special point is accessible without sophisticated tensor notation. With $S=\operatorname{diag}(1,i)$ and $\mathrm{CZ}=\operatorname{diag}(1,1,1,-1)$,
+
+$$
+e^{-i\pi Z\otimes Z/4}=e^{-i\pi/4}(S\otimes S)\mathrm{CZ},
+\qquad
+e^{-i\pi Y/4}=\frac1{\sqrt2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}.
+$$ {#eq-pe-ising-elementary}
+
+The first identity follows by checking the four $Z\otimes Z$ eigenvalues; the second follows from $Y^2=I$. The interaction is therefore a controlled phase with local phase rotations, and every matrix element of the kick has magnitude $1/\sqrt2$. In a sum over intermediate spin configurations, amplitudes become equal-magnitude factors with configuration-dependent phases. Combining them into the circuit's tensors gives the self-dual structure: appropriately grouped tensors can be contracted as unitary evolution in the spatial direction as well as in the time direction. The isolated diagonal two-spin interaction is not itself a dual-unitary gate; the grouping matters.
+
+The bath record then selects a sequence of gates on a *dual* chain of $t$ spins. Increasing $N_B$ increases this dual circuit's depth, although physical time stays fixed. Its outcome-counting distribution approaches Haar moments. The remaining boundary contraction maps the $2^t$-dimensional dual state onto the $2^{N_A}$-dimensional physical subsystem. For $t\geq N_A$, cancellations reduce this map to a scalar times a coisometry. A coisometry $Q:\mathbb C^D\to\mathbb C^d$ satisfies $QQ^\dagger=I_d$; it can retain $d$ coordinates after a unitary change of basis. Here $D=2^t$ and $d=2^{N_A}$. The model-specific steps are proving the dual circuit's mixing and this boundary identity. The next calculation explains why those two ingredients imply the claimed ensemble, including its Born weights.
+
+### Deriving the final Haar distribution after projection
+
+Take a Haar vector $u\in\mathbb C^D$ and a fixed coisometry $Q$ with $d$ output dimensions. Write
+
+$$
+x=Qu,\qquad R=\|x\|^2,\qquad v=x/\sqrt R.
+$$
+
+Choose coordinates with $Q=(I_d\ \ 0)$. Generate $u$ by normalizing independent complex Gaussians. The first $d$ Gaussian components have a direction $v$ independent of their radius; the remaining components do not affect that direction. Consequently $v$ is Haar on $\mathbb C^d$ and is independent of $R$. Also,
+
+$$
+\mathbb E R=\operatorname{Tr}\!\left[Q\frac{I_D}{D}Q^\dagger\right]=\frac dD.
+$$
+
+Now let the physical outcome weight be $w=(D/d)R$. It obeys $\mathbb Ew=1$. Even after this radial Born reweighting,
+
+$$
+\mathbb E\!\left[w(|v\rangle\langle v|)^{\otimes k}\right]
+=\mathbb Ew\;\mathbb E(|v\rangle\langle v|)^{\otimes k}
+=\frac{P_{\mathrm{sym}}^{(k)}}{\binom{d+k-1}{k}}.
+$$ {#eq-pe-coisometry-haar}
+
+This is the essential final mechanism. Rotational invariance gives uniform directions; independence of direction and norm ensures that the physical outcome probabilities preserve that uniformity. Replacing the actual Born measure by counting outcomes without this check would leave a gap in the argument. In the kicked Ising construction the scalar multiplying $Q$ supplies precisely the normalization accounted for by $w$.
+
+For $t<N_A$, the dual space has fewer dimensions than the desired output: a map from dimension $2^t$ cannot have row rank $2^{N_A}$. The coisometry mechanism cannot yet apply. More physically, only one boundary feeds entanglement into an edge region, so at most $t$ bits of subsystem entropy can have been produced in this convention, whereas a maximally mixed $N_A$-spin state needs $N_A$ bits. This explains the onset time. A finite bath still has the rank obstruction in @eq-pe-rank-bound; exact equality at every order uses an infinite collection of bath outcomes.
+
+If $A$ lies in the bulk, two boundaries feed entanglement into it. Ordinary thermalization can then occur at $\lceil N_A/2\rceil$, yet higher projected moments need additional time. The topology-dependent rates in @sec-gaussian-nonlocal concern that different geometry [@Shrotriya2025]. The comparison isolates a useful lesson: the number of entanglement cuts can determine first-moment saturation without determining the complete conditional wavefunction distribution.
+
+## Computing a projected moment reproducibly
+
+A small-system calculation should keep normalization and measurement conventions explicit. Reshape a pure-state vector into a matrix $\Psi_{az}$ whose columns correspond to the chosen bath basis. For each column compute $p_z=\sum_a|\Psi_{az}|^2$, normalize the column, construct its $k$-fold projector, and sum with weight $p_z$.
+
+For $k=2$ an alternative avoids tensoring projectors individually: form $v_z=\psi_z\otimes\psi_z$ and accumulate $p_zv_zv_z^\dagger$. The target is $(I+F)/[d_A(d_A+1)]$. Diagonalize the Hermitian difference to obtain the trace norm as the sum of absolute eigenvalues.
+
+Three checks catch common errors. First, $\sum_zp_z=1$ and $\operatorname{Tr}M^{(k)}=1$. Second, partially tracing one replica must recover $M^{(k-1)}$. Third, the computed first moment must equal a direct partial trace of the global state. These are mathematical identities, not assumptions about thermalization.
+
+Postselection on rare outcomes can change the distribution substantially. Likewise, experimental grouping of bath outcomes estimates a coarse-grained ensemble of generally mixed conditional states, rather than the rank-one ensemble defined above. Neither is intrinsically wrong, but the target and interpretation must change with the protocol.
+
+## Exercises and investigations
+
+1. **Unequal Schmidt weights.** For $\sqrt{\lambda}\lvert00\rangle+\sqrt{1-\lambda}\lvert11\rangle$, find the ensembles prepared by $Z$ and $X$ measurements on $B$, their common first moment, and their conditional $Z$ variances. Explain why the $X$-basis states need not be orthogonal. *Hint:* normalize the two vectors $\sqrt{\lambda}\lvert0\rangle\pm\sqrt{1-\lambda}\lvert1\rangle$ and distinguish variance from the second raw moment.
+
+2. **A design witness.** Compute $\mathbb E\langle X\rangle^2$, $\mathbb E\langle Y\rangle^2$, and $\mathbb E\langle Z\rangle^2$ for the uniform ensemble of the six Pauli eigenstates. Determine whether it is a $2$-design and test whether it is a $3$-design. *Hint:* inversion symmetry removes odd powers; a fourth-order test is needed to distinguish this ensemble from the sphere.
+
+3. **Frame-potential calculation.** Evaluate $\mathcal F_2$ for the tetrahedral states in @eq-pe-tetrahedron. *Hint:* for qubits $|\langle\psi_{\boldsymbol n}\vert\psi_{\boldsymbol m}\rangle|^2=(1+\boldsymbol n\cdot\boldsymbol m)/2$; distinct tetrahedral vectors have dot product $-1/3$.
+
+4. **Finite-bath obstruction.** For a two-qubit retained subsystem and an environment of three qubits, determine which design orders are excluded by @eq-pe-rank-bound and give the resulting lower bound on $\Delta_3$. *Hint:* $d_A=4$, $d_B=8$, and $D_3=\binom63$.
+
+5. **Conditional fluctuations of purity.** Split $A=A_1A_2$. Express the ensemble-averaged purity of $\operatorname{Tr}_{A_2}\lvert\psi_z\rangle\langle\psi_z\rvert$ as a trace against $M_{\mathcal E}^{(2)}$. Derive its Haar value. *Hint:* swap only the $A_1$ factors in two copies; use @eq-pe-haar-second.
+
+6. **Numerical experiment in Julia.** Sample a normalized complex Gaussian matrix for several bath sizes at fixed $d_A=2$. Compute $\Delta_1,\Delta_2,\Delta_3$ and repeat over independent matrices. Report means and variation across samples. *Hint:* compare the entire distribution of errors rather than interpreting one favorable sample as a convergence theorem.
+
+7. **A bottleneck question.** Design a local circuit in which a subsystem interacts with the bath only every $m$ layers. Which lower bounds on equilibration follow solely from this schedule? Which additional assumptions would be needed to predict the ratios of design times? *Hint:* distinguish absence of interaction from incomplete scrambling during an interaction.
+
+## Questions at the frontier
+
+There is no single universal formula for all design times. A useful research program asks which physical processes set their hierarchy: entanglement production, transport of conserved quantities, purification of rotated dynamics, or the growth of operator complexity. These processes can coincide in solvable limits and separate in less constrained models.
+
+Another open practical issue is certification. Exact moment tomography becomes expensive because the symmetric space grows as $\binom{d_A+k-1}{k}$. Which experimentally accessible witnesses can establish useful approximate designs without reconstructing that whole operator? A witness can disprove a design by detecting a discrepancy, but agreement with a few witnesses needs additional assumptions to certify closeness.
+
+Finally, the Haar ensemble is appropriate only when no relevant constraint survives. At finite temperature or with a conserved charge, even perfect scrambling cannot erase the constraint. The next chapter develops the corresponding constrained ensembles.

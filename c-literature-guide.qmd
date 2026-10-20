@@ -1,0 +1,153 @@
+# A guide to the primary literature {#sec-literature-guide}
+
+The chapters develop physical questions rather than follow a sequence of papers. This appendix provides the complementary map: where an idea entered the literature, which chapter develops it, and what kind of evidence supports it. Reading the original papers is useful for specialist extensions, but the mathematical definitions and central mechanisms used in this book are developed in the chapters themselves.
+
+Publication information was checked against primary arXiv records and journal records on **21 October 2026**. A preprint year records public availability; a journal year records publication. These can differ by several years. “Theorem” below always means a result under the stated model and hypotheses. Publication in a refereed journal does not turn a numerical observation into a theorem, and preprint status does not imply that every result in a manuscript is conjectural.
+
+## How to read a frontier claim
+
+Before importing a result into a new setting, identify five things: the mathematical object being sampled, the probability measure, the assumptions on the dynamics, the order of limits, and the diagnostic being controlled. For example, a temporal ensemble uses time as its random variable, a projected ensemble uses Born-weighted bath outcomes, and a Kraus ensemble may count outcomes uniformly. Their moments are different mathematical objects.
+
+The following distinctions recur throughout the sources:
+
+| Question | Distinction to preserve |
+|:--|:--|
+| Is a subsystem thermal? | Equilibration of its density operator versus universality of its conditional wavefunctions. |
+| Is the distribution uniform? | Haar on the full complex Hilbert space versus a symmetry-restricted, real, Gaussian, or Scrooge target. |
+| What was proved? | Exact identities, asymptotic theorems, controlled approximations, numerical evidence, and conjectures. |
+| Is the result typical? | An average over generator states versus concentration for one typical generator. |
+| Is the dynamics slow? | Slow heating, slow moment mixing, long coherent revivals, and bath memory have different clocks. |
+| Is a representation simple? | Low tensor entropy, small discarded weight, and accurate prediction of selected observables are different requirements. |
+
+The review @ergMark2026 offers a recent conceptual overview. It is used here for orientation; claims about particular theorems are supported by the corresponding research papers.
+
+## Why local averages can become thermal
+
+Start with @sec-states and @sec-measurement-ensembles, then study @sec-thermalization. These establish the distinction between a pure global state, a mixed local density operator, and a statistical ensemble of conditional states.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Hughston, Jozsa, and Wootters [@hjw1993] | Measurement ensembles; projected ensembles | Constructive classification of pure-state decompositions of a density operator. Arbitrary suitable auxiliary measurements offer more freedom than one fixed local product basis. |
+| Deutsch [@deutsch1991] | Ordinary thermalization | A foundational random-matrix route to eigenstate thermalization. Its mechanism should not be read as a theorem that every interacting Hamiltonian thermalizes. |
+| Srednicki [@srednicki1994] | Ordinary thermalization | A primary development of eigenstate thermalization from chaotic eigenfunction structure. The book separates spectral assumptions from dynamical dephasing. |
+| Popescu, Short, and Winter [@popescu2006] | Typicality and reduced states | Concentration of subsystem states for typical pure states under a global constraint. Typicality alone supplies no physical relaxation time. |
+
+A useful reading question is: *which information about the initial wavefunction survives even if every small subsystem has thermal expectation values?* Conserved energy-basis populations already answer this question for a static Hamiltonian.
+
+## From one density matrix to a distribution of wavefunctions
+
+The appropriate route is @sec-randomness-designs followed by @sec-projected-ensembles and @sec-scrooge-symmetry. Keep the moment order fixed before increasing the measured bath.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Ambainis and Emerson [@ambainis2007] | Designs and projected ensembles | State designs as finite-order substitutes for Haar randomness. Matching a finite number of moments does not identify an entire probability measure. |
+| Gross, Audenaert, and Eisert [@ergGross2007] | Designs; temporal ergodicity | Unitary-design structure and frame-potential methods. State and unitary designs have related but distinct moment spaces. |
+| Ho and Choi [@HoChoi2022] | Exact projected designs | A specified self-dual kicked Ising protocol gives all finite projected design orders at a common finite time after an infinite-bath limit. The edge geometry is specified in @sec-pe-kicked-ising. |
+| Ippoliti and Ho [@IppolitiHo2022] | Distinct design times | An analytically solvable bath-constriction model separates ordinary and deeper thermalization clocks. It is a model result, rather than a universal formula for all chaotic baths. |
+| Ippoliti and Ho [@IppolitiHo2023] | Space–time duality and purification | Relates projected-design formation to purification in rotated circuit dynamics. Exact coincident design times require compatible dynamics and boundary data. |
+| Jozsa, Robb, and Wootters [@Jozsa1994] | Accessible information and Scrooge ensembles | Subentropy is the optimal density-matrix-dependent lower bound on accessible information. The operational optimization differs from maximizing an ordinary differential entropy. |
+| Goldstein, Lebowitz, Tumulka, and Zanghì [@GoldsteinGAP2006] | Gaussian adjusted projected construction | Develops the equilibrium-wavefunction measure obtained by adjustment and radial projection. Omitting the adjustment changes the mean state. |
+| Mark and collaborators [@Mark2024] | Constrained ensembles; temporal ensembles | Maximum-entropy framework with constraints and explicit moment methods. Its dynamical applications retain spectral and typicality assumptions. |
+| Chang and collaborators [@Chang2025] | Conserved charge | Fixed-charge, charge-revealing case has a rigorous typical-state result; additional cases use replica calculations and the most general setting has numerical support. |
+| Mok and collaborators [@Mok2026] | Scrooge designs | Quantitative finite-order sufficient conditions. The temporal and global-to-local bounds in @sec-scrooge-symmetry use different error notions and cannot be composed without checking hypotheses. |
+
+A practical exercise when reading these sources is to construct two different ensembles with the same mean before studying a convergence claim. This removes the temptation to infer deep thermalization directly from an entanglement entropy or a thermal density operator.
+
+## Continuous variables and information from distant measurements
+
+@sec-gaussian-nonlocal develops two extensions whose physical assumptions are easy to conflate. Gaussian bosons require an occupation constraint; remote conditioning requires a complete classical measurement record.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Weedbrook and collaborators [@Weedbrook2012] | Gaussian background | A review of covariance matrices, symplectic transformations, and Gaussian measurements. It supplies background conventions rather than a new deep-thermalization theorem. |
+| Holevo [@Holevo2020] | Gaussian accessible information | Proves Gaussian optimization results in the gauge-symmetric setting, including optimal heterodyne reception for the isotropic coherent Gaussian ensemble used here. |
+| Holevo [@Holevo2021] | Gaussian information principles | Extends accessible-information results to general Gaussian ensembles subject to a threshold condition; arbitrary Gaussian ensembles need not satisfy that condition. |
+| Liu, Huang, and Ho [@Liu2024] | Gaussian deep thermalization | The rigorous random-passive-state results concern coherent measurements; broader squeezed measurement bases and optical-circuit dynamics have numerical support. Vacuum covariance conventions must be translated. |
+| Shrotriya and Ho [@Shrotriya2025] | Nonlocal conditioning and topology | A particular kicked Ising geometry has different open/ring higher-moment decay rates. Replica continuation and numerical checks enter; the result is not a general violation of locality. |
+
+The no-signaling derivation in the chapter is exact and independent of any scrambling assumption. The topology-dependent dynamical rates require the special model. Keeping those two levels separate prevents a model-specific observation from becoming an incorrect general claim.
+
+## How deterministic drives explore Hilbert space
+
+Read @sec-temporal-ergodicity before @sec-aperiodic-drives. A good reading strategy is to reproduce short word prefixes and their chronological matrix products before attempting long-time recursions.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Pilatowsky-Cameo, Dag, Ho, and Choi [@ergPilatowsky2023] | Fibonacci drives | For the canonical word, identifies the Haar limit assuming the average exists; suitable phase-shifted relatives have almost-sure existence results. Generic finite-dimensional gates and restricted local-Hamiltonian families are distinct settings. |
+| Pilatowsky-Cameo, Marvian, Choi, and Ho [@ergPilatowsky2024] | Obstructions and control cost | Periodic finite-action obstructions and conditional smooth-quasiperiodic dimension bounds. The existence of smooth quasienergy eigenstates is part of the latter hypotheses. |
+| Pilatowsky-Cameo, Choi, and Ho [@ergPilatowsky2025] | Critically slow morphic dynamics | Almost-everywhere Thue–Morse ergodicity theorem for qubit gates. Higher dimensions and other substitutions are studied numerically; a universal convergence exponent is not proved. |
+| Liu and collaborators [@ergLiu2026] | Experimental hierarchy | Single-spin tomography supports distinct finite-time moment hierarchies. No finite experiment certifies every order at infinite time. |
+
+The crucial quantifier is “for each fixed finite moment order.” A drive that approaches the correct limiting distribution can still generate strong temporal correlations and impractically long transients. Symbolic aperiodicity does not by itself guarantee ergodicity for commuting or otherwise exceptional gate choices.
+
+## Which quantum resources can remain hidden in thermal states?
+
+@sec-resource-transitions separates coherence, imaginarity, magic, and entanglement before discussing their transitions. The free operations and measurement apparatus are part of each resource specification.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Baumgratz, Cramer, and Plenio [@ergBaumgratz2014] | Coherence | A foundational resource framework relative to a specified basis. “Coherent” is not an absolute property independent of that basis. |
+| Chitambar and Gour [@ergChitambar2019] | General resource theories | A review of free states, free operations, monotones, and tasks. It does not establish that every resource obeys one universal transition law. |
+| Leone, Oliviero, and Hamma [@ergLeone2022] | Magic diagnostics | Introduces stabilizer Rényi diagnostics. The pure-state order-two expression used here should not be assigned unrestricted monotonicity under every stabilizer protocol. |
+| Liu, Ippoliti, and Ho [@ergLiuIppoliti2026] | Coherence-induced transitions | Analytical support counting and numerical circuit evidence. The flat-support mixed-basis threshold and entropy-matching estimates for tilted states have different accuracy. |
+| Feng and collaborators [@ergFeng2026] | Resource localizability | A 2026 preprint developing block sharpening and smooth/threshold localizability. Its scrambling-model analysis, numerical tests, and conjectural extensions to correlated Clifford permutations are distinguished. |
+
+A useful test case is the pair $|+\rangle$ and $|T\rangle$: their computational coherence agrees, while their stabilizer resources differ. Any proposed identification of a coherence threshold with a magic threshold must survive this elementary check.
+
+## Channels, temporal entanglement, and memory
+
+@sec-channels-memory introduces instruments and Choi operators; @sec-temporal-entanglement then adds interventions. One final bath measurement and a sequence of probe interventions resolve different information.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Stinespring [@stinespring1955] | Dilation of channels | Foundational mathematical dilation framework. The book derives its finite-dimensional isometry construction explicitly. |
+| Choi [@choi1975] | Complete positivity and Choi operators | Characterization of finite-dimensional completely positive maps. Trace normalization and input/output ordering must be fixed separately. |
+| Pollock and collaborators [@pollock2018framework] | Process tensors | An operational multi-time framework allowing interventions and initial correlations. A single reduced trajectory does not specify a process tensor. |
+| Pollock and collaborators [@pollock2018operational] | Markov conditions | Tests memory through causal breaks and all allowed interventions. CP divisibility alone is a weaker diagnostic. |
+| Foligno, Zhou, and Bertini [@foligno2023temporal] | Temporal entanglement spectra | Analytical and numerical temporal-entanglement results for specified chaotic-circuit settings. Linear von Neumann entropy can coexist with sublinear higher Rényi entropies. |
+| Liu and Ho [@liuho2025solvable] | Solvable influence matrices | Generalized space–time dual circuits with special initial-state families give simple exact influence structures. This is not a claim of Markovianity for arbitrary initial states. |
+| Vilkoviskiy and collaborators [@vilkoviskiy2025transition] | Temporal coarse graining | A preprint combining a solved random-unitary bath model, kicked Ising analysis, and numerics. Coarse graining restricts available interventions; it does not reset the microscopic bath. |
+| Huang and collaborators [@huang2026kraus] | Kraus universality | A September 2026 preprint. Ginibre/log-normal universality is proved in special limits and conjectured with numerical support for generic one-dimensional circuit scalings. |
+
+A recurring reading trap is to interpret an entropy of a vectorized influence matrix as a universal measure of recoverable quantum information. The chapter supplies a classical-memory example and an entanglement-recovery protocol to show why an operational interpretation requires more data.
+
+## Constraints, scars, fragmentation, and driven order
+
+The route through @sec-scars-fragmentation and @sec-driven-phases connects several distinct ways to retain memory. An invariant graph component, an exceptional recurrent trajectory, and an approximately conserved effective Hamiltonian should be diagnosed separately.
+
+| Source | Used in | Contribution and limits |
+|:--|:--|:--|
+| Turner and collaborators [@turner2018scars] | Quantum many-body scars | Identifies exceptional spectral structure and revivals in a constrained model. A small-system bright/dark oscillation alone is not evidence of a many-body scar. |
+| Ho, Choi, Pichler, and Lukin [@ho2019periodic] | Variational scar dynamics | Low-bond-dimension manifolds and unstable periodic variational orbits. A closed variational orbit is an approximation whose leakage must be assessed. |
+| Sala and collaborators [@sala2020fragmentation] | Fragmented dynamics | Dipole-conserving models show why move range and fragment statistical weight matter, in addition to charge conservation. |
+| Khemani, Hermele, and Nandkishore [@khemani2020shattering] | Hilbert-space shattering | Primary constructions of disconnected sectors and experimental realizations. Approximate laboratory constraints imply a limited validity time. |
+| Rakovszky and collaborators [@rakovszky2020statistical] | Statistical localization | Conserved nonlocal labels can concentrate in subextensive regions of typical configurations. Operator locality and statistical concentration are different notions. |
+| Datla and collaborators [@datla2026statistical] | Rydberg gauge-theory simulator | Experimental statistical-localization signatures with effective constraints and finite-size sampling. The result does not imply complete immobility of every configuration. |
+| Abanin, De Roeck, Ho, and Huveneers [@abanin2017effective] | High-frequency dynamics | Effective quasi-conserved generators and slow absorption in bounded local driven systems. Local equilibration requires additional mixing assumptions. |
+| Abanin, De Roeck, Ho, and Huveneers [@abanin2017rigorous] | Controlled prethermal regimes | Rigorous nearly exponential times under specified locality and boundedness conditions; logarithmic corrections depend on the theorem. |
+| Else, Bauer, and Nayak [@else2017prethermal] | Prethermal phases | Emergent finite-order symmetries protect driven phases over a prethermal window. A stable ordered response requires an effective Hamiltonian capable of ordering. |
+| Else, Ho, and Dumitrescu [@else2020quasiperiodic] | Several driving frequencies | Smooth high-frequency quasiperiodic drives require arithmetic and regularity assumptions. Substitution drives need a separate analysis. |
+
+## Chronology and publication status: 2024–2026 {#sec-literature-status}
+
+The table includes papers first made public earlier when their journal publication falls in this interval. ArXiv links identify the primary manuscripts; journal citations in the bibliography identify the versions of record. Entries with “preprint” have no journal publication asserted as of the verification date.
+
+| First preprint | Topic | Publication status on 21 October 2026 | Book route |
+|:--|:--|:--|:--|
+| February 2024 | Driven ergodicity obstructions [@ergPilatowsky2024] | *Physical Review X* **14**, 041059 (2024) | Temporal ergodicity |
+| March 2024 | Constrained maximum-entropy ensembles [@Mark2024] | *Physical Review X* **14**, 041051 (2024) | Scrooge ensembles |
+| May 2024 | Gaussian deep thermalization [@Liu2024] | *Physical Review Letters* **133**, 260401 (2024) | Gaussian universality |
+| August 2024 | Charge-conserving deep thermalization [@Chang2025] | *PRX Quantum* **6**, 020343 (2025) | Conserved charge |
+| December 2023 | Generalized space–time duality [@liuho2025solvable] | *Physical Review Research* **7**, L012011 (2025) | Influence matrices |
+| May 2023 | Nonlocality of deep thermalization [@Shrotriya2025] | *SciPost Physics* **18**, 107 (2025) | Remote conditioning |
+| February 2025 | Critically slow morphic drives [@ergPilatowsky2025] | *Physical Review Letters* **135**, 140402 (2025) | Aperiodic driving |
+| May 2025 | Statistical localization in a Rydberg simulator [@datla2026statistical] | *Nature Physics* **22**, 355–361 (2026); online 18 February | Constraints and fragmentation |
+| July 2025 | Single-spin ergodicity hierarchy [@ergLiu2026] | *Physical Review Letters* **136**, 020401 (2026) | Experimental moment tests |
+| October 2025 | Coherence-induced transition [@ergLiuIppoliti2026] | *Physical Review Letters* **136**, 100404 (2026) | Resource transitions |
+| November 2025 | Temporal-entanglement transition [@vilkoviskiy2025transition] | Preprint, [arXiv:2511.03846](https://arxiv.org/abs/2511.03846), v2 | Temporal memory |
+| January 2026 | Scrooge-design universality [@Mok2026] | *Physical Review X* **16**, 041003 (2026); arXiv v3 checked | Constrained designs |
+| June 2026 | Resource localizability [@ergFeng2026] | Preprint, [arXiv:2606.08756](https://arxiv.org/abs/2606.08756), v1 | Resource transitions |
+| September 2026 | Kraus-map universality [@huang2026kraus] | Preprint, [arXiv:2609.12689](https://arxiv.org/abs/2609.12689), v1 | Channels and instruments |
+| September 2026 | Review of deep thermalization and HSE [@ergMark2026] | Review preprint, [arXiv:2609.30248](https://arxiv.org/abs/2609.30248), v1 | Cross-topic orientation |
+
+The near-simultaneous development of several frameworks makes this an unusually useful moment to study their connections. It also makes careful claims essential: generic circuit universality, experimental access to high moments, resource-theoretic classifications, and scalable prediction of many-time observables remain active research directions.

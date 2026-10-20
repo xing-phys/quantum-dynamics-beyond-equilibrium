@@ -162,8 +162,8 @@ an operational discrepancy
 $$
 \epsilon_{\mathfrak A}
 =\sup_{\mathcal A_j\in\mathfrak A,\;0\leq E\leq I}
-\left|p_{\rm exact}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)
--p_{\rm approx}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)\right|.
+\left|p_{\mathrm{exact}}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)
+-p_{\mathrm{approx}}(E|\mathcal A_{T-1},\ldots,\mathcal A_0)\right|.
 $$ {#eq-rd-operational-error}
 
 The probabilities here are unconditional final probabilities for complete,

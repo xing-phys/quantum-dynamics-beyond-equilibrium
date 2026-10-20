@@ -1,0 +1,223 @@
+# Slow heating and phases stabilized by driving {#sec-driven-phases}
+
+Driving a many-body system serves two competing purposes. It can engineer interactions and symmetries that are difficult to obtain in equilibrium, but it can also inject energy until useful structure disappears. A controlled theory of a driven phase must explain both its organizing principle and its lifetime. High-frequency prethermalization provides one answer: the system approximately conserves an effective local Hamiltonian for a long interval, allowing its internal dynamics to establish order before appreciable heating occurs.
+
+This chapter develops that answer from the one-period unitary. The foundational results are older than the frontier papers elsewhere in the book, but they remain the framework needed to interpret modern slow-thermalization and constrained-driving experiments. We keep distinct four questions: whether energy is absorbed slowly, whether local observables equilibrate, whether a trajectory explores Hilbert space uniformly, and whether a robust ordered response exists. None is interchangeable with the others.
+
+## Floquet evolution and the meaning of quasienergy
+
+For $H(t+T)=H(t)$, the one-period unitary is
+
+$$
+U_F=\mathcal T\exp\left[-i\int_0^TH(t)\,dt\right],
+\qquad \omega=\frac{2\pi}{T}.
+$$ {#eq-dp-floquet}
+
+The symbol $\mathcal T$ orders later times to the left. At stroboscopic times $nT$, evolution is $U_F^n$. An eigenstate satisfies $U_F|\phi_\alpha\rangle=e^{-i\varepsilon_\alpha T}|\phi_\alpha\rangle$. Since adding an integer multiple of $\omega$ leaves the eigenvalue unchanged, $\varepsilon_\alpha$ is a **quasienergy**, defined modulo $\omega$.
+
+A matrix logarithm always produces a finite-dimensional $H_F$ with $U_F=e^{-iTH_F}$, but branch choices are not unique. More importantly, an exact logarithm need not be local. The practical task is to find a local or quasi-local effective generator that describes physical observables over a specified time range. The existence of a logarithm is elementary linear algebra; the existence of a useful local generator is a many-body dynamical result.
+
+At intermediate times, micromotion matters. Floquet factorization can be written
+
+$$
+U(t,0)=P(t)e^{-itH_F},\qquad P(t+T)=P(t),\qquad P(0)=I.
+$$
+
+An observable may oscillate substantially within each period even when its stroboscopic values vary slowly. Changing the time origin conjugates the stroboscopic generator by a micromotion unitary. Consequently different-looking effective Hamiltonians can describe the same physical drive in different Floquet gauges.
+
+## Deriving the first effective interactions
+
+Write $U_F=e^{\Omega_1+\Omega_2+\cdots}$. Expanding the time-ordered exponential and matching powers gives
+
+$$
+\Omega_1=-i\int_0^T H(t_1)\,dt_1,
+\qquad
+\Omega_2=-\frac12\int_0^Tdt_1\int_0^{t_1}dt_2
+[H(t_1),H(t_2)].
+$$ {#eq-dp-magnus}
+
+Since $-iTH_F=\sum_n\Omega_n$, the first term is the time average. The next term detects that applying two noncommuting Hamiltonians in opposite orders gives different evolution. This **Magnus expansion** organizes corrections by nested commutators, not simply by powers of the drive amplitude.
+
+A two-step drive makes the correction explicit. Apply $H_A$ for $T/2$, then $H_B$ for $T/2$:
+
+$$
+U_F=e^{-iTH_B/2}e^{-iTH_A/2}.
+$$
+
+The Baker–Campbell–Hausdorff formula $\log(e^Ae^B)=A+B+[A,B]/2+\cdots$ gives
+
+$$
+H_F=\frac{H_A+H_B}{2}
+-\frac{iT}{8}[H_B,H_A]+O(T^2).
+$$ {#eq-dp-bch}
+
+The correction is Hermitian because the commutator of two Hermitian operators is anti-Hermitian. Its sign depends on the order of the two steps. This is a useful physical and algebraic check.
+
+### Worked example: generating a new spin coupling
+
+Take $H_A=h\sum_iX_i$ and $H_B=J\sum_iZ_iZ_{i+1}$. Using $[Z,X]=2iY$, only the two fields acting on a bond contribute:
+
+$$
+[H_B,H_A]=2iJh\sum_i(Y_iZ_{i+1}+Z_iY_{i+1}).
+$$
+
+Substitution into @eq-dp-bch yields
+
+$$
+H_F=\frac h2\sum_iX_i+\frac J2\sum_iZ_iZ_{i+1}
++\frac{TJh}{4}\sum_i(Y_iZ_{i+1}+Z_iY_{i+1})+O(T^2).
+$$ {#eq-dp-engineered}
+
+The mixed $YZ$ coupling was absent from either drive segment. It appears because a spin begins to rotate about one axis before interacting through another. Reversing the segment order reverses this first correction while preserving the average Hamiltonian. A symmetric three-step arrangement can cancel odd-order gauge-dependent corrections and improve a desired approximation, although it does not eliminate all eventual heating.
+
+This example also gives an error scale. If $h$ and $J$ are comparable to a local scale $g$, the induced term is of order $g^2T$, and the omitted local terms begin at order $g^3T^2$. The expansion parameter is a local product $gT$, not the total many-body bandwidth times $T$.
+
+## Why high frequency suppresses heating without proving eternal stability
+
+A drive quantum carries energy $\omega$. If local interactions have scale $g\ll\omega$, one small local rearrangement cannot resonantly absorb it. Absorption requires a coordinated process involving many local terms. The order at which such a process first becomes effective grows with $\omega/g$. This is the physical origin of slow heating.
+
+There is an apparent obstacle. The global norm of a local many-body Hamiltonian grows with volume, so the elementary sufficient condition for convergence of the full Magnus series becomes worse as the system grows. A thermodynamic prethermal theory must use locality instead. Write $H(t)=\sum_Xh_X(t)$ with finite-dimensional sites and bounded finite-range terms, and define a local interaction scale, for example
+
+$$
+g=\sup_{i,t}\sum_{X\ni i}\|h_X(t)\|.
+$$ {#eq-dp-local-norm}
+
+This remains finite as volume increases. Repeated commutators grow supports only by local increments. Schematically, the local size of the $n$th effective-Hamiltonian contribution is bounded by
+
+$$
+g\,(CgT)^n n!,
+$$ {#eq-dp-asymptotic}
+
+where $C$ depends on range and geometry. The factorial reflects the growing number of nested local commutator sequences. It also warns that the expansion is generally asymptotic rather than convergent.
+
+For small $gT$, terms initially decrease and eventually increase. Using Stirling's formula, minimize $n\log(CgT)+n\log n-n$. The derivative vanishes near $n_*\sim1/(CgT)$. Truncating there gives a remainder schematically of order $g e^{-c/(gT)}$. Adding more terms beyond the optimum can make the approximation worse. This elementary estimate explains the exponential scale; it is not a substitute for controlling quasi-locality and accumulated errors in a rigorous proof.
+
+Abanin, De Roeck, Ho, and Huveneers established effective quasi-conserved Hamiltonians and parametrically long prethermal regimes for appropriate local driven systems [@abanin2017effective; @abanin2017rigorous]. Quantitative bounds depend on the theorem: some rigorous formulations contain logarithmic corrections and give almost-exponential lifetimes. One should not promote a schematic exponential estimate into a universal theorem for unbounded bosons, arbitrary long-range couplings, or arbitrary resonant strong drives.
+
+A useful effective statement is that an appropriate rotating frame has
+
+$$
+H_{\mathrm{rot}}(t)=D+R(t),
+$$ {#eq-dp-rotating}
+
+where $D$ is quasi-local and $R$ has a very small local norm. The density of $D$ changes slowly because $\dot D=i[R(t),D]$. Locality bounds this commutator per unit volume even though both operators are extensive. If its bound is $r$, changing the effective energy density by order $g$ requires at least a scale of order $g/r$. Approximation of a particular local observable may have a different error estimate because its support spreads under evolution; lifetime claims must state what is controlled.
+
+## Prethermalization requires an additional relaxation assumption
+
+Slow heating alone says that $D$ is approximately conserved. It does not imply that the state becomes Gibbsian. If $D$ is sufficiently mixing at its conserved energy density, local observables can approach those of
+
+$$
+\rho_{\mathrm{pre}}=\frac{e^{-\beta D}}{\operatorname{Tr}e^{-\beta D}},
+$$ {#eq-dp-gibbs}
+
+with $\beta$ fixed by the initial expectation of $D$. Other exact conserved charges require corresponding chemical potentials. If $D$ is integrable or fragmented, the appropriate restricted equilibrium can retain more information.
+
+The desired hierarchy is
+
+$$
+\tau_{\mathrm{local}}\ll t\ll\tau_{\mathrm{heat}}.
+$$ {#eq-dp-window}
+
+Here local redistribution has occurred but effective energy has barely drifted. In the laboratory frame, transform both the state and observables through micromotion. A Gibbs state of $D$ need not be thermal with respect to $H(t)$ at any particular instant.
+
+A plateau in one observable can have other causes: an almost conserved quantity, finite-size revivals, poor overlap with slow modes, or limited measurement resolution. To establish a prethermal regime, vary frequency and test the separation between redistribution and heating. To establish a prethermal **phase**, also identify an order parameter or another robust distinction and test its stability over a parameter region.
+
+The infinite-temperature endpoint is conditional. A generic isolated periodic drive with no protecting conservation law is expected to heat toward the maximally mixed state in its accessible sector. The prethermal theorem controls a long transient; it need not prove the eventual heating law. Exact constraints, localization mechanisms, integrability, or coupling to an external bath can change the late-time state.
+
+## Strong pulses and emergent discrete symmetry
+
+A common time-crystal protocol contains an almost-$\pi$ spin rotation. Its instantaneous amplitude scales as $1/T$, so it cannot be inserted naively into a bounded-amplitude high-frequency expansion. Treat the strong pulse exactly and expand only the weaker part in a suitable rotating frame.
+
+The ideal algebra is particularly simple. Let $X$ be a finite-order global unitary with $X^N=I$ and suppose
+
+$$
+U_F=Xe^{-iTD},\qquad [X,D]=0.
+$$ {#eq-dp-normal-form}
+
+Then $U_F^n=X^ne^{-inTD}$. A physical construction generally gives this form after a quasi-local dressing transformation and up to a small remainder. The important symmetry is that $D$ commutes with the finite-order operation even when the microscopic weaker Hamiltonian does not have that symmetry exactly. Its emergence is controlled by the drive structure and prethermal scale.
+
+For $N=2$, take $X=\prod_iX_i$ and an order parameter $M=L^{-1}\sum_iZ_i$, which is odd: $X^\dagger MX=-M$. Equation @eq-dp-normal-form gives
+
+$$
+M(nT)=(-1)^n e^{inTD}M e^{-inTD}.
+$$ {#eq-dp-subharmonic}
+
+If $D$ supports an ordered phase and the initial effective energy lies in it, a symmetry-broken state can have a slowly varying nonzero expectation of the last factor. The laboratory magnetization alternates sign each period, producing period $2T$ response. The oscillation is tied to discrete symmetry and order, rather than to a freely adjustable single-spin precession frequency.
+
+Else, Bauer, and Nayak established prethermal phases protected by discrete time translation, including this time-crystal mechanism [@else2017prethermal]. The normal-form algebra above explains the response; the theorem's lifetime and ordering assumptions supply its physical domain of validity.
+
+### Worked example: why perfect pulses alone are insufficient
+
+With $D=0$ and a perfect $\pi$ pulse, every spin flips and $M(nT)=(-1)^nM(0)$. Now let the actual single-spin rotation be $e^{-i(\pi+\epsilon)X/2}$. Starting from $|0\rangle$,
+
+$$
+\langle Z(nT)\rangle=\cos[n(\pi+\epsilon)]
+=(-1)^n\cos(n\epsilon).
+$$ {#eq-dp-beating}
+
+The oscillation develops beats, and its frequency shifts continuously with pulse error. Perfect doubling at one fine-tuned point is therefore not enough to identify a phase. Interactions and symmetry-breaking order can lock a collective response over a parameter region in a valid prethermal normal form. Robustness must be checked rather than inferred from one oscillatory trace.
+
+There is also an equilibrium constraint on the effective ordered phase. A one-dimensional finite-range Ising Hamiltonian has no nonzero-temperature long-range order. Its domain walls have finite energy, so their entropy produces a finite density at any nonzero temperature. An infinite-system finite-temperature prethermal Ising time crystal requires a setting where $D$ can actually order, such as sufficiently high spatial dimension or appropriate interactions. A finite one-dimensional sample may still show long-lived oscillations, but a finite-size observation and a thermodynamic phase are different claims.
+
+## Time-crystal diagnostics and the order of limits
+
+For an Ising-like response, define a stroboscopic correlator
+
+$$
+C(n)=\frac1L\sum_i\operatorname{Tr}[\rho_0Z_i(nT)Z_i(0)].
+$$ {#eq-dp-correlation}
+
+A sustained alternating component means $(-1)^nC(n)$ remains appreciable over the observation interval. Fourier weight near $\pi/T$ is helpful, but a spectral peak alone does not establish a phase: beats, transient synchronization, and short windows also create sharp-looking peaks.
+
+Useful tests are logically parallel. Vary pulse error and interactions to assess rigidity; vary system size to distinguish collective order from few-level recurrences; vary frequency to characterize the prethermal lifetime; and change the initial effective energy to test whether the ordered response disappears when $D$ enters a disordered regime. These tests address different parts of the mechanism, so agreement in one cannot replace the others.
+
+An isolated prethermal phase has a large but finite lifetime at any fixed frequency. Taking $t\to\infty$ first eventually leaves its controlled window. A sharp idealized phase is discussed by taking the parameter controlling heating large and considering times that grow while remaining below the heating time, alongside an appropriate thermodynamic limit. This is not a defect of the concept: it specifies the asymptotic regime in which the phase is defined.
+
+## Aperiodic driving and small denominators
+
+Periodic driving has one frequency lattice $m\omega$. For a smooth quasiperiodic drive with $p$ incommensurate frequencies, write
+
+$$
+H(t)=\sum_{\mathbf m\in\mathbb Z^p}H_{\mathbf m}
+ e^{i\mathbf m\cdot\boldsymbol\omega t}.
+$$ {#eq-dp-quasiperiodic}
+
+To remove the oscillating part at leading order, a rotating-frame generator satisfies $\dot K(t)=H(t)-H_{\mathbf0}$. Its nonzero Fourier components are
+
+$$
+K_{\mathbf m}=\frac{H_{\mathbf m}}{i\mathbf m\cdot\boldsymbol\omega}.
+$$ {#eq-dp-denominator}
+
+Even when each basic frequency is large, an integer combination $\mathbf m\cdot\boldsymbol\omega$ can be small. These **small denominators** compete with the decay of Fourier amplitudes. Smoothness or analyticity controls large-$|\mathbf m|$ coefficients; arithmetic conditions on the frequency vector control how closely combinations approach zero. The periodic bound cannot simply be reused with the smallest basic frequency.
+
+Else, Ho, and Dumitrescu established long-lived interacting quasiperiodically driven phases under appropriate high-frequency, smoothness, and nonresonance conditions [@else2020quasiperiodic]. Their multiple time-translation structures are naturally formulated on the drive-phase torus, not as several independent shifts of the single physical time coordinate.
+
+Substitution sequences such as Thue–Morse form another class of aperiodic drive. Their hierarchical words need not admit the smooth few-frequency expansion in @eq-dp-quasiperiodic. Recursive cancellation can suppress some effective terms, but one must analyze the actual word recursion. Likewise, slow approach to a uniform Hilbert-space ensemble is a statement about temporal sampling of states, not necessarily about an approximately conserved effective energy. The aperiodic-ergodicity results elsewhere in this book should therefore be compared with prethermalization through their observables and scaling limits, rather than placed under one undifferentiated label of slow dynamics.
+
+## Connecting driven phases to deep thermalization and constraints
+
+The different diagnostics in this book can coexist in instructive combinations. During a prethermal interval, local observables may equilibrate to $D$ while measurement-conditioned state ensembles still approach their constraint-compatible distribution. The energy shell, charges, and emergent symmetries restrict which ensemble can be the correct target. Haar randomness on the entire unconstrained subsystem is not always the appropriate expectation.
+
+If the effective $D$ is fragmented, local dynamics can equilibrate within its fragments while interfragment mixing remains absent at leading order. A weak drive-generated correction can connect fragments on a longer timescale. It is then meaningful to ask separately for the time to establish intrafragment equilibrium, the time to destroy fragment labels, and the time to absorb appreciable effective energy. These times need not coincide.
+
+Similarly, an oscillatory observable does not preclude complex bath memory. A probe can show a simple subharmonic response while its full process tensor contains intricate intervention-dependent correlations. Conversely, temporal coarse-graining can make the restricted probe process simple without establishing a thermodynamic ordered phase. The common lesson is to attach each claim to the object measured: density matrix, trajectory ensemble, channel, process tensor, graph component, or order parameter.
+
+These comparisons suggest useful research programs, but they are not generic theorems. Determining when deep thermalization, effective conservation, ordered micromotion, and quantum memory exhibit independent transitions requires a model and separate controlled limits. The precise distinctions are what make those questions scientifically sharp.
+
+## Exercises and open questions
+
+1. **Sign of the engineered term.** Derive @eq-dp-bch by expanding the two exponentials to order $T^2$. Repeat with the opposite segment ordering. *Hint:* compare the cross term $H_BH_A$ with the square of the proposed effective Hamiltonian.
+
+2. **A symmetric protocol.** Compute $\log(e^{A/2}e^Be^{A/2})$ through second order in $A,B$. Explain why the first commutator correction cancels. *Hint:* apply Baker–Campbell–Hausdorff twice and keep terms of total degree at most two.
+
+3. **Optimal truncation.** For $a_n=g(agT)^nn!$, estimate the smallest term by using $a_{n+1}/a_n$. Compare with the Stirling estimate. *Hint:* the optimum occurs when adjacent terms have comparable magnitude.
+
+4. **Effective temperature.** For a specified nonintegrable $D$, explain how to determine $\beta$ from an initial pure state. Why is matching the instantaneous laboratory energy generally insufficient? *Hint:* the approximately conserved quantity is $D$ in the appropriate frame.
+
+5. **Finite-order symmetry.** Let $X^N=I$ and $X^\dagger OX=e^{2\pi iq/N}O$. Derive the stroboscopic phase acquired by $O$ under @eq-dp-normal-form. When can its expectation remain nonzero? *Hint:* separate the exact algebraic phase from the question of ordering under $D$.
+
+6. **Domain walls in one dimension.** Estimate the low-temperature density of domain walls in a nearest-neighbor ferromagnetic Ising chain. Use it to estimate a correlation length and discuss a finite sample shorter than that length. *Hint:* a single domain wall costs $2J$ in the classical convention $D=-J\sum_iZ_iZ_{i+1}$.
+
+7. **Small-denominator test.** For two frequencies with irrational ratio, find integer pairs with small $|m_1\omega_1+m_2\omega_2|$ using rational approximants. Compare this denominator with an assumed Fourier envelope $\|H_{\mathbf m}\|\leq ge^{-\kappa|\mathbf m|}$. *Hint:* both arithmetic approximation and drive regularity enter the same perturbative term.
+
+8. **Open question: several relaxation clocks.** Design a constrained driven spin model and propose separate measurements of effective-energy drift, fragment-label decay, projected-ensemble convergence, and subharmonic order. State which scale separation would demonstrate an intermediate regime that any one of these measurements alone would miss. Treat their ordering as a hypothesis to test, rather than an assumed universal hierarchy.
