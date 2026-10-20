@@ -36,8 +36,10 @@ jobs:
           textbook_tlmgr="$(find "$HOME" -name tlmgr -print -quit)"
           test -n "$textbook_tlmgr"
           textbook_tex_bin="$(dirname "$textbook_tlmgr")"
+          "$textbook_tlmgr" update --self
           "$textbook_tlmgr" install tex-gyre tex-gyre-math
           "$textbook_tex_bin/luaotfload-tool" --update --force
+          "$textbook_tex_bin/kpsewhich" texgyrepagella-math.otf
           echo "$textbook_tex_bin" >> "$GITHUB_PATH"
 
       - name: Check source references, mathematics, and figures
