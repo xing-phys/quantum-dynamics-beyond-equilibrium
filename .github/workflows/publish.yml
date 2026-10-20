@@ -36,6 +36,7 @@ jobs:
           textbook_tlmgr="$(find "$HOME" -name tlmgr -print -quit)"
           test -n "$textbook_tlmgr"
           textbook_tex_bin="$(dirname "$textbook_tlmgr")"
+          export PATH="$textbook_tex_bin:$PATH"
           "$textbook_tlmgr" update --self
           "$textbook_tlmgr" install tex-gyre tex-gyre-math
           "$textbook_tex_bin/luaotfload-tool" --update --force
