@@ -31,6 +31,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes fonts-texgyre fonts-texgyre-math fonts-dejavu-core librsvg2-bin
 
+      - name: Register math fonts inside TinyTeX
+        run: |
+          tlmgr install tex-gyre tex-gyre-math
+          luaotfload-tool --update --force
+
       - name: Check source references, mathematics, and figures
         run: python3 scripts/check_sources.py
 

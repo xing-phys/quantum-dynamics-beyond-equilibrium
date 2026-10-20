@@ -42,7 +42,8 @@ in HTML and PDF.
 
 Edit a chapter, commit, and push to main; GitHub Actions renders and deploys
 the site. The repository Pages source is GitHub Actions. Pull requests build
-without deploying. The workflow also builds the PDF with TinyTeX.
+without deploying. The workflow also builds the PDF with TinyTeX and installs
+the TeX Gyre font packages into that TeX installation before rendering.
 Local generated output and caches are ignored by Git.
 
 Optional mathematical syntax validation uses the matching pinned MathJax parser:
