@@ -1,0 +1,9 @@
+# References {.unnumbered}
+
+The bibliography links to primary papers and publisher records. Publication
+status is recorded at the literature cutoff of 20 October 2026; preprints may
+subsequently change. The [literature guide](c-literature-guide.qmd) explains
+which sources support which parts of the book.
+
+::: {#refs}
+:::

@@ -1,0 +1,105 @@
+project:
+  type: book
+  output-dir: _site
+  resources:
+    - assets/mathjax/**
+    - figs/**
+    - scripts/*.jl
+    - LICENSE
+  render: ["*.qmd"]
+book:
+  title: "Quantum Dynamics Beyond Thermal Equilibrium"
+  subtitle: "Ensembles, ergodicity, resources, and memory"
+  author:
+    - name: Ze-Yu Xing
+      orcid: 0009-0009-5655-0187
+      affiliations:
+        - Institute of Physics, Chinese Academy of Sciences
+        - University of Chinese Academy of Sciences
+  date: "2026-10-20"
+  date-format: long
+  output-file: quantum-dynamics-beyond-equilibrium
+  site-url: https://xing-phys.github.io/quantum-dynamics-beyond-equilibrium/
+  repo-url: https://github.com/xing-phys/quantum-dynamics-beyond-equilibrium
+  repo-actions: [source, issue]
+  search: true
+  downloads: [pdf]
+  sidebar:
+    style: docked
+    collapse-level: 1
+  chapters:
+    - index.qmd
+    - part: "I · Foundations"
+      chapters:
+        - 01-states-information.qmd
+        - 02-measurement-ensembles.qmd
+        - 03-thermalization.qmd
+        - 04-randomness-designs.qmd
+    - part: "II · Distributions beyond density matrices"
+      chapters:
+        - 05-projected-ensembles.qmd
+        - 06-scrooge-symmetry.qmd
+        - 07-gaussian-nonlocal.qmd
+    - part: "III · Ergodicity and quantum resources"
+      chapters:
+        - 08-temporal-ergodicity.qmd
+        - 09-aperiodic-drives.qmd
+        - 10-resource-transitions.qmd
+    - part: "IV · Dynamics, memory, and constraints"
+      chapters:
+        - 11-channels-memory.qmd
+        - 12-temporal-entanglement.qmd
+        - 13-scars-fragmentation.qmd
+        - 14-driven-phases.qmd
+    - part: "V · Working with the frontier"
+      chapters:
+        - 15-computational-laboratory.qmd
+        - 16-research-directions.qmd
+    - references.qmd
+  appendices:
+    - a-mathematical-toolbox.qmd
+    - b-solutions.qmd
+    - c-literature-guide.qmd
+  page-footer:
+    left: "Quantum Dynamics Beyond Thermal Equilibrium"
+    right: "Text & figures: CC BY 4.0 · Code: MIT"
+bibliography: assets/bibliography.bib
+csl: assets/american-physics-society.csl
+link-citations: true
+lang: en
+execute:
+  enabled: false
+format:
+  html:
+    theme:
+      light: [cosmo, assets/theme-light.scss]
+      dark: [darkly, assets/theme-dark.scss]
+    css: assets/styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-copy: true
+    code-overflow: wrap
+    fig-responsive: true
+    include-in-header: assets/mathjax-config.html
+    html-math-method:
+      method: mathjax
+      url: assets/mathjax/tex-chtml.js
+    reference-location: document
+  pdf:
+    pdf-engine: lualatex
+    papersize: a4
+    documentclass: scrreprt
+    mainfont: TeX Gyre Pagella
+    sansfont: TeX Gyre Heros
+    monofont: DejaVu Sans Mono
+    mathfont: TeX Gyre Pagella Math
+    geometry: [margin=24mm]
+    fontsize: 10.5pt
+    colorlinks: true
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    include-in-header: assets/macros.sty
+    reference-location: document
+    keep-tex: false
