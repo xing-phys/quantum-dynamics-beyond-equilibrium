@@ -1,0 +1,6 @@
+# Preserve upstream vendor bytes and keep the repository language summary useful.
+assets/mathjax/** linguist-vendored=true -whitespace
+assets/american-physics-society.csl linguist-vendored=true
+*.qmd linguist-language=Markdown
+figs/*.svg linguist-generated=true
+figs/*.csv linguist-generated=true

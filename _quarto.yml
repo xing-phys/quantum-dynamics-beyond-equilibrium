@@ -29,29 +29,29 @@ book:
     collapse-level: 1
   chapters:
     - index.qmd
-    - part: "I · Foundations"
+    - part: "Foundations"
       chapters:
         - 01-states-information.qmd
         - 02-measurement-ensembles.qmd
         - 03-thermalization.qmd
         - 04-randomness-designs.qmd
-    - part: "II · Distributions beyond density matrices"
+    - part: "Distributions beyond density matrices"
       chapters:
         - 05-projected-ensembles.qmd
         - 06-scrooge-symmetry.qmd
         - 07-gaussian-nonlocal.qmd
-    - part: "III · Ergodicity and quantum resources"
+    - part: "Ergodicity and quantum resources"
       chapters:
         - 08-temporal-ergodicity.qmd
         - 09-aperiodic-drives.qmd
         - 10-resource-transitions.qmd
-    - part: "IV · Dynamics, memory, and constraints"
+    - part: "Dynamics, memory, and constraints"
       chapters:
         - 11-channels-memory.qmd
         - 12-temporal-entanglement.qmd
         - 13-scars-fragmentation.qmd
         - 14-driven-phases.qmd
-    - part: "V · Working with the frontier"
+    - part: "Working with the frontier"
       chapters:
         - 15-computational-laboratory.qmd
         - 16-research-directions.qmd
